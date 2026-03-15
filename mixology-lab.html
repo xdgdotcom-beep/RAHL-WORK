@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mixology Lab &mdash; ROI Plan &amp; Class Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root { --gold:#C9A84C; --gold-light:#E2C374; --gold-dim:#8B6F30; --black:#0A0A0A; --dark:#111111; --dark2:#1A1A1A; --dark3:#242424; --text:#E8E0D0; --text-muted:#999080; --white:#F5F0E8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--black); color:var(--text); font-family:'Cormorant Garamond',Georgia,serif; overflow-x:hidden; }
+
+  /* TOPBAR */
+  .topbar { background:var(--black); padding:16px 28px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(201,168,76,0.15); position:sticky; top:0; z-index:100; }
+  .topbar-left { display:flex; align-items:center; gap:20px; }
+  .topbar-back { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; display:flex; align-items:center; gap:8px; transition:color 0.3s; }
+  .topbar-back:hover { color:var(--gold); }
+  .topbar-back::before { content:'\2190'; font-size:14px; }
+  .topbar-logo { font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; letter-spacing:0.15em; color:var(--gold); }
+  .topbar-right { display:flex; gap:18px; }
+  .topbar-right a { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color 0.3s; }
+  .topbar-right a:hover { color:var(--gold); }
+
+  /* HERO */
+  .page-hero { position:relative; height:52vh; min-height:320px; overflow:hidden; display:flex; align-items:flex-end; }
+  .page-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; filter:brightness(0.35); }
+  .page-hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,transparent 20%,rgba(0,0,0,0.6) 70%,rgba(0,0,0,0.95) 100%); }
+  .page-hero-content { position:relative; z-index:2; padding:0 32px 40px; }
+  .page-hero-eyebrow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+  .page-hero-title { font-family:'Playfair Display',serif; font-size:clamp(36px,10vw,64px); font-weight:900; color:var(--white); text-transform:uppercase; letter-spacing:0.04em; line-height:1; }
+  .page-hero-title em { font-family:'Playfair Display',serif; font-weight:400; font-style:italic; color:var(--gold); text-transform:none; letter-spacing:0; }
+  .page-hero-sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:var(--text-muted); margin-top:12px; }
+
+  /* SECTIONS */
+  .block { padding:48px 32px; }
+  .block-dark { background:var(--black); }
+  .block-mid { background:var(--dark2); }
+  .block-dark2 { background:var(--dark); }
+
+  .eyebrow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  .block-title { font-family:'Playfair Display',serif; font-size:clamp(26px,6vw,36px); font-weight:400; color:var(--white); line-height:1.2; margin-bottom:8px; }
+  .block-title em { font-style:italic; color:var(--gold); }
+  .block-intro { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; line-height:1.75; color:#BBB0A0; font-weight:300; margin-top:6px; }
+
+  /* ROI METRICS */
+  .roi-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:32px; }
+  .roi-card { background:var(--dark3); border:1px solid rgba(201,168,76,0.15); padding:24px 20px; position:relative; overflow:hidden; }
+  .roi-card::after { content:''; position:absolute; top:0; left:0; width:100%; height:2px; background:linear-gradient(to right, var(--gold-dim), transparent); }
+  .roi-card-value { font-family:'Montserrat',sans-serif; font-weight:700; font-size:34px; color:var(--gold); line-height:1; margin-bottom:6px; }
+  .roi-card-label { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+  .roi-card-desc { font-family:'Cormorant Garamond',serif; font-size:14px; color:rgba(153,144,128,0.75); line-height:1.5; font-style:italic; }
+
+  /* KEY ASSUMPTIONS */
+  .assumptions { margin-top:32px; display:flex; flex-direction:column; gap:0; }
+  .assumption-row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); gap:12px; }
+  .assumption-row:last-child { border-bottom:none; }
+  .assumption-label { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); }
+  .assumption-value { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:var(--white); }
+
+  /* EVENT FLOW */
+  .flow-steps { margin-top:32px; display:flex; flex-direction:column; gap:0; }
+  .flow-step { display:flex; gap:20px; padding:28px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .flow-step:last-child { border-bottom:none; }
+  .flow-time-block { flex-shrink:0; width:96px; }
+  .flow-time { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.1em; color:var(--gold); line-height:1.4; }
+  .flow-step-body {}
+  .flow-step-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); margin-bottom:6px; }
+  .flow-step-desc { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--text-muted); line-height:1.6; margin-bottom:12px; }
+  .flow-details { display:flex; flex-direction:column; gap:7px; }
+  .flow-detail { display:flex; gap:10px; align-items:flex-start; }
+  .flow-dot { width:4px; height:4px; border-radius:50%; background:var(--gold-dim); margin-top:8px; flex-shrink:0; }
+  .flow-detail-text { font-family:'Cormorant Garamond',serif; font-size:14px; color:rgba(153,144,128,0.85); line-height:1.55; }
+
+  /* UPSELL */
+  .upsell-box { background:var(--dark3); border:1px solid rgba(201,168,76,0.18); border-left:3px solid var(--gold-dim); padding:28px 24px; margin-top:32px; }
+  .upsell-title { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+  .upsell-list { display:flex; flex-direction:column; gap:12px; }
+  .upsell-item { display:flex; gap:12px; align-items:flex-start; }
+  .upsell-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); margin-top:8px; flex-shrink:0; }
+  .upsell-text { font-family:'Cormorant Garamond',serif; font-size:16px; color:#BBB0A0; line-height:1.6; }
+
+  /* HIGHLIGHT BAND */
+  .highlight-band { background:var(--dark2); border-top:1px solid rgba(201,168,76,0.15); border-bottom:1px solid rgba(201,168,76,0.15); padding:40px 32px; text-align:center; }
+  .highlight-number { font-family:'Montserrat',sans-serif; font-weight:900; font-size:52px; color:var(--gold); line-height:1; }
+  .highlight-label { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-muted); margin-top:6px; }
+  .highlight-note { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:var(--text-muted); margin-top:10px; }
+
+  /* FOOTER */
+  .page-footer { background:var(--dark2); padding:40px 32px; text-align:center; border-top:1px solid rgba(201,168,76,0.12); }
+  .page-footer p { font-family:'Montserrat',sans-serif; font-size:9px; color:rgba(255,255,255,0.2); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:16px; }
+  .page-footer-links { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin-bottom:20px; }
+  .page-footer-links a { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color 0.3s; }
+  .page-footer-links a:hover { color:var(--gold); }
+  .page-footer a.btn { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--black); background:var(--gold); padding:12px 26px; text-decoration:none; transition:background 0.3s; display:inline-block; }
+  .page-footer a.btn:hover { background:var(--gold-light); }
+
+  .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease,transform 0.7s ease; }
+  .fade-in.visible { opacity:1; transform:none; }
+  .fade-in-delay-1 { transition-delay:0.1s; }
+  .fade-in-delay-2 { transition-delay:0.2s; }
+
+  @media (max-width:480px) { .topbar-right { display:none; } .roi-grid { grid-template-columns:1fr; } .flow-step { flex-direction:column; gap:8px; } }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="subash-shankar.html" class="topbar-back">Portfolio</a>
+    <span class="topbar-logo">SS</span>
+  </div>
+  <div class="topbar-right">
+    <a href="cocktail-menu.html">Cocktail Menu</a>
+    <a href="food-pairing.html">Food Pairings</a>
+    <a href="resume.html">R&eacute;sum&eacute;</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <img class="page-hero-img" src="https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg" alt="Mixology Lab" />
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <p class="page-hero-eyebrow">Calico &mdash; Subash Shankar</p>
+    <h1 class="page-hero-title">Mixology <em>Lab</em></h1>
+    <p class="page-hero-sub">ROI Plan, Class Structure &amp; Wine Dinner Event Flow</p>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="block block-dark fade-in">
+  <div class="eyebrow">Overview</div>
+  <h2 class="block-title">The <em>business case</em></h2>
+  <p class="block-intro">This ROI plan outlines the financial forecast for a Mixology Lab Class program, scheduled for 3 classes per week (5:00 pm&ndash;7:00 pm), priced at USD 290++ per person, with an expected attendance of 18 persons per week over 7 months (high season).</p>
+</div>
+
+<!-- ROI METRICS -->
+<div class="block block-mid fade-in">
+  <div class="eyebrow">Revenue Forecast</div>
+  <h2 class="block-title">Key <em>numbers</em></h2>
+  <div class="roi-grid">
+    <div class="roi-card">
+      <div class="roi-card-value">$290<span style="font-size:18px;font-weight:400">++</span></div>
+      <div class="roi-card-label">Price Per Person</div>
+      <div class="roi-card-desc">Excluding taxes and applicable fees</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-card-value">3&times;</div>
+      <div class="roi-card-label">Classes Per Week</div>
+      <div class="roi-card-desc">5:00 pm &ndash; 7:00 pm, 2 hours each session</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-card-value">545</div>
+      <div class="roi-card-label">Total Participants</div>
+      <div class="roi-card-desc">18 persons/week &times; 30.3 weeks (7 months)</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-card-value">$158K</div>
+      <div class="roi-card-label">Gross Revenue</div>
+      <div class="roi-card-desc">18 &times; 30.3 weeks &times; $290 = $158,218</div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY ASSUMPTIONS -->
+<div class="block block-dark fade-in">
+  <div class="eyebrow">Key Assumptions</div>
+  <h2 class="block-title">Program <em>parameters</em></h2>
+  <div class="assumptions">
+    <div class="assumption-row"><div class="assumption-label">Class Frequency</div><div class="assumption-value">3 classes per week</div></div>
+    <div class="assumption-row"><div class="assumption-label">Class Duration</div><div class="assumption-value">2 hours per class</div></div>
+    <div class="assumption-row"><div class="assumption-label">Participants</div><div class="assumption-value">18 per week</div></div>
+    <div class="assumption-row"><div class="assumption-label">Season Duration</div><div class="assumption-value">7 months (~30.3 weeks)</div></div>
+    <div class="assumption-row"><div class="assumption-label">Price Per Person</div><div class="assumption-value">USD 290 (excl. taxes)</div></div>
+    <div class="assumption-row"><div class="assumption-label">Total Participants</div><div class="assumption-value">545 persons</div></div>
+    <div class="assumption-row"><div class="assumption-label">Gross Revenue</div><div class="assumption-value">USD $158,218</div></div>
+  </div>
+</div>
+
+<!-- EVENT FLOW -->
+<div class="block block-mid fade-in">
+  <div class="eyebrow">Event Flow</div>
+  <h2 class="block-title">Mixology Class &amp; <em>Wine Dinner</em></h2>
+  <p class="block-intro" style="margin-bottom:0">A seamless evening integrating a 2-hour Mixology Lab Class followed by a sophisticated 5-course Wine Dinner with pairings at Calico Wine Room.</p>
+  <div class="flow-steps">
+
+    <div class="flow-step">
+      <div class="flow-time-block">
+        <div class="flow-time">5:00 pm<br>&ndash;<br>7:00 pm</div>
+      </div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">Mixology Lab Class</div>
+        <div class="flow-step-desc">Hands-on cocktail making with expert mixologist</div>
+        <div class="flow-details">
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong style="color:var(--white)">Welcome &amp; Introduction (5 min)</strong> &mdash; Guests greeted, overview of the evening shared</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong style="color:var(--white)">Cocktail Demonstrations (20 min)</strong> &mdash; Introduction to techniques, spirits, and ingredients</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong style="color:var(--white)">Hands-On Mixing (90 min)</strong> &mdash; Guests create 3&ndash;4 signature cocktails guided by the mixologist</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong style="color:var(--white)">Tasting &amp; Q&amp;A (15 min)</strong> &mdash; Sampling cocktails, discussing flavour profiles and cocktail history</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong style="color:var(--white)">Class Wrap-Up (10 min)</strong> &mdash; Tips for home mixology, recipe handouts, group photo opportunity</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-time-block">
+        <div class="flow-time">7:00 pm<br>&ndash;<br>7:15 pm</div>
+      </div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">Transition &amp; Refreshment Break</div>
+        <div class="flow-step-desc">Photography around Mahoney&rsquo;s bar lounge area, possibly capturing sunset</div>
+        <div class="flow-details">
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Guests escorted to the Calico Wine Room</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Light palate cleansers or a glass of sparkling wine served to prepare guests for dinner</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-time-block">
+        <div class="flow-time">7:15 pm<br>&ndash;<br>10:00 pm</div>
+      </div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">5-Course Wine Dinner &amp; Pairings</div>
+        <div class="flow-step-desc">Elegant multi-course dinner at Calico Wine Room with expert wine pairings, progressing lighter to fuller-bodied</div>
+        <div class="flow-details">
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">~30 minutes per course including wine service and brief explanations by sommelier or chef</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Sommelier introduces each wine and explains the pairing rationale</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Soft background music and elegant table settings enhance the dining experience</div></div>
+          <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Optional cocktail-themed amuse-bouche between courses to bridge mixology and wine dinner</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- UPSELL OPPORTUNITIES -->
+<div class="block block-dark fade-in">
+  <div class="eyebrow">Upsell &amp; Revenue Strategy</div>
+  <h2 class="block-title">Maximising <em>returns</em></h2>
+  <div class="upsell-box">
+    <div class="upsell-title">Revenue &amp; Upsell Opportunities</div>
+    <div class="upsell-list">
+      <div class="upsell-item"><div class="upsell-dot"></div><p class="upsell-text">Share videos and pictures for the website, Instagram, and pre-booking options to drive attendance and visibility.</p></div>
+      <div class="upsell-item"><div class="upsell-dot"></div><p class="upsell-text">Maintain pour costs and ingredient expenses to preserve profit margins throughout the season.</p></div>
+      <div class="upsell-item"><div class="upsell-dot"></div><p class="upsell-text">Offer merchandise or premium cocktail kits shipped directly to guests&rsquo; postal addresses post-class.</p></div>
+      <div class="upsell-item"><div class="upsell-dot"></div><p class="upsell-text">Back-to-back <strong style="color:var(--white)">Mixology Class + 5-Course Wine Dinner</strong> experience inside Calico Wine Room at <strong style="color:var(--gold)">USD 850++ per person</strong>.</p></div>
+      <div class="upsell-item"><div class="upsell-dot"></div><p class="upsell-text">Reassess pricing if costs or demand shift significantly during the season to maintain competitiveness.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- HIGHLIGHT BAND -->
+<div class="highlight-band fade-in">
+  <div class="highlight-number">$850<span style="font-size:28px;font-weight:400">++</span></div>
+  <div class="highlight-label">Per Person &mdash; Mixology Class + 5-Course Wine Dinner</div>
+  <div class="highlight-note">The premium back-to-back experience at Calico Wine Room</div>
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="page-footer-links">
+    <a href="cocktail-menu.html">Cocktail Menu</a>
+    <a href="food-pairing.html">Food Pairings</a>
+    <a href="resume.html">R&eacute;sum&eacute;</a>
+  </div>
+  <p>&copy; 2026 Subash Shankar &mdash; Calico Mixology Lab</p>
+  <a href="subash-shankar.html" class="btn">&#x2190; Back to Portfolio</a>
+</div>
+
+<script>
+  const obs = new IntersectionObserver((e) => e.forEach(en => { if(en.isIntersecting) en.target.classList.add('visible'); }), { threshold:0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

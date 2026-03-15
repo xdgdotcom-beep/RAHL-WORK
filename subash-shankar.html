@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subash Shankar — Master Mixologist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- Preload critical above-the-fold images -->
+<link rel="preload" as="image" href="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" fetchpriority="high" />
+<link rel="preload" as="image" href="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" />
+<link rel="preload" as="image" href="https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg" />
+
+<style>
+  :root {
+    --gold:#C9A84C; --gold-light:#E2C374; --gold-dim:#8B6F30;
+    --black:#0A0A0A; --dark:#111111; --dark2:#1A1A1A; --dark3:#242424;
+    --text:#E8E0D0; --text-muted:#999080; --white:#F5F0E8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--black); color:var(--text); font-family:'Cormorant Garamond',Georgia,serif; overflow-x:hidden; }
+
+  /* ══════════════════════════════════
+     PRELOADER — Cocktail Glass
+  ══════════════════════════════════ */
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap');
+
+  #preloader {
+    position:fixed; inset:0; z-index:9999;
+    background: radial-gradient(circle at center, #16161e 0%, #050505 100%);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    transition:opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #preloader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+
+  .svg-loader { width:80px; height:100px; margin-bottom:20px; }
+
+  .glass-outline {
+    fill:none; stroke:#ffffff;
+    stroke-width:2.5;
+    stroke-linecap:round; stroke-linejoin:round;
+    opacity:0.8;
+  }
+  .pour-stream {
+    fill:none; stroke:#ff2a5f;
+    stroke-width:3; stroke-linecap:round;
+    stroke-dasharray:10 8;
+    animation:pourFlow 0.4s linear infinite, pourToggle 3s ease-in-out infinite;
+  }
+  .liquid-fill {
+    fill:url(#liquid-gradient);
+    animation:fillGlass 3s ease-in-out infinite;
+  }
+
+  @keyframes pourFlow {
+    from { stroke-dashoffset:18; }
+    to   { stroke-dashoffset:0; }
+  }
+  @keyframes pourToggle {
+    0%, 5%   { opacity:1; }
+    35%, 100% { opacity:0; }
+  }
+  @keyframes fillGlass {
+    0%        { transform:translateY(46px); }
+    35%, 65%  { transform:translateY(0px); }
+    100%      { transform:translateY(46px); }
+  }
+
+  .preloader-brand {
+    font-family:'Cinzel', serif;
+    font-size:24px; letter-spacing:3px;
+    color:#ffffff;
+    text-transform:uppercase;
+    margin:0 0 10px 0;
+  }
+  .preloader-text {
+    font-family:'Montserrat',sans-serif;
+    font-size:10px; letter-spacing:5px;
+    color:#a0a0a0; text-transform:uppercase;
+    animation:pulseText 1.5s infinite alternate;
+  }
+  @keyframes pulseText {
+    0%   { opacity:0.4; color:#a0a0a0; }
+    100% { opacity:1;   color:#ff2a5f; }
+  }
+
+  .preloader-track {
+    width:150px; height:1px;
+    background:#222;
+    margin-top:25px;
+    position:relative; overflow:hidden;
+  }
+  .preloader-indicator {
+    position:absolute; top:0; left:0;
+    height:100%; width:0%;
+    background:linear-gradient(90deg, #00f3ff, #ff2a5f);
+    transition:width 0.25s ease;
+  }
+
+  /* Shimmer skeleton on images while loading */
+  @keyframes shimmer {
+    0%   { background-position:-400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  .img-skeleton {
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 400px 100%;
+    animation: shimmer 1.4s infinite linear;
+  }
+  img.lazy-img { opacity:0; transition:opacity 0.5s ease; }
+  img.lazy-img.loaded { opacity:1; }
+
+  /* ══════════════════════════════════
+     NAV
+  ══════════════════════════════════ */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:18px 28px; background:linear-gradient(to bottom,rgba(0,0,0,0.9) 0%,transparent 100%); }
+  .nav-logo { font-family:'Montserrat',sans-serif; font-weight:700; font-size:18px; letter-spacing:0.15em; color:var(--gold); }
+  .nav-menu { display:flex; gap:20px; list-style:none; align-items:center; }
+  .nav-menu a { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color 0.3s; }
+  .nav-menu a:hover { color:var(--gold); }
+  .nav-resume-btn { color:var(--gold)!important; border:1px solid var(--gold-dim); padding:7px 14px; border-radius:2px; transition:all 0.3s!important; }
+  .nav-resume-btn:hover { background:var(--gold)!important; color:var(--black)!important; }
+
+  /* ══════════════════════════════════
+     HERO
+  ══════════════════════════════════ */
+  .hero { position:relative; height:100vh; min-height:700px; overflow:hidden; display:flex; align-items:flex-end; }
+  .hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; filter:brightness(0.55); }
+  .hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,0.3) 60%,rgba(0,0,0,0.92) 100%); }
+  .hero-content { position:relative; z-index:2; padding:0 32px 52px; width:100%; }
+  .hero-eyebrow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  .hero-name-first { font-family:'Montserrat',sans-serif; font-weight:900; font-size:clamp(52px,14vw,80px); letter-spacing:0.02em; color:var(--white); line-height:1; text-transform:uppercase; display:block; }
+  .hero-name-last { font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:400; font-size:clamp(52px,14vw,80px); color:var(--gold); line-height:1.05; display:block; margin-top:2px; }
+  .hero-tagline { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:17px; font-weight:300; color:var(--text-muted); margin-top:18px; letter-spacing:0.03em; }
+  .hero-btns { display:flex; gap:14px; margin-top:28px; flex-wrap:wrap; }
+  .btn-gold { display:inline-block; font-family:'Montserrat',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; padding:14px 28px; background:var(--gold); color:var(--black); border:none; cursor:pointer; transition:background 0.3s,transform 0.2s; }
+  .btn-gold:hover { background:var(--gold-light); transform:translateY(-1px); }
+  .btn-outline { display:inline-block; font-family:'Montserrat',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; padding:13px 28px; background:transparent; color:var(--white); border:1px solid rgba(255,255,255,0.35); cursor:pointer; transition:all 0.3s; }
+  .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* COMMONS */
+  section { padding:72px 32px; }
+  .eyebrow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(30px,8vw,44px); font-weight:400; line-height:1.15; color:var(--white); }
+  .section-title em { font-style:italic; color:var(--gold); font-weight:400; }
+  .gold-rule { width:48px; height:1px; background:var(--gold-dim); margin:18px 0 24px; }
+
+  /* ARTISAN */
+  .artisan { background:var(--black); }
+  .artisan p { font-size:17px; line-height:1.8; color:#BBB0A0; font-weight:300; margin-bottom:18px; }
+  .artisan p:first-of-type::first-letter { float:left; font-family:'Playfair Display',serif; font-size:68px; font-weight:700; color:var(--gold); line-height:0.78; margin-right:10px; margin-top:8px; }
+
+  /* RECOGNITION */
+  .recognition { background:var(--dark); padding:56px 32px; }
+  .recognition-list { margin-top:32px; display:flex; flex-direction:column; }
+  .recognition-item { display:flex; align-items:flex-start; gap:16px; padding:20px 0; border-bottom:1px solid rgba(201,168,76,0.1); }
+  .recognition-item:first-child { border-top:1px solid rgba(201,168,76,0.1); }
+  .recognition-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); margin-top:8px; flex-shrink:0; }
+  .recognition-text { font-size:16px; line-height:1.65; color:#BBB0A0; font-weight:300; }
+
+  /* STATS */
+  .stats { background:var(--dark2); padding:48px 32px; }
+  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px 24px; }
+  .stat-number { font-family:'Montserrat',sans-serif; font-weight:700; font-size:42px; color:var(--gold); line-height:1; }
+  .stat-infinity { font-size:48px; }
+  .stat-label { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-muted); margin-top:6px; }
+
+  /* COLLAGE */
+  .collage { background:var(--black); padding:0; }
+  .collage-grid { position:relative; display:grid; grid-template-columns:58% 42%; gap:3px; height:320px; }
+  .collage-main { height:100%; overflow:hidden; }
+  .collage-main img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; filter:brightness(0.88); transition:filter 0.4s; }
+  .collage-main:hover img { filter:brightness(1); }
+  .collage-right { position:relative; height:100%; overflow:hidden; }
+  .collage-right-main { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.85); transition:filter 0.4s; }
+  .collage-right:hover .collage-right-main { filter:brightness(1); }
+  .collage-thumb { position:absolute; bottom:8px; right:8px; width:52%; height:44%; overflow:hidden; border:2px solid var(--black); box-shadow:0 4px 16px rgba(0,0,0,0.6); }
+  .collage-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* DIAMOND */
+  .diamond-divider { background:var(--dark); text-align:center; padding:28px; }
+  .diamond-divider::before { content:'\25C6'; color:var(--gold); font-size:14px; }
+
+  /* VIDEO */
+  .video-section { background:var(--dark); text-align:center; padding:64px 32px; }
+  .video-wrapper { position:relative; margin:32px auto 0; border-radius:4px; overflow:hidden; background:#000; aspect-ratio:16/9; max-width:560px; }
+  .video-wrapper iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+
+  /* GALLERY */
+  .gallery { background:var(--black); padding:64px 32px; }
+  .gallery-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:32px; }
+  .gallery-item { overflow:hidden; aspect-ratio:1; position:relative; }
+  .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s,filter 0.4s; filter:brightness(0.8) saturate(0.9); }
+  .gallery-item:hover img { transform:scale(1.05); filter:brightness(1) saturate(1.1); }
+
+  /* PHILOSOPHY */
+  .philosophy { background:var(--dark2); padding:80px 32px; text-align:center; position:relative; overflow:hidden; }
+  .philosophy::before { content:''; position:absolute; inset:0; background:url('https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg') center/cover no-repeat; opacity:0.08; }
+  .philosophy-eyebrow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:28px; position:relative; }
+  .philosophy blockquote { position:relative; font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(20px,5.5vw,28px); font-weight:400; line-height:1.55; color:var(--white); max-width:480px; margin:0 auto; }
+  .philosophy blockquote::before { content:'\201C'; display:block; font-size:80px; color:var(--gold-dim); line-height:0.6; margin-bottom:20px; opacity:0.6; }
+  .philosophy cite { display:block; font-family:'Montserrat',sans-serif; font-style:normal; font-size:9px; font-weight:600; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-top:28px; position:relative; }
+  .philosophy cite::before { content:'\2014 '; }
+
+  /* FEATURE CARDS */
+  .features { background:var(--dark); padding:72px 32px; }
+  .feature-cards { display:flex; flex-direction:column; gap:24px; margin-top:40px; }
+  .feature-card { display:block; text-decoration:none; background:var(--dark2); overflow:hidden; border:1px solid rgba(201,168,76,0.1); transition:border-color 0.3s,transform 0.3s; }
+  .feature-card:hover { border-color:rgba(201,168,76,0.4); transform:translateY(-3px); }
+  .feature-card-img { width:100%; height:180px; background-size:cover; background-position:center; filter:brightness(0.7) saturate(0.8); transition:filter 0.4s; }
+  .feature-card:hover .feature-card-img { filter:brightness(0.9) saturate(1); }
+  .feature-card-body { padding:24px 22px 28px; }
+  .feature-card-eyebrow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+  .feature-card-title { font-family:'Playfair Display',serif; font-size:24px; font-weight:400; color:var(--white); line-height:1.2; margin-bottom:12px; }
+  .feature-card-title em { font-style:italic; color:var(--gold); }
+  .feature-card-desc { font-family:'Cormorant Garamond',serif; font-size:15px; color:var(--text-muted); line-height:1.7; font-weight:300; margin-bottom:18px; }
+  .feature-card-cta { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); }
+
+  /* DISCIPLINES */
+  .disciplines { background:var(--black); padding:72px 32px; }
+  .discipline-list { margin-top:48px; display:flex; flex-direction:column; }
+  .discipline-item { padding:36px 0; border-bottom:1px solid rgba(201,168,76,0.12); display:flex; gap:20px; align-items:flex-start; }
+  .discipline-item:first-child { border-top:1px solid rgba(201,168,76,0.12); }
+  .discipline-number { font-family:'Montserrat',sans-serif; font-size:42px; font-weight:700; color:rgba(201,168,76,0.15); line-height:1; min-width:56px; text-align:right; padding-top:4px; }
+  .discipline-icon { font-size:22px; margin-bottom:10px; display:block; }
+  .discipline-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--white); margin-bottom:10px; }
+  .discipline-desc { font-size:15px; line-height:1.7; color:var(--text-muted); font-weight:300; }
+
+  /* CAREER */
+  .career { background:var(--dark2); padding:72px 32px; }
+  .timeline { margin-top:48px; position:relative; padding-left:20px; }
+  .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:0; width:1px; background:linear-gradient(to bottom,var(--gold-dim),transparent); }
+  .timeline-item { position:relative; padding:0 0 44px 28px; }
+  .timeline-item::before { content:''; position:absolute; left:-4px; top:8px; width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 3px rgba(201,168,76,0.15); }
+  .timeline-period { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+  .timeline-role { font-family:'Playfair Display',serif; font-size:19px; font-weight:700; color:var(--white); margin-bottom:3px; }
+  .timeline-place { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--text-muted); margin-bottom:2px; }
+  .timeline-location { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:rgba(153,144,128,0.6); }
+
+  /* EDUCATION */
+  .education { background:var(--dark); padding:64px 32px; }
+  .edu-list { margin-top:36px; display:flex; flex-direction:column; gap:28px; }
+  .edu-item { padding:24px; background:var(--dark2); border-left:3px solid var(--gold-dim); }
+  .edu-degree { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--white); margin-bottom:6px; }
+  .edu-institution { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--text-muted); margin-bottom:4px; }
+  .edu-period { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); }
+
+  /* CERTS */
+  .certificates { background:var(--black); padding:72px 32px; }
+  .cert-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:36px; }
+  .cert-card { background:var(--dark2); border:1px solid rgba(201,168,76,0.12); padding:20px 18px; position:relative; overflow:hidden; }
+  .cert-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--gold-dim); }
+  .cert-name { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; color:var(--white); margin-bottom:6px; line-height:1.3; }
+  .cert-issuer { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+  .cert-year { font-family:'Montserrat',sans-serif; font-size:9px; color:var(--text-muted); }
+
+  /* CTA */
+  .cta-band { background:var(--dark2); padding:56px 32px; text-align:center; border-top:1px solid rgba(201,168,76,0.15); border-bottom:1px solid rgba(201,168,76,0.15); }
+  .cta-band-title { font-family:'Playfair Display',serif; font-size:clamp(26px,6vw,38px); font-weight:400; color:var(--white); margin-bottom:12px; line-height:1.2; }
+  .cta-band-title em { font-style:italic; color:var(--gold); }
+  .cta-band-sub { font-family:'Cormorant Garamond',serif; font-size:16px; font-style:italic; color:var(--text-muted); margin-bottom:32px; }
+
+  /* FOOTER */
+  footer { background:var(--dark2); padding:64px 32px 48px; position:relative; overflow:hidden; }
+  .footer-bg-text { position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); font-family:'Montserrat',sans-serif; font-weight:900; font-size:clamp(40px,12vw,80px); text-transform:uppercase; letter-spacing:0.05em; color:rgba(255,255,255,0.03); white-space:nowrap; pointer-events:none; }
+  .footer-logo { font-family:'Montserrat',sans-serif; font-weight:900; font-size:28px; letter-spacing:0.1em; color:var(--white); text-transform:uppercase; margin-bottom:6px; position:relative; }
+  .footer-subtitle { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:var(--gold); margin-bottom:4px; position:relative; }
+  .footer-location { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-muted); margin-top:8px; display:flex; align-items:center; gap:6px; position:relative; }
+  .footer-contact { margin-top:20px; position:relative; display:flex; flex-direction:column; gap:8px; }
+  .footer-contact a { font-family:'Montserrat',sans-serif; font-size:11px; color:var(--text-muted); text-decoration:none; transition:color 0.3s; display:flex; align-items:center; gap:8px; }
+  .footer-contact a:hover { color:var(--gold); }
+  .footer-divider { width:100%; height:1px; background:rgba(201,168,76,0.15); margin:32px 0; position:relative; }
+  .footer-links { display:flex; flex-wrap:wrap; gap:20px; position:relative; }
+  .footer-links a { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color 0.3s; }
+  .footer-links a:hover { color:var(--gold); }
+  .footer-copy { font-family:'Montserrat',sans-serif; font-size:10px; color:rgba(255,255,255,0.2); margin-top:24px; position:relative; }
+
+  /* ANIMATIONS */
+  .fade-in { opacity:0; transform:translateY(28px); transition:opacity 0.8s ease,transform 0.8s ease; }
+  .fade-in.visible { opacity:1; transform:none; }
+  .fade-in-delay-1 { transition-delay:0.1s; }
+  .fade-in-delay-2 { transition-delay:0.2s; }
+  .fade-in-delay-3 { transition-delay:0.3s; }
+
+  @media (max-width:480px) {
+    nav .nav-menu { display:none; }
+    .collage-grid { height:260px; }
+    .cert-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ PRELOADER ══ -->
+<div id="preloader">
+
+  <svg class="svg-loader" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="liquid-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#ff2a5f" />
+        <stop offset="100%" stop-color="#00f3ff" />
+      </linearGradient>
+      <clipPath id="inner-glass">
+        <polygon points="17,22 83,22 50,68" />
+      </clipPath>
+    </defs>
+    <line class="pour-stream" x1="50" y1="-10" x2="50" y2="65" />
+    <rect class="liquid-fill" x="15" y="22" width="70" height="46" clip-path="url(#inner-glass)" />
+    <path class="glass-outline" d="M 15,20 L 85,20 L 50,70 Z" />
+    <line class="glass-outline" x1="50" y1="70" x2="50" y2="110" />
+    <line class="glass-outline" x1="30" y1="110" x2="70" y2="110" />
+  </svg>
+
+  <div class="preloader-brand">Subash Shankar</div>
+  <div class="preloader-text">Synthesizing spirits...</div>
+
+  <div class="preloader-track">
+    <div class="preloader-indicator" id="preloaderBar"></div>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SS</div>
+  <ul class="nav-menu">
+    <li><a href="#artisan">About</a></li>
+    <li><a href="cocktail-menu.html">Menu</a></li>
+    <li><a href="food-pairing.html">Pairings</a></li>
+    <li><a href="mixology-lab.html">Lab</a></li>
+    <li><a href="#career">Career</a></li>
+    <li><a href="resume.html" class="nav-resume-btn">R&eacute;sum&eacute;</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <img class="hero-img lazy-img img-skeleton"
+       src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg"
+       alt="Subash Shankar"
+       fetchpriority="high" />
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Lead Molecular Mixologist &middot; 19 Years of Innovation</p>
+    <h1>
+      <span class="hero-name-first">Subash</span>
+      <span class="hero-name-last">Shankar</span>
+    </h1>
+    <p class="hero-tagline">Where science meets soul &mdash; cocktails as art</p>
+    <div class="hero-btns">
+      <a href="cocktail-menu.html" class="btn-gold">View Cocktail Menu</a>
+      <a href="resume.html" class="btn-outline">Full R&eacute;sum&eacute;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ARTISAN -->
+<section class="artisan" id="artisan">
+  <div class="eyebrow fade-in">The Artisan</div>
+  <h2 class="section-title fade-in fade-in-delay-1">Crafting <em>liquid</em><br>experiences</h2>
+  <div class="gold-rule fade-in fade-in-delay-2"></div>
+  <p class="fade-in fade-in-delay-2">In the modern cocktail scene, the terms &ldquo;mixology&rdquo; and &ldquo;mixologist&rdquo; are a regular part of bar vocabulary &mdash; being used more and more to describe a style of mixing cocktails and the people who practice it. Subash Shankar exemplifies this distinction at the highest level.</p>
+  <p class="fade-in fade-in-delay-3">With 19 years of experience spanning India, the UAE, Bahrain, Qatar, Belize, and the Turks &amp; Caicos Islands, Subash is a Lead Molecular Mixologist and Beverage Program Developer with a deep passion for local ingredients, gastronomy-led cocktail design, and elevating every guest experience into a multi-sensory performance.</p>
+</section>
+
+<!-- RECOGNITION -->
+<section class="recognition" id="recognition">
+  <div class="eyebrow fade-in">Global Media &amp; Digital Recognition</div>
+  <h2 class="section-title fade-in fade-in-delay-1">A name <em>known</em><br>worldwide</h2>
+  <div class="recognition-list">
+    <div class="recognition-item fade-in"><div class="recognition-dot"></div><p class="recognition-text">Featured across leading U.S. digital media outlets including <strong style="color:var(--white)">UPROXX</strong> and <strong style="color:var(--white)">Vision Viral</strong>.</p></div>
+    <div class="recognition-item fade-in fade-in-delay-1"><div class="recognition-dot"></div><p class="recognition-text">International press coverage for presenting one of the <strong style="color:var(--white)">world&rsquo;s best margaritas</strong> in the United States.</p></div>
+    <div class="recognition-item fade-in fade-in-delay-2"><div class="recognition-dot"></div><p class="recognition-text">Widely recognized for innovative <strong style="color:var(--white)">molecular cocktail techniques</strong> and modern beverage artistry.</p></div>
+    <div class="recognition-item fade-in fade-in-delay-3"><div class="recognition-dot"></div><p class="recognition-text">Elevated <strong style="color:var(--white)">Belize&rsquo;s presence</strong> in the global mixology industry through international media exposure.</p></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat-item fade-in"><div class="stat-number">19+</div><div class="stat-label">Years<br>Experience</div></div>
+    <div class="stat-item fade-in fade-in-delay-1"><div class="stat-number">200+</div><div class="stat-label">Original<br>Recipes</div></div>
+    <div class="stat-item fade-in fade-in-delay-2"><div class="stat-number">10+</div><div class="stat-label">Molecular<br>Mixology Yrs</div></div>
+    <div class="stat-item fade-in fade-in-delay-3"><div class="stat-number stat-infinity">&infin;</div><div class="stat-label">Creativity</div></div>
+  </div>
+</section>
+
+<!-- COLLAGE -->
+<div class="collage">
+  <div class="collage-grid">
+    <div class="collage-main img-skeleton">
+      <img class="lazy-img" src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Subash Shankar at the bar" />
+    </div>
+    <div class="collage-right img-skeleton">
+      <img class="collage-right-main lazy-img" src="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" alt="Skull cocktail" />
+      <div class="collage-thumb">
+        <img class="lazy-img" src="https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg" alt="Garnished cocktail" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="diamond-divider"></div>
+
+<!-- VIDEO -->
+<section class="video-section" id="video">
+  <div class="eyebrow fade-in">In Motion</div>
+  <h2 class="section-title fade-in fade-in-delay-1">Watch the <em>magic</em></h2>
+  <div class="video-wrapper fade-in fade-in-delay-2">
+    <iframe src="https://player.vimeo.com/video/577733619?autoplay=0&title=0&byline=0&portrait=0&color=C9A84C" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="eyebrow fade-in">The Work</div>
+  <h2 class="section-title fade-in fade-in-delay-1">A gallery of <em>craft</em></h2>
+  <div class="gallery-grid">
+    <div class="gallery-item img-skeleton fade-in"><img class="lazy-img" src="https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg" alt="Cocktail craft 1" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-1"><img class="lazy-img" src="https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg" alt="Cocktail craft 2" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-1"><img class="lazy-img" src="https://foldr.space/api/view/aZGoN4EiyltIahyK/IMG-20260313-WA0208.jpg" alt="Cocktail craft 3" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-2"><img class="lazy-img" src="https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg" alt="Cocktail craft 4" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-2"><img class="lazy-img" src="https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg" alt="Cocktail craft 5" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-3"><img class="lazy-img" src="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" alt="Cocktail craft 6" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-3"><img class="lazy-img" src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Cocktail craft 7" loading="lazy" /></div>
+    <div class="gallery-item img-skeleton fade-in fade-in-delay-3"><img class="lazy-img" src="https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg" alt="Cocktail craft 8" loading="lazy" /></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <p class="philosophy-eyebrow">Philosophy</p>
+  <blockquote>
+    A cocktail is not just a drink &mdash; it is a story told in glass, fire, smoke, and flavour.
+    <cite>Subash Shankar</cite>
+  </blockquote>
+</section>
+
+<!-- FEATURE CARDS -->
+<section class="features" id="features">
+  <div class="eyebrow fade-in">Explore the Work</div>
+  <h2 class="section-title fade-in fade-in-delay-1">Three <em>signature</em> experiences</h2>
+  <div class="feature-cards">
+    <a href="cocktail-menu.html" class="feature-card fade-in">
+      <div class="feature-card-img" style="background-image:url('https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg')"></div>
+      <div class="feature-card-body">
+        <div class="feature-card-eyebrow">Ambergris Alchemy</div>
+        <div class="feature-card-title">The Cocktail <em>Menu</em></div>
+        <p class="feature-card-desc">Six chapters of liquid artistry &mdash; Fire &amp; Ash, Aged But Not Old, Boozy Gelato Cocktails, Molecular Alchemy, Fat Wash &amp; Clarification, and BBQ &amp; Toast Inspired.</p>
+        <div class="feature-card-cta">View Full Menu &rarr;</div>
+      </div>
+    </a>
+    <a href="food-pairing.html" class="feature-card fade-in fade-in-delay-1">
+      <div class="feature-card-img" style="background-image:url('https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg')"></div>
+      <div class="feature-card-body">
+        <div class="feature-card-eyebrow">El Mago &mdash; Mexican Peruvian Table</div>
+        <div class="feature-card-title">Food &amp; Cocktail <em>Pairings</em></div>
+        <p class="feature-card-desc">A refined Mexican&ndash;Peruvian menu weaving bold, vibrant tastes and innovative textures &mdash; appetizers, mains, and desserts in celebration of artistry and tradition.</p>
+        <div class="feature-card-cta">View Pairings &rarr;</div>
+      </div>
+    </a>
+    <a href="mixology-lab.html" class="feature-card fade-in fade-in-delay-2">
+      <div class="feature-card-img" style="background-image:url('https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg')"></div>
+      <div class="feature-card-body">
+        <div class="feature-card-eyebrow">Calico &mdash; Mixology Lab Classes</div>
+        <div class="feature-card-title">ROI Plan &amp; <em>Class Flow</em></div>
+        <p class="feature-card-desc">USD 290++ per person &middot; 3 classes/week &middot; 18 participants &middot; $158K projected revenue &middot; Complete event flow with optional 5-Course Wine Dinner at USD 850++.</p>
+        <div class="feature-card-cta">View ROI Plan &rarr;</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- DISCIPLINES -->
+<section class="disciplines" id="disciplines">
+  <div class="eyebrow fade-in">Disciplines</div>
+  <h2 class="section-title fade-in fade-in-delay-1">Areas of <em>mastery</em></h2>
+  <div class="discipline-list">
+    <div class="discipline-item fade-in"><div class="discipline-number">01</div><div class="discipline-body"><span class="discipline-icon">&#x1F9EA;</span><div class="discipline-title">Molecular Mixology</div><p class="discipline-desc">Employing liquid nitrogen, spherification, and culinary science to transform cocktails into multi-sensory theatre that challenges every expectation.</p></div></div>
+    <div class="discipline-item fade-in"><div class="discipline-number">02</div><div class="discipline-body"><span class="discipline-icon">&#x1F525;</span><div class="discipline-title">Live Presentation</div><p class="discipline-desc">Mastery of fire, smoke, and live tableside craftsmanship &mdash; turning every pour into a performance that guests remember long after the glass is empty.</p></div></div>
+    <div class="discipline-item fade-in"><div class="discipline-number">03</div><div class="discipline-body"><span class="discipline-icon">&#x1F33F;</span><div class="discipline-title">House Infusions</div><p class="discipline-desc">Crafting bespoke botanical infusions, barrel-aged spirits, and fermented preparations that give each menu a distinct terroir and identity.</p></div></div>
+    <div class="discipline-item fade-in"><div class="discipline-number">04</div><div class="discipline-body"><span class="discipline-icon">&#x1F393;</span><div class="discipline-title">Cocktail Education</div><p class="discipline-desc">Delivering immersive Gastronomy &amp; Molecular Mixology Masterclasses for guests and hospitality teams globally.</p></div></div>
+    <div class="discipline-item fade-in"><div class="discipline-number">05</div><div class="discipline-body"><span class="discipline-icon">&#x1F379;</span><div class="discipline-title">Menu Architecture</div><p class="discipline-desc">Designing cocktail menus that tell a narrative &mdash; from concept to flavour balance, presentation, and the guest experience from first glance to last sip.</p></div></div>
+    <div class="discipline-item fade-in"><div class="discipline-number">06</div><div class="discipline-body"><span class="discipline-icon">&#x2B50;</span><div class="discipline-title">Bar Leadership</div><p class="discipline-desc">Leading luxury property bar teams to the highest standard, with specialist training in Cost Control and Inventory Management.</p></div></div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section class="career" id="career">
+  <div class="eyebrow fade-in">Work History</div>
+  <h2 class="section-title fade-in fade-in-delay-1">A career of <em>distinction</em></h2>
+  <div class="timeline">
+    <div class="timeline-item fade-in"><div class="timeline-period">Nov 2024 &mdash; Jan 2026</div><div class="timeline-role">Group Mixology Master</div><div class="timeline-place">Waterloo Hotel Management Ltd</div><div class="timeline-location">Turks and Caicos</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">May 2021 &mdash; Nov 2024</div><div class="timeline-role">Beverage Manager / Head Mixologist</div><div class="timeline-place">Alaia Marriott Autograph Collection</div><div class="timeline-location">San Pedro, Belize</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Jul 2019 &mdash; Feb 2021</div><div class="timeline-role">Mixologist / In Charge</div><div class="timeline-place">Nawlin&rsquo;s Jazz House &mdash; Marsa Malaz Kempinski</div><div class="timeline-location">Doha, Qatar</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Nov 2018 &mdash; Jun 2019</div><div class="timeline-role">Mixologist / In Charge</div><div class="timeline-place">Pearl Social by Chef Jason Atherton &mdash; Kempinski</div><div class="timeline-location">Doha, Qatar</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Dec 2016 &mdash; Oct 2018</div><div class="timeline-role">Bar &amp; Lounge Supervisor</div><div class="timeline-place">Antica Pesa &mdash; Marsa Malaz Kempinski</div><div class="timeline-location">Doha, Qatar</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Nov 2014 &mdash; Nov 2016</div><div class="timeline-role">Bar Supervisor</div><div class="timeline-place">El Faro Spanish Cuisine &mdash; Kempinski</div><div class="timeline-location">Doha, Qatar</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Sep 2011 &mdash; Aug 2014</div><div class="timeline-role">Bar Supervisor</div><div class="timeline-place">Boudoir &mdash; Kempinski Grand &amp; Ixir Hotel</div><div class="timeline-location">Bahrain</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Nov 2007 &mdash; May 2011</div><div class="timeline-role">Head Bartender</div><div class="timeline-place">Trader Vic&rsquo;s &mdash; Beach Rotana</div><div class="timeline-location">Abu Dhabi, UAE</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">Sep 2006 &mdash; May 2007</div><div class="timeline-role">Bartender</div><div class="timeline-place">Club Mahindra</div><div class="timeline-location">Munnar, India</div></div>
+    <div class="timeline-item fade-in"><div class="timeline-period">May 2004 &mdash; Nov 2005</div><div class="timeline-role">Bartender (Training)</div><div class="timeline-place">Le M&eacute;ridien</div><div class="timeline-location">Cochin, India</div></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="education" id="education">
+  <div class="eyebrow fade-in">Education</div>
+  <h2 class="section-title fade-in fade-in-delay-1">Academic <em>foundations</em></h2>
+  <div class="edu-list">
+    <div class="edu-item fade-in"><div class="edu-degree">Diploma in Hotel Management</div><div class="edu-institution">Indian Institute of Tourism and Management, Calicut</div><div class="edu-period">Jun 2003 &mdash; Aug 2006</div></div>
+    <div class="edu-item fade-in fade-in-delay-1"><div class="edu-degree">Bachelor of Arts &mdash; Politics</div><div class="edu-institution">Calicut University, Calicut</div><div class="edu-period">2001 &mdash; 2003</div></div>
+    <div class="edu-item fade-in fade-in-delay-2"><div class="edu-degree">Pre-Degree &mdash; History &amp; Politics</div><div class="edu-institution">Calicut University, Calicut</div><div class="edu-period">1997 &mdash; 1999</div></div>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section class="certificates" id="certificates">
+  <div class="eyebrow fade-in">Certifications</div>
+  <h2 class="section-title fade-in fade-in-delay-1">Credentials &amp; <em>training</em></h2>
+  <div class="cert-grid">
+    <div class="cert-card fade-in"><div class="cert-name">Introductory Whisky Training Level 1 &amp; 2</div><div class="cert-issuer">Chivas Academy</div><div class="cert-year">2014 &amp; 2020</div></div>
+    <div class="cert-card fade-in fade-in-delay-1"><div class="cert-name">Train The Trainer &mdash; Certified Trainer</div><div class="cert-issuer">Kempinski Bahrain</div><div class="cert-year">2013</div></div>
+    <div class="cert-card fade-in fade-in-delay-1"><div class="cert-name">Essential PCI DSS Certification</div><div class="cert-issuer">Corporate IT Training, Kempinski</div><div class="cert-year">2013</div></div>
+    <div class="cert-card fade-in fade-in-delay-2"><div class="cert-name">Jameson Irish Whiskey Training</div><div class="cert-issuer">Old Jameson Distillery</div><div class="cert-year">2009</div></div>
+    <div class="cert-card fade-in fade-in-delay-2"><div class="cert-name">Habanos Cigar Training</div><div class="cert-issuer">Baquer Mohebi Est.</div><div class="cert-year">2008</div></div>
+    <div class="cert-card fade-in fade-in-delay-3"><div class="cert-name">Food Safety Level 2</div><div class="cert-issuer">Kempinski Marsa Malaz</div><div class="cert-year">2019</div></div>
+    <div class="cert-card fade-in fade-in-delay-3"><div class="cert-name">Bacardi Portfolio Training</div><div class="cert-issuer">Bacardi</div><div class="cert-year">2020</div></div>
+    <div class="cert-card fade-in fade-in-delay-3"><div class="cert-name">WSET Master in Spirit Level 2</div><div class="cert-issuer">Wine &amp; Spirit Education Trust</div><div class="cert-year">&mdash;</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="eyebrow fade-in">Ready to collaborate?</div>
+  <h2 class="cta-band-title fade-in fade-in-delay-1">Explore the full<br><em>professional story</em></h2>
+  <p class="cta-band-sub fade-in fade-in-delay-2">19 years. 10+ countries. One extraordinary career.</p>
+  <a href="resume.html" class="btn-gold fade-in fade-in-delay-3">View Full R&eacute;sum&eacute;</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-bg-text">SUBASH SHANKAR</div>
+  <div class="footer-logo">Subash<br>Shankar</div>
+  <div class="footer-subtitle">Lead Molecular Mixologist &amp; Beverage Program Developer</div>
+  <div class="footer-location">&#x1F4CD; San Pedro, Belize &middot; Central America</div>
+  <div class="footer-contact">
+    <a href="/cdn-cgi/l/email-protection#cfbcbaada7aebca7a4aebdbab9aebdaebfaebbbbae8fa8a2aea6a3e1aca0a2"><span>&#x2709;</span> <span class="__cf_email__" data-cfemail="562523343e37253e3d37242320372437263722223716313b373f3a7835393b">[email&#160;protected]</span></a>
+    <a href="tel:+917994031394"><span>&#x260E;</span> +91 799 403 1394</a>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-links">
+    <a href="#artisan">About</a>
+    <a href="cocktail-menu.html">Cocktail Menu</a>
+    <a href="food-pairing.html">Food Pairings</a>
+    <a href="mixology-lab.html">Mixology Lab</a>
+    <a href="#career">Career</a>
+    <a href="#certificates">Certifications</a>
+    <a href="resume.html">R&eacute;sum&eacute;</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 Subash Shankar. All rights reserved.</p>
+</footer>
+
+<script>
+(function() {
+  const CRITICAL = [
+    'https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg',
+    'https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg',
+    'https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg'
+  ];
+  const ALL_IMGS = [
+    ...CRITICAL,
+    'https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg',
+    'https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg',
+    'https://foldr.space/api/view/aZGoN4EiyltIahyK/IMG-20260313-WA0208.jpg',
+    'https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg',
+    'https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg'
+  ];
+
+  const preloader = document.getElementById('preloader');
+  const bar       = document.getElementById('preloaderBar');
+  const total     = ALL_IMGS.length;
+  let loaded      = 0;
+
+  function updateBar(n) {
+    bar.style.width = Math.round((n / total) * 100) + '%';
+  }
+
+  function dismiss() {
+    preloader.classList.add('hidden');
+    startObserver();
+  }
+
+  function loadImage(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload  = () => { loaded++; updateBar(loaded); resolve(); };
+      img.onerror = () => { loaded++; updateBar(loaded); resolve(); };
+      img.src = src;
+    });
+  }
+
+  const timeout = setTimeout(dismiss, 8000);
+
+  Promise.all(ALL_IMGS.map(loadImage)).then(() => {
+    clearTimeout(timeout);
+    setTimeout(dismiss, 320);
+  });
+
+  function startObserver() {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  }
+
+  document.querySelectorAll('img.lazy-img').forEach(img => {
+    const parent = img.parentElement;
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('loaded');
+      parent.classList.remove('img-skeleton');
+    } else {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+        parent.classList.remove('img-skeleton');
+      });
+      img.addEventListener('error', () => {
+        parent.classList.remove('img-skeleton');
+      });
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
