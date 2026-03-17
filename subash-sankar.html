@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Subhash Sankar — Master Mixologist</title>
+<meta name="description" content="Subhash Sankar — Lead Molecular Mixologist &amp; Beverage Program Developer. 19 years of innovation spanning 10+ countries."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<link rel="preload" as="image" href="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" fetchpriority="high"/>
+<style>
+/* ══════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════ */
+:root{
+  --bg:#F0EBE3;
+  --ink:#16120E;
+  --am:#E07820;
+  --al:#FF9040;
+  --tl:#0E6868;
+  --li:#DDD6CC;
+  --gap:clamp(8px,1.2vw,12px);
+  --px:clamp(14px,3vw,32px);
+  --r:clamp(10px,1.5vw,16px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:"Syne",sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ══════════════════════════════════
+   PRELOADER
+══════════════════════════════════ */
+#pl{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  transition:opacity .7s,visibility .7s;
+}
+#pl.out{opacity:0;visibility:hidden;pointer-events:none}
+.pn{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(18px,5vw,32px);letter-spacing:-.02em;color:#fff}
+.ps{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--am)}
+.pb{width:160px;height:2px;background:#2a2a2a;overflow:hidden;margin-top:14px;border-radius:2px;position:relative}
+#pf{position:absolute;top:0;left:0;bottom:0;width:0%;background:var(--am);transition:width .2s ease;border-radius:2px}
+
+/* ══════════════════════════════════
+   NAV
+══════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(240,235,227,.94);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s;
+  padding:13px var(--px);
+  display:flex;justify-content:space-between;align-items:center;
+}
+nav.s{border-bottom-color:var(--li)}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;letter-spacing:-.02em;color:var(--ink)}
+.logo em{color:var(--am);font-style:normal}
+.nl{display:flex;gap:14px;list-style:none;align-items:center}
+.nl a{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#8A7868;transition:color .2s;white-space:nowrap}
+.nl a:hover{color:var(--ink)}
+.nl .ct{color:var(--am)!important;background:rgba(224,120,32,.1);padding:5px 12px;border-radius:3px}
+.ham{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
+.ham span{width:20px;height:2px;background:var(--ink);display:block;border-radius:2px;transition:transform .3s,opacity .3s}
+.ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.drawer{
+  display:none;position:fixed;inset:0;z-index:190;
+  background:rgba(240,235,227,.99);
+  flex-direction:column;align-items:center;justify-content:center;gap:24px;
+}
+.drawer.op{display:flex}
+.drawer a{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(22px,6vw,32px);color:#8A7868;transition:color .2s}
+.drawer a:hover{color:var(--am)}
+
+/* ══════════════════════════════════
+   PAGE & ROWS
+══════════════════════════════════ */
+.page{padding:calc(52px + var(--px)) var(--px) var(--px);display:flex;flex-direction:column;gap:var(--gap)}
+.row{display:grid;gap:var(--gap)}
+.cols-4{grid-template-columns:repeat(4,1fr)}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-2{grid-template-columns:1fr 1fr}
+.cols-8-4{grid-template-columns:2fr 1fr}
+.cols-4-8{grid-template-columns:1fr 2fr}
+.cols-5-7{grid-template-columns:5fr 7fr}
+
+/* ══════════════════════════════════
+   TILE BASE
+══════════════════════════════════ */
+.tile{background:#fff;border-radius:var(--r);overflow:hidden;transition:transform .3s,box-shadow .3s}
+.tile:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(22,18,14,.08)}
+
+/* ══════════════════════════════════
+   SHARED TYPOGRAPHY
+══════════════════════════════════ */
+.ey{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--am);margin-bottom:8px}
+.h2{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(20px,3.2vw,30px);letter-spacing:-.02em;color:var(--ink);line-height:1.05;margin-bottom:14px}
+.h2 em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--am);font-size:1.05em;font-weight:400}
+.body-p{font-family:"Instrument Serif",serif;font-size:clamp(14px,1.8vw,16px);line-height:1.72;color:#5A4A38;margin-bottom:8px}
+.body-p:last-child{margin-bottom:0}
+
+/* ══════════════════════════════════
+   HERO
+══════════════════════════════════ */
+.t-hero{
+  position:relative;
+  min-height:clamp(420px,60vw,640px);
+  background:var(--ink);
+  border-radius:var(--r);
+  overflow:hidden;
+  display:flex;align-items:flex-end;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url("https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg") center top/cover;
+  opacity:.4;filter:saturate(.4);
+}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(160deg,rgba(22,18,14,.96) 36%,rgba(22,18,14,.22) 100%)}
+.hero-body{position:relative;z-index:2;padding:clamp(24px,4vw,48px);width:100%}
+.hero-eye{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--am);margin-bottom:12px}
+.hero-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(42px,8vw,80px);color:#fff;line-height:.88;letter-spacing:-.03em}
+.hero-name-i{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(34px,6.5vw,64px);color:var(--am);display:block;margin-top:6px}
+.hero-sub{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(13px,2vw,17px);color:rgba(255,255,255,.45);margin:14px 0 20px;line-height:1.55;max-width:500px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-a{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:.04em;padding:10px 22px;background:var(--am);color:#fff;border-radius:6px;display:inline-block;transition:background .2s,transform .15s}
+.btn-a:hover{background:var(--al);transform:translateY(-1px)}
+.btn-b{font-family:"Syne",sans-serif;font-weight:600;font-size:10px;letter-spacing:.04em;padding:9px 22px;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.75);border-radius:6px;display:inline-block;transition:border-color .2s,color .2s}
+.btn-b:hover{border-color:rgba(255,255,255,.55);color:#fff}
+
+/* ══════════════════════════════════
+   STATS
+══════════════════════════════════ */
+.t-stat{padding:clamp(18px,2.5vw,28px);display:flex;flex-direction:column;justify-content:center}
+.stat-n{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(32px,4.5vw,52px);color:var(--am);line-height:1;letter-spacing:-.03em}
+.stat-l{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#8A7868;margin-top:5px}
+.t-stat-hi{background:var(--am)}
+.t-stat-hi .stat-n{color:#fff}
+.t-stat-hi .stat-l{color:rgba(255,255,255,.6)}
+
+/* ══════════════════════════════════
+   IMAGE TILE
+══════════════════════════════════ */
+.t-img{overflow:hidden;min-height:200px}
+.t-img img{width:100%;height:100%;min-height:200px;object-fit:cover;transition:transform .5s,filter .4s;filter:brightness(.82)}
+.t-img:hover img{transform:scale(1.04);filter:brightness(1)}
+
+/* ══════════════════════════════════
+   ABOUT
+══════════════════════════════════ */
+.t-about{padding:clamp(22px,3.5vw,40px)}
+
+/* ══════════════════════════════════
+   RECOGNITION
+══════════════════════════════════ */
+.t-rec{padding:clamp(20px,3vw,32px);background:var(--am)}
+.t-rec .ey{color:rgba(255,255,255,.65)}
+.t-rec .h2{color:#fff}
+.ri-row{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.15)}
+.ri-row:last-child{border-bottom:none}
+.ri-row p{font-family:"Instrument Serif",serif;font-size:clamp(12px,1.5vw,14px);color:rgba(255,255,255,.85);line-height:1.55}
+.ri-row p strong{color:#fff}
+
+/* ══════════════════════════════════
+   QUOTE
+══════════════════════════════════ */
+.t-qt{background:var(--tl);padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;justify-content:flex-end;min-height:200px}
+.qt-lbl{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.36);margin-bottom:12px}
+.qt{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:#fff;line-height:1.55}
+.qtc{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.36);margin-top:14px}
+
+/* ══════════════════════════════════
+   VIDEO
+══════════════════════════════════ */
+.t-vid{position:relative;overflow:hidden;min-height:260px}
+.t-vid::before{content:'';display:block;padding-bottom:56.25%}
+.t-vid iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+
+/* ══════════════════════════════════
+   FEATURE CARDS
+══════════════════════════════════ */
+.t-fc{display:flex;flex-direction:column;overflow:hidden}
+.t-fc a{display:flex;flex-direction:column;flex:1;color:inherit}
+.fc-img{height:clamp(150px,20vw,200px);background-size:cover;background-position:center;filter:brightness(.72);transition:filter .4s;flex-shrink:0}
+.t-fc:hover .fc-img{filter:brightness(1)}
+.fc-body{padding:clamp(16px,2.5vw,22px)}
+.fc-eye{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.25em;text-transform:uppercase;color:var(--am);margin-bottom:5px}
+.fc-title{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(14px,2vw,18px);color:var(--ink);letter-spacing:-.01em;margin-bottom:6px}
+.fc-desc{font-family:"Instrument Serif",serif;font-size:12px;color:#8A7868;line-height:1.55;margin-bottom:10px}
+.fc-cta{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--am)}
+
+/* ══════════════════════════════════
+   GALLERY
+══════════════════════════════════ */
+.gallery-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap)}
+.gal-item{overflow:hidden;border-radius:var(--r);aspect-ratio:1/1}
+.gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s,filter .4s;filter:brightness(.82)}
+.gal-item:hover img{transform:scale(1.05);filter:brightness(1)}
+
+/* ══════════════════════════════════
+   DISCIPLINES
+══════════════════════════════════ */
+.disc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--gap)}
+.di-card{background:#fff;border-radius:var(--r);padding:clamp(16px,2.5vw,24px);transition:transform .3s,box-shadow .3s}
+.di-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(22,18,14,.08)}
+.dn{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(24px,3.5vw,34px);color:rgba(224,120,32,.12);letter-spacing:-.02em;line-height:1}
+.dico{font-size:18px;margin:6px 0 8px}
+.dt{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(12px,1.8vw,14px);color:var(--ink);margin-bottom:5px}
+.dd{font-family:"Instrument Serif",serif;font-size:11px;color:#8A7868;line-height:1.6}
+
+/* ══════════════════════════════════
+   CAREER
+══════════════════════════════════ */
+.t-career{padding:clamp(24px,3.5vw,40px) 0}
+.career-hd{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,4vw,36px);letter-spacing:-.02em;color:var(--ink);margin-bottom:clamp(16px,2.5vw,24px)}
+.career-hd em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--am);font-weight:400}
+.career-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(24px,4vw,56px)}
+.tr{padding:clamp(12px,2vw,18px) 0;border-bottom:1px solid var(--li);display:grid;grid-template-columns:clamp(100px,14vw,130px) 1fr;gap:12px;align-items:start}
+.tr:first-child{border-top:1px solid var(--li)}
+.per{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--am);padding-top:2px;line-height:1.4}
+.role{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(12px,1.8vw,14px);letter-spacing:-.01em;color:var(--ink);margin-bottom:3px}
+.place{font-family:"Instrument Serif",serif;font-style:italic;font-size:12px;color:#8A7868}
+.loc{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(138,120,104,.4);margin-top:2px}
+
+/* ══════════════════════════════════
+   EDUCATION
+══════════════════════════════════ */
+.t-edu{padding:clamp(22px,3.5vw,36px);background:var(--ink)}
+.t-edu .ey{color:var(--am)}
+.t-edu .h2{color:#fff}
+.ei{padding:clamp(12px,2vw,18px) 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.ei:first-child{border-top:1px solid rgba(255,255,255,.07)}
+.ei:last-child{border-bottom:none}
+.edeg{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(12px,1.8vw,15px);letter-spacing:-.01em;color:#fff;margin-bottom:3px}
+.einst{font-family:"Instrument Serif",serif;font-style:italic;font-size:12px;color:rgba(255,255,255,.38);margin-bottom:3px}
+.eyr{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--am)}
+
+/* ══════════════════════════════════
+   CERTIFICATES
+══════════════════════════════════ */
+.t-cert{padding:clamp(22px,3.5vw,36px);background:#fff}
+.t-cert .ey{color:var(--am)}
+.t-cert .h2{color:var(--ink)}
+.cert-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.cc{background:var(--bg);border-radius:6px;padding:11px 13px;border-left:3px solid var(--am)}
+.cn{font-family:"Syne",sans-serif;font-weight:600;font-size:10px;color:var(--ink);margin-bottom:3px;line-height:1.3}
+.ci{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--am);margin-bottom:1px}
+.cy{font-family:"JetBrains Mono",monospace;font-size:7px;color:#8A7868}
+
+/* ══════════════════════════════════
+   CTA
+══════════════════════════════════ */
+.t-cta{
+  background:var(--am);
+  border-radius:var(--r);
+  padding:clamp(28px,4.5vw,52px) clamp(22px,4vw,48px);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;
+}
+.cta-hl{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(30px,5.5vw,56px);color:#fff;letter-spacing:-.03em;line-height:.92}
+.cta-sub{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(14px,2vw,19px);color:rgba(255,255,255,.62);margin-top:10px}
+.cta-btn{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;padding:14px 32px;background:#fff;color:var(--am);border-radius:8px;display:inline-block;white-space:nowrap;transition:transform .2s,box-shadow .2s}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.14)}
+
+/* ══════════════════════════════════
+   FOOTER
+══════════════════════════════════ */
+.t-footer{
+  padding:clamp(22px,3vw,36px) 0;
+  border-top:1px solid var(--li);
+  display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;
+}
+.ft-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(15px,2.5vw,22px);letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
+.ft-role{font-family:"JetBrains Mono",monospace;font-size:8px;color:#8A7868;letter-spacing:.12em;margin-bottom:2px}
+.ft-loc{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(138,120,104,.55);letter-spacing:.15em;text-transform:uppercase}
+.ft-contact{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.ft-contact a{font-family:"JetBrains Mono",monospace;font-size:8px;color:#8A7868;transition:color .2s;display:flex;align-items:center;gap:6px}
+.ft-contact a:hover{color:var(--am)}
+.ft-links{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.ft-links a{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#8A7868;transition:color .2s}
+.ft-links a:hover{color:var(--am)}
+.ft-copy{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(22,18,14,.2);width:100%;margin-top:4px}
+
+/* ══════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════ */
+.r{opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease}
+.r.in{opacity:1;transform:none}
+
+/* ══════════════════════════════════
+   RESPONSIVE — TABLET ≤ 900px
+══════════════════════════════════ */
+@media(max-width:900px){
+  .cols-8-4,.cols-4-8,.cols-5-7{grid-template-columns:1fr}
+  .cols-3{grid-template-columns:1fr 1fr}
+  .disc-grid{grid-template-columns:repeat(3,1fr)}
+  .gallery-row{grid-template-columns:repeat(2,1fr)}
+  .career-grid{grid-template-columns:1fr}
+  .cert-g{grid-template-columns:1fr}
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE — MOBILE ≤ 600px
+══════════════════════════════════ */
+@media(max-width:600px){
+  .nl{display:none}
+  .ham{display:flex}
+  .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
+  .disc-grid{grid-template-columns:1fr 1fr}
+  .gallery-row{grid-template-columns:1fr 1fr}
+  .tr{grid-template-columns:1fr}
+  .t-cta{flex-direction:column;align-items:flex-start}
+  .t-footer{flex-direction:column;gap:20px}
+}
+@media(max-width:400px){
+  .disc-grid{grid-template-columns:1fr}
+  .gallery-row{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="pl">
+  <div class="pn">Subhash Sankar</div>
+  <div class="ps">Molecular Mixologist</div>
+  <div class="pb"><div id="pf"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo" aria-label="Subhash Sankar">S<em>S</em> Mixology</a>
+  <ul class="nl">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Work</a></li>
+    <li><a href="#career">Career</a></li>
+    <li><a href="#edu">Education</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="resume.html" class="ct">Résum&eacute;</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer" id="drw">
+  <a href="#about">About</a>
+  <a href="#features">Work</a>
+  <a href="#career">Career</a>
+  <a href="#edu">Education</a>
+  <a href="#certs">Certs</a>
+  <a href="resume.html">Résum&eacute;</a>
+</div>
+
+<div class="page">
+
+  <!-- ── HERO ── -->
+  <div class="t-hero r">
+    <div class="hero-bg"></div>
+    <div class="hero-ov"></div>
+    <div class="hero-body">
+      <p class="hero-eye">Lead Molecular Mixologist &middot; 19 Years of Innovation</p>
+      <div class="hero-name">Subhash<span class="hero-name-i">Sankar</span></div>
+      <p class="hero-sub">Where science meets soul &mdash; cocktails as art and theatre</p>
+      <div class="hero-btns">
+        <a href="cocktail-menu.html" class="btn-a">View Cocktail Menu</a>
+        <a href="resume.html" class="btn-b">Full Résum&eacute;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STATS ── -->
+  <div class="row cols-4">
+    <div class="tile t-stat r"><div class="stat-n">19+</div><div class="stat-l">Years Experience</div></div>
+    <div class="tile t-stat r"><div class="stat-n">200+</div><div class="stat-l">Original Recipes</div></div>
+    <div class="tile t-stat r"><div class="stat-n">10+</div><div class="stat-l">Molecular Mixology Yrs</div></div>
+    <div class="tile t-stat t-stat-hi r"><div class="stat-n">&infin;</div><div class="stat-l">Creativity</div></div>
+  </div>
+
+  <!-- ── ABOUT + RECOGNITION ── -->
+  <div class="row cols-8-4" id="about">
+    <div class="tile t-about r">
+      <p class="ey">The Artisan</p>
+      <h2 class="h2">Crafting <em>liquid</em> experiences</h2>
+      <p class="body-p">In the modern cocktail scene, the terms &ldquo;mixology&rdquo; and &ldquo;mixologist&rdquo; are a regular part of bar vocabulary &mdash; being used more and more to describe a style of mixing cocktails and the people who practice it. Subhash Sankar exemplifies this distinction at the highest level.</p>
+      <p class="body-p">With 19 years of experience spanning India, the UAE, Bahrain, Qatar, Belize, and the Turks &amp; Caicos Islands, Subhash is a Lead Molecular Mixologist and Beverage Program Developer with a deep passion for local ingredients, gastronomy-led cocktail design, and elevating every guest experience into a multi-sensory performance.</p>
+    </div>
+    <div class="tile t-rec r">
+      <p class="ey">Global Media &amp; Recognition</p>
+      <h2 class="h2" style="color:#fff">Known <em style="color:rgba(255,255,255,.7)">worldwide</em></h2>
+      <div class="ri-row"><p>Featured across leading U.S. digital media outlets including <strong>UPROXX</strong> and <strong>Vision Viral</strong>.</p></div>
+      <div class="ri-row"><p>International press coverage for presenting one of the <strong>world&rsquo;s best margaritas</strong> in the United States.</p></div>
+      <div class="ri-row"><p>Widely recognized for innovative <strong>molecular cocktail techniques</strong> and modern beverage artistry.</p></div>
+      <div class="ri-row"><p>Elevated <strong>Belize&rsquo;s presence</strong> in the global mixology industry through international media exposure.</p></div>
+    </div>
+  </div>
+
+  <!-- ── IMAGES + QUOTE ── -->
+  <div class="row cols-3">
+    <div class="tile t-img r">
+      <img src="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" alt="Skull cocktail" loading="lazy"/>
+    </div>
+    <div class="tile t-img r">
+      <img src="https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg" alt="Garnished cocktail" loading="lazy"/>
+    </div>
+    <div class="tile t-qt r">
+      <p class="qt-lbl">Philosophy</p>
+      <p class="qt">&ldquo;A cocktail is not just a drink &mdash; it is a story told in glass, fire, smoke, and flavour.&rdquo;</p>
+      <p class="qtc">&mdash; Subhash Sankar</p>
+    </div>
+  </div>
+
+  <!-- ── VIDEO + IMAGE ── -->
+  <div class="row cols-8-4" id="video">
+    <div class="tile t-vid r">
+      <iframe src="https://player.vimeo.com/video/577733619?autoplay=0&title=0&byline=0&portrait=0&color=E07820" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Subhash Sankar Mixology Video"></iframe>
+    </div>
+    <div class="tile t-img r">
+      <img src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Subhash Sankar at the bar" loading="lazy" style="min-height:280px"/>
+    </div>
+  </div>
+
+  <!-- ── FEATURE CARDS ── -->
+  <div class="row cols-3" id="features">
+    <div class="tile t-fc r">
+      <a href="cocktail-menu.html">
+        <div class="fc-img" style="background-image:url('https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg')"></div>
+        <div class="fc-body">
+          <div class="fc-eye">Liquid Artistry</div>
+          <div class="fc-title">The Cocktail Menu</div>
+          <p class="fc-desc">Six chapters of liquid artistry &mdash; Fire &amp; Ash, Aged But Not Old, Boozy Gelato Cocktails, Molecular Alchemy, Fat Wash &amp; Clarification, and BBQ &amp; Toast.</p>
+          <div class="fc-cta">View Full Menu &rarr;</div>
+        </div>
+      </a>
+    </div>
+    <div class="tile t-fc r">
+      <a href="food-pairing.html">
+        <div class="fc-img" style="background-image:url('https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg')"></div>
+        <div class="fc-body">
+          <div class="fc-eye">El Mago &mdash; Mexican Peruvian Table</div>
+          <div class="fc-title">Food &amp; Cocktail Pairings</div>
+          <p class="fc-desc">A refined Mexican&ndash;Peruvian menu weaving bold, vibrant tastes and innovative textures in a celebration of artistry and tradition.</p>
+          <div class="fc-cta">View Pairings &rarr;</div>
+        </div>
+      </a>
+    </div>
+    <div class="tile t-fc r">
+      <a href="mixology-lab.html">
+        <div class="fc-img" style="background-image:url('https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg')"></div>
+        <div class="fc-body">
+          <div class="fc-eye">Mixology Lab Classes</div>
+          <div class="fc-title">ROI Plan &amp; Class Flow</div>
+          <p class="fc-desc">USD 290++ per person &middot; 3 classes/week &middot; $158K projected revenue &middot; Optional 5-Course Wine Dinner at USD 850++.</p>
+          <div class="fc-cta">View ROI Plan &rarr;</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── GALLERY ── -->
+  <div class="gallery-row">
+    <div class="gal-item r"><img src="https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg" alt="Cocktail craft" loading="lazy"/></div>
+    <div class="gal-item r"><img src="https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg" alt="Cocktail craft" loading="lazy"/></div>
+    <div class="gal-item r"><img src="https://foldr.space/api/view/aZGoN4EiyltIahyK/IMG-20260313-WA0208.jpg" alt="Cocktail craft" loading="lazy"/></div>
+    <div class="gal-item r"><img src="https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg" alt="Cocktail craft" loading="lazy"/></div>
+  </div>
+
+  <!-- ── DISCIPLINES ── -->
+  <div class="disc-grid" id="disciplines">
+    <div class="di-card r"><div class="dn">01</div><div class="dico">&#x1F9EA;</div><div class="dt">Molecular Mixology</div><p class="dd">Employing liquid nitrogen, spherification, and culinary science to transform cocktails into multi-sensory theatre that challenges every expectation.</p></div>
+    <div class="di-card r"><div class="dn">02</div><div class="dico">&#x1F525;</div><div class="dt">Live Presentation</div><p class="dd">Mastery of fire, smoke, and live tableside craftsmanship &mdash; turning every pour into a performance that guests remember long after the glass is empty.</p></div>
+    <div class="di-card r"><div class="dn">03</div><div class="dico">&#x1F33F;</div><div class="dt">House Infusions</div><p class="dd">Crafting bespoke botanical infusions, barrel-aged spirits, and fermented preparations that give each menu a distinct terroir and identity.</p></div>
+    <div class="di-card r"><div class="dn">04</div><div class="dico">&#x1F393;</div><div class="dt">Cocktail Education</div><p class="dd">Delivering immersive Gastronomy &amp; Molecular Mixology Masterclasses for guests and hospitality teams globally.</p></div>
+    <div class="di-card r"><div class="dn">05</div><div class="dico">&#x1F379;</div><div class="dt">Menu Architecture</div><p class="dd">Designing cocktail menus that tell a narrative &mdash; from concept to flavour balance, presentation, and the guest experience from first glance to last sip.</p></div>
+    <div class="di-card r"><div class="dn">06</div><div class="dico">&#x2B50;</div><div class="dt">Bar Leadership</div><p class="dd">Leading luxury property bar teams to the highest standard, with specialist training in Cost Control and Inventory Management.</p></div>
+  </div>
+
+  <!-- ── CAREER ── -->
+  <div class="t-career r" id="career">
+    <p class="ey">Work History</p>
+    <h2 class="career-hd">A Career of <em>Distinction</em></h2>
+    <div class="career-grid">
+      <div class="tr r"><div class="per">Nov 2024 &mdash; Jan 2026</div><div><div class="role">Group Mixology Master</div><div class="place">Waterloo Hotel Management Ltd</div><div class="loc">Turks and Caicos</div></div></div>
+      <div class="tr r"><div class="per">May 2021 &mdash; Nov 2024</div><div><div class="role">Beverage Manager / Head Mixologist</div><div class="place">Alaia Marriott Autograph Collection</div><div class="loc">San Pedro, Belize</div></div></div>
+      <div class="tr r"><div class="per">Jul 2019 &mdash; Feb 2021</div><div><div class="role">Mixologist / In Charge</div><div class="place">Nawlin&rsquo;s Jazz House &mdash; Marsa Malaz Kempinski</div><div class="loc">Doha, Qatar</div></div></div>
+      <div class="tr r"><div class="per">Nov 2018 &mdash; Jun 2019</div><div><div class="role">Mixologist / In Charge</div><div class="place">Pearl Social by Chef Jason Atherton &mdash; Kempinski</div><div class="loc">Doha, Qatar</div></div></div>
+      <div class="tr r"><div class="per">Dec 2016 &mdash; Oct 2018</div><div><div class="role">Bar &amp; Lounge Supervisor</div><div class="place">Antica Pesa &mdash; Marsa Malaz Kempinski</div><div class="loc">Doha, Qatar</div></div></div>
+      <div class="tr r"><div class="per">Nov 2014 &mdash; Nov 2016</div><div><div class="role">Bar Supervisor</div><div class="place">El Faro Spanish Cuisine &mdash; Kempinski</div><div class="loc">Doha, Qatar</div></div></div>
+      <div class="tr r"><div class="per">Sep 2011 &mdash; Aug 2014</div><div><div class="role">Bar Supervisor</div><div class="place">Boudoir &mdash; Kempinski Grand &amp; Ixir Hotel</div><div class="loc">Bahrain</div></div></div>
+      <div class="tr r"><div class="per">Nov 2007 &mdash; May 2011</div><div><div class="role">Head Bartender</div><div class="place">Trader Vic&rsquo;s &mdash; Beach Rotana</div><div class="loc">Abu Dhabi, UAE</div></div></div>
+      <div class="tr r"><div class="per">Sep 2006 &mdash; May 2007</div><div><div class="role">Bartender</div><div class="place">Club Mahindra</div><div class="loc">Munnar, India</div></div></div>
+      <div class="tr r"><div class="per">May 2004 &mdash; Nov 2005</div><div><div class="role">Bartender (Training)</div><div class="place">Le M&eacute;ridien</div><div class="loc">Cochin, India</div></div></div>
+    </div>
+  </div>
+
+  <!-- ── EDUCATION + CERTIFICATES ── -->
+  <div class="row cols-5-7">
+    <div class="tile t-edu r" id="edu">
+      <p class="ey">Education</p>
+      <h2 class="h2">Academic <em>Foundations</em></h2>
+      <div class="ei"><div class="edeg">Diploma in Hotel Management</div><div class="einst">Indian Institute of Tourism and Management, Calicut</div><div class="eyr">Jun 2003 &mdash; Aug 2006</div></div>
+      <div class="ei"><div class="edeg">Bachelor of Arts &mdash; Politics</div><div class="einst">Calicut University, Calicut</div><div class="eyr">2001 &mdash; 2003</div></div>
+      <div class="ei"><div class="edeg">Pre-Degree &mdash; History &amp; Politics</div><div class="einst">Calicut University, Calicut</div><div class="eyr">1997 &mdash; 1999</div></div>
+    </div>
+    <div class="tile t-cert r" id="certs">
+      <p class="ey">Certifications</p>
+      <h2 class="h2">Credentials &amp; <em>Training</em></h2>
+      <div class="cert-g">
+        <div class="cc"><div class="cn">Introductory Whisky Training Level 1 &amp; 2</div><div class="ci">Chivas Academy</div><div class="cy">2014 &amp; 2020</div></div>
+        <div class="cc"><div class="cn">Train The Trainer &mdash; Certified Trainer</div><div class="ci">Kempinski Bahrain</div><div class="cy">2013</div></div>
+        <div class="cc"><div class="cn">Essential PCI DSS Certification</div><div class="ci">Corporate IT Training, Kempinski</div><div class="cy">2013</div></div>
+        <div class="cc"><div class="cn">Jameson Irish Whiskey Training</div><div class="ci">Old Jameson Distillery</div><div class="cy">2009</div></div>
+        <div class="cc"><div class="cn">Habanos Cigar Training</div><div class="ci">Baquer Mohebi Est.</div><div class="cy">2008</div></div>
+        <div class="cc"><div class="cn">Food Safety Level 2</div><div class="ci">Kempinski Marsa Malaz</div><div class="cy">2019</div></div>
+        <div class="cc"><div class="cn">Bacardi Portfolio Training</div><div class="ci">Bacardi</div><div class="cy">2020</div></div>
+        <div class="cc"><div class="cn">WSET Master in Spirit Level 2</div><div class="ci">Wine &amp; Spirit Education Trust</div><div class="cy">&mdash;</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA ── -->
+  <div class="t-cta r">
+    <div>
+      <div class="cta-hl">Explore the<br>Full Story</div>
+      <p class="cta-sub">19 years. 10+ countries. One extraordinary career.</p>
+    </div>
+    <a href="resume.html" class="cta-btn">View Full Résum&eacute;</a>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="t-footer">
+    <div>
+      <div class="ft-name">Subhash Sankar</div>
+      <div class="ft-role">Lead Molecular Mixologist &amp; Beverage Program Developer</div>
+      <div class="ft-loc">&#x1F4CD; San Pedro, Belize &middot; Central America</div>
+      <div class="ft-contact">
+        <a href="mailto:subhashkaruvarapatta@gmail.com"><span>&#x2709;</span> subhashkaruvarapatta@gmail.com</a>
+        <a href="tel:+917994031394"><span>&#x260E;</span> +91 799 403 1394</a>
+      </div>
+    </div>
+    <div class="ft-links">
+      <a href="#about">About</a>
+      <a href="cocktail-menu.html">Cocktail Menu</a>
+      <a href="food-pairing.html">Food Pairings</a>
+      <a href="mixology-lab.html">Mixology Lab</a>
+      <a href="#career">Career</a>
+      <a href="#certs">Certifications</a>
+      <a href="resume.html">Résum&eacute;</a>
+    </div>
+    <p class="ft-copy">&copy; 2026 Subhash Sankar. All rights reserved.</p>
+  </div>
+
+</div><!-- /.page -->
+
+<script>
+(function(){
+  /* ── Preloader ── */
+  var pl = document.getElementById('pl');
+  var pf = document.getElementById('pf');
+  var IMGS = [
+    'https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg',
+    'https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg',
+    'https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg',
+    'https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg',
+    'https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg',
+    'https://foldr.space/api/view/aZGoN4EiyltIahyK/IMG-20260313-WA0208.jpg',
+    'https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg',
+    'https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg'
+  ];
+  var n = 0, total = IMGS.length;
+  function done(){ pl.classList.add('out'); startReveal(); }
+  var timer = setTimeout(done, 8000);
+  IMGS.forEach(function(src){
+    var i = new Image();
+    i.onload = i.onerror = function(){
+      n++;
+      pf.style.width = Math.round(n / total * 100) + '%';
+      if(n === total){ clearTimeout(timer); setTimeout(done, 280); }
+    };
+    i.src = src;
+  });
+
+  /* ── Scroll reveal ── */
+  function startReveal(){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    },{ threshold:0.05, rootMargin:'0px 0px -20px 0px' });
+    document.querySelectorAll('.r').forEach(function(el){ obs.observe(el); });
+  }
+
+  /* ── Sticky nav ── */
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('s', window.scrollY > 50);
+  },{ passive:true });
+
+  /* ── Hamburger ── */
+  var ham = document.getElementById('ham');
+  var drw = document.getElementById('drw');
+  ham.addEventListener('click', function(){
+    var open = drw.classList.toggle('op');
+    ham.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drw.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      drw.classList.remove('op');
+      ham.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+</script>
+</body>
+</html>
