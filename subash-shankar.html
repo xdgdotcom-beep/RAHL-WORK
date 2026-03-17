@@ -10,9 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
 <link rel="preload" as="image" href="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" fetchpriority="high"/>
 <style>
-/* ══════════════════════════════════
-   ROOT & RESET
-══════════════════════════════════ */
 :root{
   --bg:#F0EBE3;
   --ink:#16120E;
@@ -30,33 +27,16 @@ body{background:var(--bg);color:var(--ink);font-family:"Syne",sans-serif;overflo
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
 
-/* ══════════════════════════════════
-   PRELOADER
-══════════════════════════════════ */
-#pl{
-  position:fixed;inset:0;z-index:9999;
-  background:var(--ink);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  transition:opacity .7s,visibility .7s;
-}
+/* PRELOADER */
+#pl{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:opacity .7s,visibility .7s}
 #pl.out{opacity:0;visibility:hidden;pointer-events:none}
 .pn{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(18px,5vw,32px);letter-spacing:-.02em;color:#fff}
 .ps{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--am)}
 .pb{width:160px;height:2px;background:#2a2a2a;overflow:hidden;margin-top:14px;border-radius:2px;position:relative}
 #pf{position:absolute;top:0;left:0;bottom:0;width:0%;background:var(--am);transition:width .2s ease;border-radius:2px}
 
-/* ══════════════════════════════════
-   NAV
-══════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  background:rgba(240,235,227,.94);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid transparent;
-  transition:border-color .3s;
-  padding:13px var(--px);
-  display:flex;justify-content:space-between;align-items:center;
-}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(240,235,227,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s;padding:13px var(--px);display:flex;justify-content:space-between;align-items:center}
 nav.s{border-bottom-color:var(--li)}
 .logo{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;letter-spacing:-.02em;color:var(--ink)}
 .logo em{color:var(--am);font-style:normal}
@@ -69,18 +49,12 @@ nav.s{border-bottom-color:var(--li)}
 .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .ham.open span:nth-child(2){opacity:0}
 .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.drawer{
-  display:none;position:fixed;inset:0;z-index:190;
-  background:rgba(240,235,227,.99);
-  flex-direction:column;align-items:center;justify-content:center;gap:24px;
-}
+.drawer{display:none;position:fixed;inset:0;z-index:190;background:rgba(240,235,227,.99);flex-direction:column;align-items:center;justify-content:center;gap:24px}
 .drawer.op{display:flex}
 .drawer a{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(22px,6vw,32px);color:#8A7868;transition:color .2s}
 .drawer a:hover{color:var(--am)}
 
-/* ══════════════════════════════════
-   PAGE & ROWS
-══════════════════════════════════ */
+/* PAGE & ROWS */
 .page{padding:calc(52px + var(--px)) var(--px) var(--px);display:flex;flex-direction:column;gap:var(--gap)}
 .row{display:grid;gap:var(--gap)}
 .cols-4{grid-template-columns:repeat(4,1fr)}
@@ -90,42 +64,29 @@ nav.s{border-bottom-color:var(--li)}
 .cols-4-8{grid-template-columns:1fr 2fr}
 .cols-5-7{grid-template-columns:5fr 7fr}
 
-/* ══════════════════════════════════
-   TILE BASE
-══════════════════════════════════ */
+/* TILE BASE */
 .tile{background:#fff;border-radius:var(--r);overflow:hidden;transition:transform .3s,box-shadow .3s}
 .tile:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(22,18,14,.08)}
 
-/* ══════════════════════════════════
-   SHARED TYPOGRAPHY
-══════════════════════════════════ */
+/* SHARED TYPOGRAPHY */
 .ey{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--am);margin-bottom:8px}
 .h2{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(20px,3.2vw,30px);letter-spacing:-.02em;color:var(--ink);line-height:1.05;margin-bottom:14px}
 .h2 em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--am);font-size:1.05em;font-weight:400}
 .body-p{font-family:"Instrument Serif",serif;font-size:clamp(14px,1.8vw,16px);line-height:1.72;color:#5A4A38;margin-bottom:8px}
 .body-p:last-child{margin-bottom:0}
 
-/* ══════════════════════════════════
-   HERO
-══════════════════════════════════ */
-.t-hero{
-  position:relative;
-  min-height:clamp(420px,60vw,640px);
-  background:var(--ink);
-  border-radius:var(--r);
-  overflow:hidden;
-  display:flex;align-items:flex-end;
-}
+/* HERO */
+.t-hero{position:relative;min-height:clamp(420px,60vw,640px);background:var(--ink);border-radius:var(--r);overflow:hidden;display:flex;align-items:flex-end}
 .hero-bg{
   position:absolute;inset:0;
   background:url("https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg") center top/cover;
-  opacity:.4;filter:saturate(.4);
+  opacity:.72;filter:saturate(.75) brightness(.9);
 }
-.hero-ov{position:absolute;inset:0;background:linear-gradient(160deg,rgba(22,18,14,.96) 36%,rgba(22,18,14,.22) 100%)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(155deg,rgba(22,18,14,.88) 28%,rgba(22,18,14,.15) 100%)}
 .hero-body{position:relative;z-index:2;padding:clamp(24px,4vw,48px);width:100%}
 .hero-eye{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--am);margin-bottom:12px}
 .hero-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(42px,8vw,80px);color:#fff;line-height:.88;letter-spacing:-.03em}
-.hero-name-i{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(34px,6.5vw,64px);color:var(--am);display:block;margin-top:6px}
+.hero-name-i{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(40px,7.5vw,74px);color:var(--am);display:block;margin-top:6px}
 .hero-sub{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(13px,2vw,17px);color:rgba(255,255,255,.45);margin:14px 0 20px;line-height:1.55;max-width:500px}
 .hero-btns{display:flex;gap:10px;flex-wrap:wrap}
 .btn-a{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:.04em;padding:10px 22px;background:var(--am);color:#fff;border-radius:6px;display:inline-block;transition:background .2s,transform .15s}
@@ -133,9 +94,7 @@ nav.s{border-bottom-color:var(--li)}
 .btn-b{font-family:"Syne",sans-serif;font-weight:600;font-size:10px;letter-spacing:.04em;padding:9px 22px;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.75);border-radius:6px;display:inline-block;transition:border-color .2s,color .2s}
 .btn-b:hover{border-color:rgba(255,255,255,.55);color:#fff}
 
-/* ══════════════════════════════════
-   STATS
-══════════════════════════════════ */
+/* STATS */
 .t-stat{padding:clamp(18px,2.5vw,28px);display:flex;flex-direction:column;justify-content:center}
 .stat-n{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(32px,4.5vw,52px);color:var(--am);line-height:1;letter-spacing:-.03em}
 .stat-l{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#8A7868;margin-top:5px}
@@ -143,21 +102,15 @@ nav.s{border-bottom-color:var(--li)}
 .t-stat-hi .stat-n{color:#fff}
 .t-stat-hi .stat-l{color:rgba(255,255,255,.6)}
 
-/* ══════════════════════════════════
-   IMAGE TILE
-══════════════════════════════════ */
+/* IMAGE TILE */
 .t-img{overflow:hidden;min-height:200px}
 .t-img img{width:100%;height:100%;min-height:200px;object-fit:cover;transition:transform .5s,filter .4s;filter:brightness(.82)}
 .t-img:hover img{transform:scale(1.04);filter:brightness(1)}
 
-/* ══════════════════════════════════
-   ABOUT
-══════════════════════════════════ */
+/* ABOUT */
 .t-about{padding:clamp(22px,3.5vw,40px)}
 
-/* ══════════════════════════════════
-   RECOGNITION
-══════════════════════════════════ */
+/* RECOGNITION */
 .t-rec{padding:clamp(20px,3vw,32px);background:var(--am)}
 .t-rec .ey{color:rgba(255,255,255,.65)}
 .t-rec .h2{color:#fff}
@@ -166,24 +119,18 @@ nav.s{border-bottom-color:var(--li)}
 .ri-row p{font-family:"Instrument Serif",serif;font-size:clamp(12px,1.5vw,14px);color:rgba(255,255,255,.85);line-height:1.55}
 .ri-row p strong{color:#fff}
 
-/* ══════════════════════════════════
-   QUOTE
-══════════════════════════════════ */
+/* QUOTE */
 .t-qt{background:var(--tl);padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;justify-content:flex-end;min-height:200px}
 .qt-lbl{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.36);margin-bottom:12px}
 .qt{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:#fff;line-height:1.55}
 .qtc{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.36);margin-top:14px}
 
-/* ══════════════════════════════════
-   VIDEO
-══════════════════════════════════ */
+/* VIDEO */
 .t-vid{position:relative;overflow:hidden;min-height:260px}
 .t-vid::before{content:'';display:block;padding-bottom:56.25%}
 .t-vid iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
 
-/* ══════════════════════════════════
-   FEATURE CARDS
-══════════════════════════════════ */
+/* FEATURE CARDS */
 .t-fc{display:flex;flex-direction:column;overflow:hidden}
 .t-fc a{display:flex;flex-direction:column;flex:1;color:inherit}
 .fc-img{height:clamp(150px,20vw,200px);background-size:cover;background-position:center;filter:brightness(.72);transition:filter .4s;flex-shrink:0}
@@ -194,17 +141,13 @@ nav.s{border-bottom-color:var(--li)}
 .fc-desc{font-family:"Instrument Serif",serif;font-size:12px;color:#8A7868;line-height:1.55;margin-bottom:10px}
 .fc-cta{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--am)}
 
-/* ══════════════════════════════════
-   GALLERY
-══════════════════════════════════ */
+/* GALLERY */
 .gallery-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap)}
 .gal-item{overflow:hidden;border-radius:var(--r);aspect-ratio:1/1}
 .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s,filter .4s;filter:brightness(.82)}
 .gal-item:hover img{transform:scale(1.05);filter:brightness(1)}
 
-/* ══════════════════════════════════
-   DISCIPLINES
-══════════════════════════════════ */
+/* DISCIPLINES */
 .disc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--gap)}
 .di-card{background:#fff;border-radius:var(--r);padding:clamp(16px,2.5vw,24px);transition:transform .3s,box-shadow .3s}
 .di-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(22,18,14,.08)}
@@ -213,9 +156,7 @@ nav.s{border-bottom-color:var(--li)}
 .dt{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(12px,1.8vw,14px);color:var(--ink);margin-bottom:5px}
 .dd{font-family:"Instrument Serif",serif;font-size:11px;color:#8A7868;line-height:1.6}
 
-/* ══════════════════════════════════
-   CAREER
-══════════════════════════════════ */
+/* CAREER */
 .t-career{padding:clamp(24px,3.5vw,40px) 0}
 .career-hd{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,4vw,36px);letter-spacing:-.02em;color:var(--ink);margin-bottom:clamp(16px,2.5vw,24px)}
 .career-hd em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--am);font-weight:400}
@@ -227,9 +168,7 @@ nav.s{border-bottom-color:var(--li)}
 .place{font-family:"Instrument Serif",serif;font-style:italic;font-size:12px;color:#8A7868}
 .loc{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(138,120,104,.4);margin-top:2px}
 
-/* ══════════════════════════════════
-   EDUCATION
-══════════════════════════════════ */
+/* EDUCATION */
 .t-edu{padding:clamp(22px,3.5vw,36px);background:var(--ink)}
 .t-edu .ey{color:var(--am)}
 .t-edu .h2{color:#fff}
@@ -240,9 +179,7 @@ nav.s{border-bottom-color:var(--li)}
 .einst{font-family:"Instrument Serif",serif;font-style:italic;font-size:12px;color:rgba(255,255,255,.38);margin-bottom:3px}
 .eyr{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--am)}
 
-/* ══════════════════════════════════
-   CERTIFICATES
-══════════════════════════════════ */
+/* CERTIFICATES */
 .t-cert{padding:clamp(22px,3.5vw,36px);background:#fff}
 .t-cert .ey{color:var(--am)}
 .t-cert .h2{color:var(--ink)}
@@ -252,28 +189,15 @@ nav.s{border-bottom-color:var(--li)}
 .ci{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--am);margin-bottom:1px}
 .cy{font-family:"JetBrains Mono",monospace;font-size:7px;color:#8A7868}
 
-/* ══════════════════════════════════
-   CTA
-══════════════════════════════════ */
-.t-cta{
-  background:var(--am);
-  border-radius:var(--r);
-  padding:clamp(28px,4.5vw,52px) clamp(22px,4vw,48px);
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;
-}
+/* CTA */
+.t-cta{background:var(--am);border-radius:var(--r);padding:clamp(28px,4.5vw,52px) clamp(22px,4vw,48px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
 .cta-hl{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(30px,5.5vw,56px);color:#fff;letter-spacing:-.03em;line-height:.92}
 .cta-sub{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(14px,2vw,19px);color:rgba(255,255,255,.62);margin-top:10px}
 .cta-btn{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;padding:14px 32px;background:#fff;color:var(--am);border-radius:8px;display:inline-block;white-space:nowrap;transition:transform .2s,box-shadow .2s}
 .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.14)}
 
-/* ══════════════════════════════════
-   FOOTER
-══════════════════════════════════ */
-.t-footer{
-  padding:clamp(22px,3vw,36px) 0;
-  border-top:1px solid var(--li);
-  display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;
-}
+/* FOOTER */
+.t-footer{padding:clamp(22px,3vw,36px) 0;border-top:1px solid var(--li);display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px}
 .ft-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(15px,2.5vw,22px);letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
 .ft-role{font-family:"JetBrains Mono",monospace;font-size:8px;color:#8A7868;letter-spacing:.12em;margin-bottom:2px}
 .ft-loc{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(138,120,104,.55);letter-spacing:.15em;text-transform:uppercase}
@@ -285,15 +209,11 @@ nav.s{border-bottom-color:var(--li)}
 .ft-links a:hover{color:var(--am)}
 .ft-copy{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(22,18,14,.2);width:100%;margin-top:4px}
 
-/* ══════════════════════════════════
-   SCROLL REVEAL
-══════════════════════════════════ */
+/* SCROLL REVEAL */
 .r{opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease}
 .r.in{opacity:1;transform:none}
 
-/* ══════════════════════════════════
-   RESPONSIVE — TABLET ≤ 900px
-══════════════════════════════════ */
+/* RESPONSIVE — TABLET */
 @media(max-width:900px){
   .cols-8-4,.cols-4-8,.cols-5-7{grid-template-columns:1fr}
   .cols-3{grid-template-columns:1fr 1fr}
@@ -303,9 +223,7 @@ nav.s{border-bottom-color:var(--li)}
   .cert-g{grid-template-columns:1fr}
 }
 
-/* ══════════════════════════════════
-   RESPONSIVE — MOBILE ≤ 600px
-══════════════════════════════════ */
+/* RESPONSIVE — MOBILE */
 @media(max-width:600px){
   .nl{display:none}
   .ham{display:flex}
@@ -318,7 +236,6 @@ nav.s{border-bottom-color:var(--li)}
 }
 @media(max-width:400px){
   .disc-grid{grid-template-columns:1fr}
-  .gallery-row{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -340,7 +257,7 @@ nav.s{border-bottom-color:var(--li)}
     <li><a href="#career">Career</a></li>
     <li><a href="#edu">Education</a></li>
     <li><a href="#certs">Certs</a></li>
-    <li><a href="resume.html" class="ct">Résum&eacute;</a></li>
+    <li><a href="resume.html" class="ct">R&eacute;sum&eacute;</a></li>
   </ul>
   <button class="ham" id="ham" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
@@ -352,12 +269,12 @@ nav.s{border-bottom-color:var(--li)}
   <a href="#career">Career</a>
   <a href="#edu">Education</a>
   <a href="#certs">Certs</a>
-  <a href="resume.html">Résum&eacute;</a>
+  <a href="resume.html">R&eacute;sum&eacute;</a>
 </div>
 
 <div class="page">
 
-  <!-- ── HERO ── -->
+  <!-- HERO -->
   <div class="t-hero r">
     <div class="hero-bg"></div>
     <div class="hero-ov"></div>
@@ -367,12 +284,12 @@ nav.s{border-bottom-color:var(--li)}
       <p class="hero-sub">Where science meets soul &mdash; cocktails as art and theatre</p>
       <div class="hero-btns">
         <a href="cocktail-menu.html" class="btn-a">View Cocktail Menu</a>
-        <a href="resume.html" class="btn-b">Full Résum&eacute;</a>
+        <a href="resume.html" class="btn-b">Full R&eacute;sum&eacute;</a>
       </div>
     </div>
   </div>
 
-  <!-- ── STATS ── -->
+  <!-- STATS -->
   <div class="row cols-4">
     <div class="tile t-stat r"><div class="stat-n">19+</div><div class="stat-l">Years Experience</div></div>
     <div class="tile t-stat r"><div class="stat-n">200+</div><div class="stat-l">Original Recipes</div></div>
@@ -380,7 +297,7 @@ nav.s{border-bottom-color:var(--li)}
     <div class="tile t-stat t-stat-hi r"><div class="stat-n">&infin;</div><div class="stat-l">Creativity</div></div>
   </div>
 
-  <!-- ── ABOUT + RECOGNITION ── -->
+  <!-- ABOUT + RECOGNITION -->
   <div class="row cols-8-4" id="about">
     <div class="tile t-about r">
       <p class="ey">The Artisan</p>
@@ -398,7 +315,7 @@ nav.s{border-bottom-color:var(--li)}
     </div>
   </div>
 
-  <!-- ── IMAGES + QUOTE ── -->
+  <!-- IMAGES + QUOTE -->
   <div class="row cols-3">
     <div class="tile t-img r">
       <img src="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" alt="Skull cocktail" loading="lazy"/>
@@ -413,7 +330,7 @@ nav.s{border-bottom-color:var(--li)}
     </div>
   </div>
 
-  <!-- ── VIDEO + IMAGE ── -->
+  <!-- VIDEO + IMAGE -->
   <div class="row cols-8-4" id="video">
     <div class="tile t-vid r">
       <iframe src="https://player.vimeo.com/video/577733619?autoplay=0&title=0&byline=0&portrait=0&color=E07820" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Subhash Sankar Mixology Video"></iframe>
@@ -423,7 +340,7 @@ nav.s{border-bottom-color:var(--li)}
     </div>
   </div>
 
-  <!-- ── FEATURE CARDS ── -->
+  <!-- FEATURE CARDS -->
   <div class="row cols-3" id="features">
     <div class="tile t-fc r">
       <a href="cocktail-menu.html">
@@ -460,7 +377,7 @@ nav.s{border-bottom-color:var(--li)}
     </div>
   </div>
 
-  <!-- ── GALLERY ── -->
+  <!-- GALLERY -->
   <div class="gallery-row">
     <div class="gal-item r"><img src="https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg" alt="Cocktail craft" loading="lazy"/></div>
     <div class="gal-item r"><img src="https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg" alt="Cocktail craft" loading="lazy"/></div>
@@ -468,7 +385,7 @@ nav.s{border-bottom-color:var(--li)}
     <div class="gal-item r"><img src="https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg" alt="Cocktail craft" loading="lazy"/></div>
   </div>
 
-  <!-- ── DISCIPLINES ── -->
+  <!-- DISCIPLINES -->
   <div class="disc-grid" id="disciplines">
     <div class="di-card r"><div class="dn">01</div><div class="dico">&#x1F9EA;</div><div class="dt">Molecular Mixology</div><p class="dd">Employing liquid nitrogen, spherification, and culinary science to transform cocktails into multi-sensory theatre that challenges every expectation.</p></div>
     <div class="di-card r"><div class="dn">02</div><div class="dico">&#x1F525;</div><div class="dt">Live Presentation</div><p class="dd">Mastery of fire, smoke, and live tableside craftsmanship &mdash; turning every pour into a performance that guests remember long after the glass is empty.</p></div>
@@ -478,7 +395,7 @@ nav.s{border-bottom-color:var(--li)}
     <div class="di-card r"><div class="dn">06</div><div class="dico">&#x2B50;</div><div class="dt">Bar Leadership</div><p class="dd">Leading luxury property bar teams to the highest standard, with specialist training in Cost Control and Inventory Management.</p></div>
   </div>
 
-  <!-- ── CAREER ── -->
+  <!-- CAREER -->
   <div class="t-career r" id="career">
     <p class="ey">Work History</p>
     <h2 class="career-hd">A Career of <em>Distinction</em></h2>
@@ -496,7 +413,7 @@ nav.s{border-bottom-color:var(--li)}
     </div>
   </div>
 
-  <!-- ── EDUCATION + CERTIFICATES ── -->
+  <!-- EDUCATION + CERTIFICATES -->
   <div class="row cols-5-7">
     <div class="tile t-edu r" id="edu">
       <p class="ey">Education</p>
@@ -521,16 +438,16 @@ nav.s{border-bottom-color:var(--li)}
     </div>
   </div>
 
-  <!-- ── CTA ── -->
+  <!-- CTA -->
   <div class="t-cta r">
     <div>
       <div class="cta-hl">Explore the<br>Full Story</div>
       <p class="cta-sub">19 years. 10+ countries. One extraordinary career.</p>
     </div>
-    <a href="resume.html" class="cta-btn">View Full Résum&eacute;</a>
+    <a href="resume.html" class="cta-btn">View Full R&eacute;sum&eacute;</a>
   </div>
 
-  <!-- ── FOOTER ── -->
+  <!-- FOOTER -->
   <div class="t-footer">
     <div>
       <div class="ft-name">Subhash Sankar</div>
@@ -548,7 +465,7 @@ nav.s{border-bottom-color:var(--li)}
       <a href="mixology-lab.html">Mixology Lab</a>
       <a href="#career">Career</a>
       <a href="#certs">Certifications</a>
-      <a href="resume.html">Résum&eacute;</a>
+      <a href="resume.html">R&eacute;sum&eacute;</a>
     </div>
     <p class="ft-copy">&copy; 2026 Subhash Sankar. All rights reserved.</p>
   </div>
@@ -557,7 +474,6 @@ nav.s{border-bottom-color:var(--li)}
 
 <script>
 (function(){
-  /* ── Preloader ── */
   var pl = document.getElementById('pl');
   var pf = document.getElementById('pf');
   var IMGS = [
@@ -583,7 +499,6 @@ nav.s{border-bottom-color:var(--li)}
     i.src = src;
   });
 
-  /* ── Scroll reveal ── */
   function startReveal(){
     var obs = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
@@ -593,13 +508,11 @@ nav.s{border-bottom-color:var(--li)}
     document.querySelectorAll('.r').forEach(function(el){ obs.observe(el); });
   }
 
-  /* ── Sticky nav ── */
   var nav = document.getElementById('nav');
   window.addEventListener('scroll', function(){
     nav.classList.toggle('s', window.scrollY > 50);
   },{ passive:true });
 
-  /* ── Hamburger ── */
   var ham = document.getElementById('ham');
   var drw = document.getElementById('drw');
   ham.addEventListener('click', function(){
