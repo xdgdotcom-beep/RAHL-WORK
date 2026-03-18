@@ -427,10 +427,12 @@ nav.solid {
   position: relative; width: 100%; padding-bottom: 56.25%;
   background: #0a0908; overflow: hidden;
 }
-.gal-item.video-item .vid-wrap iframe {
+.gal-item.video-item .vid-wrap iframe,
+.gal-item.video-item .vid-wrap video {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  border: none; pointer-events: none;
+  border: none; object-fit: cover;
 }
+.gal-item.video-item .vid-wrap iframe { pointer-events: none; }
 .gal-item.video-item:hover .vid-wrap iframe { pointer-events: auto; }
 .gal-item.video-item .vid-play-overlay {
   position: absolute; inset: 0;
@@ -705,7 +707,7 @@ footer::before {
 <nav id="nav">
   <div class="nav-logo">El <span>Mago</span></div>
   <div class="nav-right">
-    <div class="nav-count"><em id="visible-count">81</em> / 79 images · 2 videos</div>
+    <div class="nav-count"><em id="visible-count">82</em> / 79 images · 3 videos</div>
   </div>
 </nav>
 
@@ -951,25 +953,36 @@ footer::before {
 
     <div class="gal-item" data-tags="event people" data-idx="88"><img src="https://i.ibb.co/TxZQyJv5/IMG-20260313-WA0208.jpg" alt="El Mago Event" loading="lazy"/><span class="num">088</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <!-- VIDEO 01 — Facebook -->
+    <!-- VIDEO 01 -->
     <div class="gal-item video-item" data-tags="video event" data-idx="v1">
       <div class="vid-wrap">
-        <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fv%2F17FHXbqNpM%2F&show_text=false&width=560&t=0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-        <div class="vid-play-overlay">
+        <video src="/video/vid1.mp4" preload="metadata" loop playsinline></video>
+        <div class="vid-play-overlay" onclick="toggleVid(this)">
           <div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <span class="vid-label">video · 01</span>
       </div>
     </div>
 
-    <!-- VIDEO 02 — YouTube -->
+    <!-- VIDEO 02 -->
     <div class="gal-item video-item" data-tags="video event" data-idx="v2">
       <div class="vid-wrap">
-        <iframe src="https://www.youtube.com/embed/Y5oNDKDIILY?si=o1g77eKeJDQ7wIkW&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        <div class="vid-play-overlay">
+        <video src="/video/vid2.mp4" preload="metadata" loop playsinline></video>
+        <div class="vid-play-overlay" onclick="toggleVid(this)">
           <div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <span class="vid-label">video · 02</span>
+      </div>
+    </div>
+
+    <!-- VIDEO 03 -->
+    <div class="gal-item video-item" data-tags="video event" data-idx="v3">
+      <div class="vid-wrap">
+        <video src="/video/vid3.mp4" preload="metadata" loop playsinline></video>
+        <div class="vid-play-overlay" onclick="toggleVid(this)">
+          <div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="vid-label">video · 03</span>
       </div>
     </div>
 
@@ -1186,7 +1199,20 @@ lb.addEventListener('touchend',function(e){
   if(Math.abs(dx)>60){dx<0?nextImg():prevImg();}
 });
 
-/* ── MEDIA TOGGLE (Photos / Videos) ── */
+/* ── VIDEO PLAY/PAUSE ── */
+function toggleVid(overlay){
+  var video=overlay.parentElement.querySelector('video');
+  if(video.paused){
+    video.play();
+    overlay.style.opacity='0';
+    overlay.style.pointerEvents='none';
+    video.addEventListener('click',function(){
+      video.pause();
+      overlay.style.opacity='1';
+      overlay.style.pointerEvents='auto';
+    },{once:true});
+  }
+}
 var activeMedia='photos';
 function applyMediaToggle(media){
   activeMedia=media;
