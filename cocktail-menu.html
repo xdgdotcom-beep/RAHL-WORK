@@ -81,11 +81,19 @@ nav.s{border-bottom-color:var(--li)}
   background:url("https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg") center top/cover;
   opacity:.72;filter:saturate(.75) brightness(.9);
 }
-.hero-ov{position:absolute;inset:0;background:linear-gradient(155deg,rgba(22,18,14,.88) 28%,rgba(22,18,14,.15) 100%)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(155deg,rgba(22,18,14,.93) 28%,rgba(22,18,14,.30) 100%)}
 .hero-body{position:relative;z-index:2;padding:clamp(20px,4vw,48px);width:100%;min-width:0}
 .hero-eye{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--am);margin-bottom:12px}
-.hero-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(36px,9vw,96px);color:#fff;line-height:.92;letter-spacing:-.03em;text-transform:uppercase;word-break:break-word;overflow-wrap:break-word;max-width:100%}
-.hero-name-i{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(28px,5vw,58px);color:var(--am);display:block;margin-top:10px;text-transform:none;letter-spacing:-.01em}
+.hero-name{line-height:1;letter-spacing:-.03em;text-transform:uppercase;margin-bottom:4px}
+.hero-name-i{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(28px,5vw,58px);color:var(--am);display:block;margin-top:8px;text-transform:none;letter-spacing:-.01em}
+
+/* SVG-based ALCHEMY title — always single line, image fill */
+.hero-title-svg{
+  display:block;
+  width:100%;
+  overflow:visible;
+  margin-bottom:4px;
+}
 .hero-sub{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(13px,2vw,17px);color:rgba(255,255,255,.45);margin:14px 0 20px;line-height:1.55;max-width:100%}
 
 /* ABOUT INTRO */
@@ -159,7 +167,6 @@ nav.s{border-bottom-color:var(--li)}
   .nl{display:none}
   .ham{display:flex}
   .t-footer{flex-direction:column;gap:20px}
-  .hero-name{font-size:clamp(32px,13vw,54px);letter-spacing:-.02em}
   .hero-name-i{font-size:clamp(24px,8vw,40px)}
 }
 </style>
@@ -197,7 +204,37 @@ nav.s{border-bottom-color:var(--li)}
     <div class="hero-ov"></div>
     <div class="hero-body">
       <p class="hero-eye">Subash Shankar &middot; The Signature Collection</p>
-      <div class="hero-name">Alchemy<span class="hero-name-i">El Mago</span></div>
+      <div class="hero-name">
+      <svg class="hero-title-svg" viewBox="0 0 1000 160" preserveAspectRatio="xMinYMid meet" aria-label="Alchemy">
+        <defs>
+          <pattern id="imgfill" patternUnits="userSpaceOnUse" x="0" y="0" width="1000" height="160">
+            <image href="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg"
+              x="-100" y="-120" width="1200" height="500"
+              preserveAspectRatio="xMidYMid slice"/>
+          </pattern>
+          <filter id="boost">
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="1.1"/>
+              <feFuncG type="linear" slope="1.05"/>
+              <feFuncB type="linear" slope="0.9"/>
+            </feComponentTransfer>
+          </filter>
+        </defs>
+        <text
+          x="0" y="140"
+          font-family="Syne, sans-serif"
+          font-weight="800"
+          font-size="160"
+          letter-spacing="-6"
+          text-anchor="start"
+          textLength="1000"
+          lengthAdjust="spacingAndGlyphs"
+          fill="url(#imgfill)"
+          filter="url(#boost)"
+          style="text-transform:uppercase">ALCHEMY</text>
+      </svg>
+        <span class="hero-name-i">El Mago</span>
+      </div>
       <p class="hero-sub">The signature cocktail menu &mdash; six chapters of liquid artistry</p>
     </div>
   </div>
@@ -324,6 +361,8 @@ nav.s{border-bottom-color:var(--li)}
     };
     i.src = src;
   });
+
+
 
   function startReveal(){
     var obs = new IntersectionObserver(function(entries){
