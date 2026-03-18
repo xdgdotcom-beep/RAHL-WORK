@@ -1,146 +1,1737 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Under Final Touches</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Subhash Sankar — Master Mixologist</title>
+<meta name="description" content="Subhash Sankar — Lead Molecular Mixologist & Beverage Program Developer. 19 years of innovation."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; cursor:none; }
+body { cursor:none; }
+a, button, [onclick], .nav-tab, .fc-card { cursor:none; }
 
-    body {
-      background-color: #0a0a0c;
-      color: #e0e0e0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+.cursor {
+  position:fixed; pointer-events:none; z-index:99999;
+  mix-blend-mode:difference;
+}
+.cursor-dot {
+  width:8px; height:8px; background:#fff; border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:transform .1s ease, width .3s ease, height .3s ease;
+}
+.cursor-ring {
+  width:40px; height:40px; border:1px solid rgba(255,255,255,.5);
+  border-radius:50%; transform:translate(-50%,-50%);
+  transition:transform .15s ease, width .3s ease, height .3s ease, opacity .3s ease;
+}
+body.cursor-hover .cursor-dot { width:12px; height:12px; }
+body.cursor-hover .cursor-ring { width:60px; height:60px; opacity:.3; }
 
-    .container {
-      text-align: center;
-      background: #121216;
-      padding: 50px 40px;
-      border: 1px solid #222;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      max-width: 450px;
-      width: 90%;
-    }
+/* ═══════════════════════════════════════
+   CSS VARIABLES & BASE
+═══════════════════════════════════════ */
+:root {
+  --void:#040404;
+  --obsidian:#0a0908;
+  --charcoal:#111110;
+  --ember:#C8581A;
+  --flame:#E8722A;
+  --gold:#D4A843;
+  --cream:#F2EDE4;
+  --smoke:#8A7F74;
+  --ash:#3A3530;
+  --teal:#0D5C5C;
+  --gap:clamp(10px,1.4vw,16px);
+  --px:clamp(16px,3.5vw,48px);
+  --r:4px;
+  --font-display:'Bebas Neue', sans-serif;
+  --font-body:'Cormorant Garamond', serif;
+  --font-mono:'DM Mono', monospace;
+}
 
-    .icon-wrapper {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 20px;
-    }
+html { background:var(--void); }
+body {
+  background:var(--void);
+  color:var(--cream);
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img { display:block; max-width:100%; }
+a { text-decoration:none; color:inherit; }
 
-    .gear {
-      width: 100%;
-      height: 100%;
-      border: 3px dashed #4caf50;
-      border-radius: 50%;
-      animation: spin 8s linear infinite;
-    }
+/* ═══════════════════════════════════════
+   NOISE TEXTURE OVERLAY
+═══════════════════════════════════════ */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:1;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.035;
+  mix-blend-mode:overlay;
+}
 
-    .inner-circle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 30px;
-      height: 30px;
-      background: #4caf50;
-      border-radius: 50%;
-      box-shadow: 0 0 15px #4caf50;
-      animation: pulse 2s ease-in-out infinite;
-    }
+/* ═══════════════════════════════════════
+   PRELOADER
+═══════════════════════════════════════ */
+#pl {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--void);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transition:opacity 1s ease, visibility 1s ease;
+}
+#pl.out { opacity:0; visibility:hidden; pointer-events:none; }
+.pl-logo {
+  font-family:var(--font-display);
+  font-size:clamp(48px,10vw,96px);
+  letter-spacing:.1em;
+  color:transparent;
+  background:linear-gradient(135deg, var(--ember), var(--gold), var(--flame));
+  -webkit-background-clip:text; background-clip:text;
+  animation:logoReveal 1.2s ease forwards;
+  opacity:0;
+}
+@keyframes logoReveal {
+  0% { opacity:0; transform:translateY(20px) skewY(2deg); filter:blur(8px); }
+  100% { opacity:1; transform:none; filter:blur(0); }
+}
+.pl-sub {
+  font-family:var(--font-mono); font-size:9px;
+  letter-spacing:.4em; text-transform:uppercase;
+  color:var(--smoke); margin-top:12px;
+  animation:fadeUp .8s ease .5s forwards; opacity:0;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.pl-bar { width:200px; height:1px; background:var(--ash); margin-top:32px; position:relative; overflow:hidden; }
+.pl-fill {
+  position:absolute; top:0; left:0; bottom:0; width:0%;
+  background:linear-gradient(90deg, var(--ember), var(--gold));
+  transition:width .3s ease;
+  box-shadow:0 0 12px rgba(200,88,26,.6);
+}
+.pl-pct {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.2em;
+  color:var(--ember); margin-top:10px;
+  animation:fadeUp .8s ease .8s forwards; opacity:0;
+}
 
-    h1 {
-      font-size: 22px;
-      font-weight: 500;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      color: #fff;
-    }
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  padding:0 var(--px);
+  display:flex; align-items:stretch; justify-content:space-between;
+  height:58px;
+  transition:background .4s ease, backdrop-filter .4s ease;
+}
+nav.scrolled {
+  background:rgba(4,4,4,.88);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(200,88,26,.15);
+}
+.nav-logo {
+  font-family:var(--font-display);
+  font-size:20px; letter-spacing:.08em;
+  display:flex; align-items:center; gap:2px;
+  color:var(--cream);
+  transition:color .2s;
+}
+.nav-logo span { color:var(--ember); }
+.nav-tabs {
+  display:flex; gap:0; list-style:none; align-items:stretch;
+}
+.nav-tab {
+  font-family:var(--font-mono); font-size:8.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--smoke);
+  display:flex; align-items:center; padding:0 18px;
+  border-bottom:2px solid transparent;
+  transition:color .25s, border-color .25s;
+  position:relative;
+}
+.nav-tab::after {
+  content:''; position:absolute; bottom:-2px; left:50%; right:50%;
+  height:2px; background:linear-gradient(90deg, var(--ember), var(--gold));
+  transition:left .3s ease, right .3s ease;
+}
+.nav-tab:hover, .nav-tab.active { color:var(--cream); }
+.nav-tab:hover::after, .nav-tab.active::after { left:0; right:0; }
+.nav-resume {
+  font-family:var(--font-mono); font-size:8.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ember);
+  display:flex; align-items:center; padding:0 18px;
+  border:1px solid rgba(200,88,26,.3); margin:12px 0 12px 8px;
+  border-radius:2px; transition:background .25s, color .25s, border-color .25s;
+}
+.nav-resume:hover, .nav-resume.active { background:var(--ember); color:#fff; border-color:var(--ember); }
 
-    p {
-      font-size: 13px;
-      color: #888;
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
+.ham { display:none; flex-direction:column; gap:6px; background:none; border:none; padding:4px; align-self:center; }
+.ham span { width:22px; height:1.5px; background:var(--cream); display:block; transition:transform .3s, opacity .3s, width .3s; }
+.ham.open span:nth-child(1) { transform:translateY(7.5px) rotate(45deg); }
+.ham.open span:nth-child(2) { opacity:0; width:0; }
+.ham.open span:nth-child(3) { transform:translateY(-7.5px) rotate(-45deg); }
 
-    .progress-container {
-      background: #1a1a20;
-      border-radius: 4px;
-      height: 6px;
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      border: 1px solid #2a2a30;
-    }
+.drawer {
+  display:none; position:fixed; inset:0; z-index:190;
+  background:var(--void); flex-direction:column;
+  align-items:flex-start; justify-content:center;
+  padding:0 var(--px); gap:0;
+}
+.drawer.op { display:flex; }
+.drawer-item {
+  font-family:var(--font-display); font-size:clamp(36px,8vw,64px);
+  letter-spacing:.06em; color:var(--ash); border-bottom:1px solid var(--ash);
+  width:100%; padding:16px 0;
+  transition:color .2s, padding-left .2s;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.drawer-item:hover, .drawer-item.active { color:var(--cream); padding-left:12px; }
+.drawer-item span { font-family:var(--font-mono); font-size:9px; color:var(--ember); letter-spacing:.2em; }
 
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #2e7d32, #4caf50);
-      border-radius: 4px;
-      animation: loadProgress 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      box-shadow: 0 0 10px #4caf50;
-    }
+/* ═══════════════════════════════════════
+   SECTIONS
+═══════════════════════════════════════ */
+.section { display:none; }
+.section.active { display:block; animation:sectionIn .6s ease; }
+@keyframes sectionIn { from { opacity:0; } to { opacity:1; } }
 
-    .status-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #666;
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+/* ═══════════════════════════════════════
+   PAGE WRAPPERS
+═══════════════════════════════════════ */
+.page { padding:58px var(--px) clamp(40px,6vw,80px); display:flex; flex-direction:column; gap:var(--gap); }
+.page-inner { padding:58px var(--px) clamp(40px,6vw,80px); display:flex; flex-direction:column; gap:var(--gap); max-width:1200px; margin:0 auto; width:100%; }
 
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
+/* ═══════════════════════════════════════
+   GRID UTILITIES
+═══════════════════════════════════════ */
+.row { display:grid; gap:var(--gap); }
+.g2 { grid-template-columns:1fr 1fr; }
+.g3 { grid-template-columns:1fr 1fr 1fr; }
+.g4 { grid-template-columns:repeat(4,1fr); }
+.g84 { grid-template-columns:2fr 1fr; }
+.g57 { grid-template-columns:5fr 7fr; }
 
-    @keyframes pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    }
+/* ═══════════════════════════════════════
+   REVEAL ANIMATIONS
+═══════════════════════════════════════ */
+.rv { opacity:0; transform:translateY(24px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.rv.vis { opacity:1; transform:none; }
+.rv-l { opacity:0; transform:translateX(-32px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.rv-l.vis { opacity:1; transform:none; }
+.rv-r { opacity:0; transform:translateX(32px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.rv-r.vis { opacity:1; transform:none; }
+.rv.d1 { transition-delay:.1s; } .rv.d2 { transition-delay:.2s; } .rv.d3 { transition-delay:.3s; } .rv.d4 { transition-delay:.4s; } .rv.d5 { transition-delay:.5s; }
 
-    @keyframes loadProgress {
-      0% { width: 0%; }
-      70% { width: 85%; }
-      100% { width: 95%; } /* Stops at 95% to show it's almost done */
-    }
-  </style>
+/* ═══════════════════════════════════════
+   CARD BASE
+═══════════════════════════════════════ */
+.card {
+  background:var(--charcoal);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:var(--r); overflow:hidden;
+  position:relative;
+  transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease, border-color .4s ease;
+}
+.card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(200,88,26,.04) 0%, transparent 60%);
+  opacity:0; transition:opacity .4s ease;
+  pointer-events:none; z-index:0;
+}
+.card:hover { transform:translateY(-4px); border-color:rgba(200,88,26,.25); box-shadow:0 20px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(200,88,26,.1); }
+.card:hover::before { opacity:1; }
+.card > * { position:relative; z-index:1; }
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════════════ */
+.eyebrow {
+  font-family:var(--font-mono); font-size:8.5px; letter-spacing:.35em;
+  text-transform:uppercase; color:var(--ember); margin-bottom:10px;
+  display:flex; align-items:center; gap:14px;
+}
+.eyebrow::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, rgba(200,88,26,.4), transparent); max-width:60px; }
+
+.display {
+  font-family:var(--font-display); font-size:clamp(28px,4.5vw,52px);
+  letter-spacing:.04em; color:var(--cream); line-height:1;
+  margin-bottom:18px;
+}
+.display em { color:var(--ember); font-style:normal; }
+.display-xl { font-size:clamp(48px,9vw,120px); letter-spacing:.02em; line-height:.88; }
+.display-lg { font-size:clamp(36px,6vw,76px); }
+
+.serif-body {
+  font-family:var(--font-body); font-size:clamp(15px,1.9vw,18px);
+  line-height:1.78; color:rgba(242,237,228,.6); font-weight:300;
+}
+.serif-body + .serif-body { margin-top:12px; }
+
+.mono-label {
+  font-family:var(--font-mono); font-size:8px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--smoke);
+}
+
+/* ═══════════════════════════════════════
+   ██ HERO — PORTFOLIO
+═══════════════════════════════════════ */
+.hero-portfolio {
+  position:relative; min-height:100vh;
+  display:flex; align-items:flex-end;
+  overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background:url('https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg') center top/cover;
+  transform:scale(1.05);
+  animation:heroZoom 12s ease-out forwards;
+}
+@keyframes heroZoom { from { transform:scale(1.08); } to { transform:scale(1); } }
+.hero-bg::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(170deg, rgba(4,4,4,.85) 0%, rgba(4,4,4,.55) 55%, rgba(4,4,4,.9) 100%);
+}
+
+/* Animated ember particles */
+.particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.particle {
+  position:absolute; border-radius:50%;
+  background:var(--ember); pointer-events:none;
+  animation:floatParticle linear infinite;
+  opacity:0;
+}
+@keyframes floatParticle {
+  0% { transform:translateY(100vh) scale(0); opacity:0; }
+  10% { opacity:.6; }
+  90% { opacity:.1; }
+  100% { transform:translateY(-20px) scale(1.5); opacity:0; }
+}
+
+.hero-content { position:relative; z-index:2; padding:clamp(60px,8vw,100px) var(--px) clamp(60px,8vw,100px); width:100%; }
+.hero-eyebrow {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.4em;
+  text-transform:uppercase; color:var(--ember);
+  margin-bottom:20px; display:flex; align-items:center; gap:16px;
+  opacity:0; animation:fadeUp .8s ease .3s forwards;
+}
+.hero-eyebrow::before { content:''; width:40px; height:1px; background:linear-gradient(90deg, transparent, var(--ember)); }
+.hero-name {
+  font-family:var(--font-display);
+  font-size:clamp(60px,12vw,160px);
+  letter-spacing:.02em; line-height:.85;
+  color:var(--cream);
+  opacity:0; animation:heroNameIn 1s cubic-bezier(.16,1,.3,1) .5s forwards;
+}
+@keyframes heroNameIn { from { opacity:0; transform:translateY(40px) skewX(-2deg); filter:blur(4px); } to { opacity:1; transform:none; filter:blur(0); } }
+.hero-name-accent {
+  display:block;
+  background:linear-gradient(135deg, var(--ember) 0%, var(--gold) 50%, var(--flame) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  background-size:200%;
+  animation:gradShift 4s ease infinite;
+}
+@keyframes gradShift { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
+
+.hero-title-line {
+  width:0; height:1px;
+  background:linear-gradient(90deg, var(--ember), var(--gold), transparent);
+  margin:20px 0;
+  animation:lineExpand 1s ease .8s forwards;
+  box-shadow:0 0 8px rgba(200,88,26,.4);
+}
+@keyframes lineExpand { to { width:min(500px,70vw); } }
+
+.hero-sub {
+  font-family:var(--font-body); font-style:italic;
+  font-size:clamp(16px,2.5vw,22px); color:rgba(242,237,228,.5);
+  line-height:1.6; max-width:520px;
+  opacity:0; animation:fadeUp .8s ease 1s forwards;
+}
+.hero-btns {
+  display:flex; gap:12px; flex-wrap:wrap; margin-top:32px;
+  opacity:0; animation:fadeUp .8s ease 1.2s forwards;
+}
+.btn-primary {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.25em;
+  text-transform:uppercase; padding:14px 30px;
+  background:linear-gradient(135deg, var(--ember), var(--flame));
+  color:#fff; border-radius:2px; display:inline-block;
+  transition:transform .25s, box-shadow .25s;
+  box-shadow:0 4px 20px rgba(200,88,26,.35);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(200,88,26,.5); }
+.btn-ghost {
+  font-family:var(--font-mono); font-size:9px; letter-spacing:.25em;
+  text-transform:uppercase; padding:13px 30px;
+  border:1px solid rgba(242,237,228,.2); color:rgba(242,237,228,.7);
+  border-radius:2px; display:inline-block;
+  transition:border-color .25s, color .25s, background .25s;
+}
+.btn-ghost:hover { border-color:rgba(242,237,228,.6); color:var(--cream); background:rgba(242,237,228,.05); }
+
+/* Scroll indicator */
+.scroll-hint {
+  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+  z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px;
+  opacity:0; animation:fadeUp .8s ease 1.6s forwards;
+}
+.scroll-hint span { font-family:var(--font-mono); font-size:7px; letter-spacing:.3em; text-transform:uppercase; color:var(--smoke); }
+.scroll-arrow { width:1px; height:40px; background:linear-gradient(180deg, var(--smoke), transparent); animation:scrollBob 2s ease infinite; }
+@keyframes scrollBob { 0%,100% { transform:scaleY(1); } 50% { transform:scaleY(.6); } }
+
+/* ═══════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════ */
+.stat-card { padding:clamp(20px,3vw,32px); }
+.stat-num {
+  font-family:var(--font-display); font-size:clamp(44px,6vw,72px);
+  letter-spacing:.04em; line-height:1; margin-bottom:8px;
+  background:linear-gradient(135deg, var(--cream), rgba(242,237,228,.5));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.stat-num.amber {
+  background:linear-gradient(135deg, var(--ember), var(--gold));
+  -webkit-background-clip:text; background-clip:text;
+}
+.stat-label { font-family:var(--font-mono); font-size:8px; letter-spacing:.25em; text-transform:uppercase; color:var(--smoke); }
+.card.stat-hi { background:linear-gradient(135deg, var(--ember) 0%, #A84010 100%); border-color:transparent; }
+.card.stat-hi .stat-num { background:none; -webkit-background-clip:unset; color:#fff; }
+.card.stat-hi .stat-label { color:rgba(255,255,255,.55); }
+.card.stat-hi:hover { box-shadow:0 20px 60px rgba(200,88,26,.4); }
+
+/* ═══════════════════════════════════════
+   ABOUT / TEXT CARD
+═══════════════════════════════════════ */
+.text-card { padding:clamp(28px,4vw,52px); }
+.text-card.dark { background:var(--obsidian); }
+.text-card.ember-bg { background:linear-gradient(135deg, var(--ember) 0%, #8A3A0A 100%); border-color:transparent; }
+.text-card.teal-bg { background:linear-gradient(135deg, var(--teal) 0%, #053D3D 100%); border-color:transparent; }
+.text-card.ember-bg .eyebrow { color:rgba(255,255,255,.55); }
+.text-card.ember-bg .eyebrow::after { background:linear-gradient(90deg, rgba(255,255,255,.3), transparent); }
+.text-card.ember-bg .display { color:#fff; }
+.text-card.ember-bg .serif-body { color:rgba(255,255,255,.7); }
+.text-card.teal-bg .eyebrow { color:rgba(255,255,255,.55); }
+.text-card.teal-bg .eyebrow::after { background:linear-gradient(90deg, rgba(255,255,255,.3), transparent); }
+.text-card.teal-bg .display { color:#fff; }
+.text-card.teal-bg .serif-body { color:rgba(255,255,255,.7); }
+
+/* ═══════════════════════════════════════
+   RECOGNITION LIST
+═══════════════════════════════════════ */
+.rec-item { padding:14px 0; border-bottom:1px solid rgba(255,255,255,.06); display:flex; gap:16px; align-items:flex-start; }
+.rec-item:last-child { border-bottom:none; }
+.rec-diamond { width:6px; height:6px; background:var(--ember); transform:rotate(45deg); flex-shrink:0; margin-top:8px; }
+.rec-text { font-family:var(--font-body); font-size:clamp(14px,1.6vw,16px); color:rgba(255,255,255,.75); line-height:1.6; }
+.rec-text strong { color:#fff; font-weight:600; }
+
+/* ═══════════════════════════════════════
+   IMAGE TILE
+═══════════════════════════════════════ */
+.img-tile { overflow:hidden; min-height:240px; }
+.img-tile img {
+  width:100%; height:100%; object-fit:cover; min-height:240px;
+  transition:transform .7s cubic-bezier(.16,1,.3,1), filter .5s ease;
+  filter:brightness(.75) saturate(.8);
+}
+.img-tile:hover img { transform:scale(1.06); filter:brightness(.95) saturate(1); }
+
+/* ═══════════════════════════════════════
+   QUOTE CARD
+═══════════════════════════════════════ */
+.quote-card {
+  padding:clamp(28px,4vw,48px); background:var(--teal);
+  border-color:transparent; display:flex; flex-direction:column; justify-content:flex-end; min-height:240px;
+  position:relative; overflow:hidden;
+}
+.quote-card::before {
+  content:'\201C';
+  position:absolute; top:-20px; right:20px;
+  font-family:var(--font-display); font-size:clamp(120px,20vw,200px);
+  color:rgba(255,255,255,.05); line-height:1; pointer-events:none;
+}
+.quote-label { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.3em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:14px; }
+.quote-text { font-family:var(--font-body); font-style:italic; font-size:clamp(15px,2vw,20px); color:#fff; line-height:1.6; }
+.quote-attr { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:16px; }
+
+/* ═══════════════════════════════════════
+   VIDEO TILE
+═══════════════════════════════════════ */
+.vid-tile { position:relative; overflow:hidden; }
+.vid-tile::before { content:''; display:block; padding-bottom:56.25%; }
+.vid-tile iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+
+/* ═══════════════════════════════════════
+   FEATURE CARDS (nav cards)
+═══════════════════════════════════════ */
+.fc-card { display:flex; flex-direction:column; overflow:hidden; }
+.fc-card .fc-img {
+  height:clamp(160px,22vw,220px); background-size:cover; background-position:center;
+  filter:brightness(.6) saturate(.7);
+  transition:filter .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
+  transform-origin:center;
+}
+.fc-card:hover .fc-img { filter:brightness(.85) saturate(1); transform:scale(1.03); }
+.fc-body { padding:clamp(18px,2.5vw,28px); flex:1; display:flex; flex-direction:column; }
+.fc-eye { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--ember); margin-bottom:8px; }
+.fc-title { font-family:var(--font-display); font-size:clamp(18px,2.5vw,26px); letter-spacing:.04em; color:var(--cream); margin-bottom:8px; }
+.fc-desc { font-family:var(--font-body); font-size:13px; color:var(--smoke); line-height:1.65; flex:1; }
+.fc-arrow {
+  font-family:var(--font-mono); font-size:8px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ember); margin-top:16px; display:flex; align-items:center; gap:8px;
+  transition:gap .25s;
+}
+.fc-arrow::after { content:'→'; font-size:12px; transition:transform .25s; }
+.fc-card:hover .fc-arrow { gap:12px; }
+.fc-card:hover .fc-arrow::after { transform:translateX(4px); }
+
+/* ═══════════════════════════════════════
+   GALLERY
+═══════════════════════════════════════ */
+.gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--gap); }
+.gal-item { overflow:hidden; border-radius:var(--r); aspect-ratio:1/1; position:relative; }
+.gal-item img { width:100%; height:100%; object-fit:cover; transition:transform .7s ease, filter .5s ease; filter:brightness(.65) saturate(.7); }
+.gal-item:hover img { transform:scale(1.08); filter:brightness(.9) saturate(1.1); }
+.gal-item::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 50%, rgba(4,4,4,.6) 100%);
+  opacity:0; transition:opacity .3s;
+}
+.gal-item:hover::after { opacity:1; }
+
+/* ═══════════════════════════════════════
+   DISCIPLINES / SKILLS GRID
+═══════════════════════════════════════ */
+.disc-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:var(--gap); }
+.disc-card {
+  padding:clamp(18px,2.5vw,28px);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:var(--r);
+  background:var(--charcoal);
+  transition:border-color .3s, transform .3s, background .3s;
+  position:relative; overflow:hidden;
+}
+.disc-card::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--ember), var(--gold));
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .35s ease;
+}
+.disc-card:hover { border-color:rgba(200,88,26,.2); transform:translateY(-4px); background:rgba(17,17,16,.8); }
+.disc-card:hover::before { transform:scaleX(1); }
+.disc-num { font-family:var(--font-display); font-size:40px; color:rgba(200,88,26,.1); line-height:1; margin-bottom:8px; }
+.disc-icon { font-size:20px; margin-bottom:10px; }
+.disc-title { font-family:var(--font-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--cream); margin-bottom:8px; }
+.disc-desc { font-family:var(--font-body); font-size:12.5px; color:var(--smoke); line-height:1.65; }
+
+/* ═══════════════════════════════════════
+   CAREER TIMELINE
+═══════════════════════════════════════ */
+.career-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 clamp(32px,5vw,80px); }
+.career-item {
+  padding:clamp(14px,2vw,22px) 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  display:grid; grid-template-columns:clamp(110px,14vw,140px) 1fr; gap:16px;
+  transition:background .2s;
+}
+.career-item:first-child { border-top:1px solid rgba(255,255,255,.05); }
+.career-period { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ember); padding-top:3px; line-height:1.5; }
+.career-role { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--cream); margin-bottom:4px; }
+.career-place { font-family:var(--font-body); font-style:italic; font-size:13px; color:var(--smoke); }
+.career-loc { font-family:var(--font-mono); font-size:7px; color:rgba(138,127,116,.4); margin-top:3px; letter-spacing:.12em; text-transform:uppercase; }
+
+/* ═══════════════════════════════════════
+   EDUCATION / CERTS
+═══════════════════════════════════════ */
+.edu-item { padding:clamp(12px,2vw,20px) 0; border-bottom:1px solid rgba(255,255,255,.05); }
+.edu-item:first-child { border-top:1px solid rgba(255,255,255,.05); }
+.edu-item:last-child { border-bottom:none; }
+.edu-deg { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--cream); margin-bottom:5px; }
+.edu-inst { font-family:var(--font-body); font-style:italic; font-size:13px; color:var(--smoke); margin-bottom:4px; }
+.edu-yr { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--ember); }
+
+.cert-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:20px; }
+.cert-item {
+  padding:14px 16px;
+  border:1px solid rgba(200,88,26,.15); border-left:2px solid var(--ember);
+  border-radius:var(--r); background:rgba(200,88,26,.04);
+  transition:border-color .25s, background .25s;
+}
+.cert-item:hover { border-color:rgba(200,88,26,.4); background:rgba(200,88,26,.08); }
+.cert-name { font-family:var(--font-mono); font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--cream); margin-bottom:4px; line-height:1.4; }
+.cert-issuer { font-family:var(--font-body); font-style:italic; font-size:12px; color:var(--ember); margin-bottom:2px; }
+.cert-year { font-family:var(--font-mono); font-size:7px; color:var(--smoke); }
+
+/* ═══════════════════════════════════════
+   CTA BAND
+═══════════════════════════════════════ */
+.cta-band {
+  background:var(--obsidian); border:1px solid rgba(200,88,26,.15);
+  border-radius:var(--r); padding:clamp(36px,5vw,64px) clamp(28px,4vw,56px);
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:28px;
+  position:relative; overflow:hidden;
+}
+.cta-band::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--ember), var(--gold), transparent);
+}
+.cta-band::after {
+  content:''; position:absolute; bottom:-80px; right:-40px;
+  width:300px; height:300px;
+  background:radial-gradient(circle, rgba(200,88,26,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cta-headline { font-family:var(--font-display); font-size:clamp(36px,6vw,72px); letter-spacing:.04em; color:var(--cream); line-height:.92; }
+.cta-sub { font-family:var(--font-body); font-style:italic; font-size:clamp(14px,2vw,18px); color:var(--smoke); margin-top:10px; }
+
+/* ═══════════════════════════════════════
+   ██ ALCHEMY HERO
+═══════════════════════════════════════ */
+.hero-alchemy {
+  position:relative; min-height:clamp(500px,70vh,780px);
+  background:var(--obsidian); border-radius:var(--r); overflow:hidden;
+  display:flex; align-items:flex-end;
+}
+.hero-alchemy-bg {
+  position:absolute; inset:0;
+  background:url('https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg') center/cover;
+  filter:brightness(.5) saturate(.6);
+  transform:scale(1.04); animation:heroZoom 14s ease-out forwards;
+}
+.hero-alchemy-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(165deg, rgba(4,4,4,.92) 25%, rgba(4,4,4,.3) 100%);
+}
+.hero-alchemy-body { position:relative; z-index:2; padding:clamp(32px,5vw,64px); width:100%; }
+.alchemy-svg-title {
+  display:block; width:100%; overflow:visible; margin-bottom:8px;
+}
+.alchemy-sub-name {
+  font-family:var(--font-body); font-style:italic;
+  font-size:clamp(22px,4vw,44px); color:var(--ember); display:block; margin-top:6px;
+}
+
+/* ═══════════════════════════════════════
+   CHAPTER DIVIDER
+═══════════════════════════════════════ */
+.ch-div {
+  display:flex; align-items:center; gap:20px; padding:8px 0;
+}
+.ch-div span { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.35em; text-transform:uppercase; color:var(--smoke); white-space:nowrap; }
+.ch-div::before, .ch-div::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); }
+
+/* ═══════════════════════════════════════
+   MENU SECTIONS
+═══════════════════════════════════════ */
+.menu-card { padding:clamp(28px,4vw,52px); position:relative; overflow:hidden; }
+.menu-card::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--ember), var(--gold), transparent);
+  opacity:0; transition:opacity .4s;
+}
+.menu-card:hover::after { opacity:1; }
+.menu-card.dark { background:var(--obsidian); }
+
+.menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 clamp(40px,6vw,80px); }
+.menu-row {
+  padding:clamp(12px,2vw,18px) 0; border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex; flex-direction:column; gap:5px;
+  transition:padding-left .25s ease;
+}
+.menu-row:hover { padding-left:8px; }
+.menu-row:first-child { border-top:1px solid rgba(255,255,255,.04); }
+.menu-dark .menu-row { border-color:rgba(255,255,255,.04); }
+.menu-name { font-family:var(--font-mono); font-size:clamp(11px,1.4vw,13px); letter-spacing:.1em; text-transform:uppercase; color:var(--cream); line-height:1.3; }
+.menu-desc { font-family:var(--font-body); font-style:italic; font-size:clamp(13px,1.6vw,15px); color:var(--smoke); line-height:1.45; }
+.menu-tag { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--ember); margin-top:2px; }
+
+.sig-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(200,88,26,.1); border:1px solid rgba(200,88,26,.3);
+  border-radius:2px; padding:5px 12px; margin-bottom:16px;
+}
+.sig-badge span { font-family:var(--font-mono); font-size:7px; letter-spacing:.3em; text-transform:uppercase; color:var(--ember); }
+
+.cocktail-chip-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:20px; }
+.cocktail-chip {
+  padding:16px 18px; border:1px solid rgba(200,88,26,.12); border-left:2px solid var(--ember);
+  border-radius:var(--r); background:rgba(200,88,26,.04);
+  transition:background .25s, border-color .25s, transform .25s;
+}
+.cocktail-chip:hover { background:rgba(200,88,26,.1); border-color:rgba(200,88,26,.4); transform:translateX(4px); }
+.chip-name { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--cream); margin-bottom:4px; }
+.chip-tech { font-family:var(--font-body); font-style:italic; font-size:12px; color:var(--ember); }
+
+/* ═══════════════════════════════════════
+   ██ FOOD PAIRING HERO
+═══════════════════════════════════════ */
+.hero-food {
+  position:relative; min-height:clamp(460px,65vh,720px);
+  background:var(--obsidian); border-radius:var(--r); overflow:hidden; display:flex; align-items:flex-end;
+}
+.hero-food-bg {
+  position:absolute; inset:0;
+  background:url('https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg') center/cover;
+  filter:brightness(.45) saturate(.6);
+  transform:scale(1.04); animation:heroZoom 14s ease-out forwards;
+}
+
+.food-cat-card { padding:clamp(24px,3.5vw,44px); }
+.food-cat-card.light { background:var(--charcoal); }
+.food-cat-card.dark { background:var(--obsidian); }
+.food-cat-card.teal { background:linear-gradient(135deg, var(--teal), #053D3D); border-color:transparent; }
+.cat-hd { display:flex; align-items:center; gap:16px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,.05); }
+.cat-num-big { font-family:var(--font-display); font-size:clamp(40px,5.5vw,60px); color:rgba(200,88,26,.15); line-height:1; letter-spacing:.04em; }
+.food-cat-card.teal .cat-num-big { color:rgba(255,255,255,.1); }
+.cat-title { font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--cream); }
+.food-cat-card.teal .cat-title { color:#fff; }
+.cat-sub { font-family:var(--font-body); font-style:italic; font-size:12px; color:var(--smoke); margin-top:3px; }
+.food-cat-card.teal .cat-sub { color:rgba(255,255,255,.45); }
+.food-row { padding:clamp(10px,1.8vw,16px) 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.food-row:last-child { border-bottom:none; }
+.food-cat-card.teal .food-row { border-color:rgba(255,255,255,.08); }
+.food-name { font-family:var(--font-mono); font-size:clamp(10px,1.4vw,13px); letter-spacing:.1em; text-transform:uppercase; color:var(--cream); margin-bottom:5px; }
+.food-cat-card.teal .food-name { color:#fff; }
+.food-desc { font-family:var(--font-body); font-style:italic; font-size:clamp(12px,1.5vw,14px); color:var(--smoke); line-height:1.55; }
+.food-cat-card.teal .food-desc { color:rgba(255,255,255,.5); }
+
+/* ═══════════════════════════════════════
+   CLOSING QUOTE FULL-BLEED
+═══════════════════════════════════════ */
+.closing-quote {
+  position:relative; overflow:hidden; border-radius:var(--r);
+  padding:clamp(48px,7vw,80px) clamp(28px,5vw,64px); text-align:center;
+  background:var(--obsidian);
+}
+.closing-quote-bg { position:absolute; inset:0; background-size:cover; background-position:center; opacity:.06; }
+.closing-quote-glow { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:600px; height:400px; background:radial-gradient(ellipse, rgba(200,88,26,.12) 0%, transparent 70%); pointer-events:none; }
+.big-q { font-family:var(--font-display); font-size:clamp(80px,14vw,140px); color:rgba(200,88,26,.2); line-height:.6; display:block; margin-bottom:20px; }
+.quote-body { position:relative; font-family:var(--font-body); font-style:italic; font-size:clamp(18px,3vw,28px); color:var(--cream); line-height:1.65; max-width:600px; margin:0 auto; }
+.quote-by { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.35em; text-transform:uppercase; color:var(--smoke); margin-top:24px; position:relative; }
+
+/* ═══════════════════════════════════════
+   ██ LAB HERO
+═══════════════════════════════════════ */
+.hero-lab-page {
+  position:relative; min-height:clamp(480px,68vh,740px);
+  background:var(--obsidian); border-radius:var(--r); overflow:hidden; display:flex; align-items:flex-end;
+}
+.hero-lab-bg {
+  position:absolute; inset:0;
+  background:url('https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg') center/cover;
+  filter:brightness(.4) saturate(.55);
+  transform:scale(1.04); animation:heroZoom 14s ease-out forwards;
+}
+/* Animated hat stars */
+.elmago-wrap { display:inline-flex; align-items:center; gap:clamp(10px,2vw,20px); margin-bottom:10px; flex-wrap:wrap; }
+.elmago-text { font-family:var(--font-display); font-size:clamp(48px,9vw,100px); color:#fff; letter-spacing:.04em; line-height:.9; }
+.elmago-italic { font-family:var(--font-body); font-style:italic; font-size:clamp(44px,8vw,90px); color:var(--ember); line-height:.9; }
+.magician { display:inline-flex; align-items:center; gap:6px; position:relative; }
+.hat { font-size:clamp(32px,5vw,56px); display:inline-block; animation:hatBob 3s ease-in-out infinite; filter:drop-shadow(0 0 10px rgba(200,88,26,.6)); }
+@keyframes hatBob { 0%,100% { transform:translateY(0) rotate(-4deg); } 50% { transform:translateY(-10px) rotate(4deg); } }
+.star { position:absolute; font-size:clamp(10px,1.5vw,16px); opacity:0; pointer-events:none; }
+.star:nth-child(2) { top:-20px; left:20%; animation:sb1 2.4s ease-in-out infinite; }
+.star:nth-child(3) { top:-28px; left:50%; animation:sb2 2.4s ease-in-out infinite .4s; }
+.star:nth-child(4) { top:-16px; left:72%; animation:sb3 2.4s ease-in-out infinite .8s; }
+.star:nth-child(5) { top:-32px; left:35%; animation:sb1 2.4s ease-in-out infinite 1.2s; }
+.star:nth-child(6) { top:-10px; left:60%; animation:sb2 2.4s ease-in-out infinite 1.6s; }
+@keyframes sb1 { 0% { opacity:0; transform:translate(0,0) scale(.3); } 25% { opacity:1; transform:translate(-12px,-18px) scale(1); } 70% { opacity:.4; transform:translate(-20px,-32px) scale(.8); } 100% { opacity:0; transform:translate(-28px,-48px) scale(.3); } }
+@keyframes sb2 { 0% { opacity:0; transform:translate(0,0) scale(.3); } 25% { opacity:1; transform:translate(0,-22px) scale(1); } 70% { opacity:.4; transform:translate(4px,-38px) scale(.8); } 100% { opacity:0; transform:translate(8px,-54px) scale(.3); } }
+@keyframes sb3 { 0% { opacity:0; transform:translate(0,0) scale(.3); } 25% { opacity:1; transform:translate(10px,-16px) scale(1); } 70% { opacity:.4; transform:translate(18px,-30px) scale(.8); } 100% { opacity:0; transform:translate(24px,-44px) scale(.3); } }
+.wand-line { position:relative; height:1.5px; background:linear-gradient(90deg, transparent, var(--ember), var(--gold), transparent); border-radius:2px; margin-top:8px; overflow:visible; }
+.wand-glow { position:absolute; top:-4px; left:-10%; width:20%; height:10px; background:radial-gradient(ellipse,rgba(255,144,64,.8),transparent 70%); border-radius:50%; animation:wandSwipe 2.4s ease-in-out infinite; }
+@keyframes wandSwipe { 0% { left:-20%; opacity:0; } 20% { opacity:1; } 80% { opacity:1; } 100% { left:110%; opacity:0; } }
+.hero-lab-title { font-family:var(--font-display); font-size:clamp(28px,5vw,56px); color:rgba(255,255,255,.12); letter-spacing:.04em; line-height:1; margin-top:6px; }
+
+/* ═══════════════════════════════════════
+   ROI METRIC CARD
+═══════════════════════════════════════ */
+.metric-card { padding:clamp(20px,3vw,32px); position:relative; overflow:hidden; }
+.metric-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--ember), transparent); transform:scaleX(0); transform-origin:left; transition:transform .4s ease; }
+.metric-card:hover::after { transform:scaleX(1); }
+.metric-val { font-family:var(--font-display); font-size:clamp(36px,5.5vw,64px); letter-spacing:.04em; line-height:1; margin-bottom:8px; color:var(--ember); }
+.metric-val sup { font-size:.42em; vertical-align:super; font-weight:400; }
+.metric-label { font-family:var(--font-mono); font-size:8.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--smoke); margin-bottom:5px; }
+.metric-note { font-family:var(--font-body); font-style:italic; font-size:12px; color:rgba(138,127,116,.6); }
+.card.metric-hi { background:linear-gradient(135deg, var(--ember), #7A2C06); border-color:transparent; }
+.card.metric-hi .metric-val { color:#fff; }
+.card.metric-hi .metric-label { color:rgba(255,255,255,.55); }
+.card.metric-hi .metric-note { color:rgba(255,255,255,.4); }
+.card.metric-hi::after { background:linear-gradient(90deg, rgba(255,255,255,.4), transparent); }
+
+/* Assumptions table */
+.assumption-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:clamp(10px,1.5vw,16px) 0; border-bottom:1px solid rgba(255,255,255,.04); gap:16px;
+}
+.assumption-row:last-child { border-bottom:none; }
+.assumption-key { font-family:var(--font-mono); font-size:8.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--smoke); }
+.assumption-val { font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--cream); font-weight:300; }
+
+/* Flow steps */
+.flow-step { display:flex; gap:clamp(18px,3vw,32px); padding:clamp(18px,3vw,30px) 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.flow-step:last-child { border-bottom:none; }
+.flow-time-block { flex-shrink:0; width:clamp(76px,12vw,120px); }
+.flow-time { font-family:var(--font-mono); font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--ember); line-height:1.7; }
+.flow-title { font-family:var(--font-display); font-size:clamp(16px,2.5vw,22px); letter-spacing:.04em; color:var(--cream); margin-bottom:5px; }
+.flow-desc { font-family:var(--font-body); font-style:italic; font-size:clamp(13px,1.7vw,15px); color:var(--smoke); margin-bottom:14px; line-height:1.55; }
+.flow-detail { display:flex; gap:12px; align-items:flex-start; margin-bottom:8px; }
+.flow-dot { width:3px; height:3px; background:var(--ember); border-radius:50%; margin-top:8px; flex-shrink:0; }
+.flow-detail-text { font-family:var(--font-body); font-size:clamp(12px,1.5vw,14px); color:rgba(138,127,116,.8); line-height:1.6; }
+.flow-detail-text strong { color:var(--cream); font-weight:600; }
+
+/* Upsell */
+.upsell-card { padding:clamp(28px,4vw,48px); background:linear-gradient(135deg, var(--teal), #032E2E); border-color:transparent; }
+.upsell-card .eyebrow { color:rgba(255,255,255,.45); }
+.upsell-card .eyebrow::after { background:linear-gradient(90deg, rgba(255,255,255,.2), transparent); }
+.upsell-card .display { color:#fff; }
+.upsell-row { display:flex; gap:14px; align-items:flex-start; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.07); }
+.upsell-row:last-child { border-bottom:none; }
+.upsell-diamond { width:5px; height:5px; background:rgba(255,255,255,.4); transform:rotate(45deg); flex-shrink:0; margin-top:8px; }
+.upsell-text { font-family:var(--font-body); font-size:clamp(13px,1.8vw,16px); color:rgba(255,255,255,.75); line-height:1.65; }
+.upsell-text strong { color:#fff; }
+.upsell-text em { color:var(--gold); font-style:normal; font-weight:600; }
+
+/* Highlight band */
+.highlight-band {
+  border-radius:var(--r); padding:clamp(32px,5vw,56px) clamp(24px,4vw,52px);
+  background:linear-gradient(135deg, var(--ember) 0%, #7A2C06 100%);
+  border-color:transparent;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px;
+  position:relative; overflow:hidden;
+}
+.highlight-band::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity:.04; }
+.hl-val { font-family:var(--font-display); font-size:clamp(48px,8vw,88px); color:#fff; letter-spacing:.04em; line-height:1; }
+.hl-val sup { font-size:.4em; vertical-align:super; }
+.hl-label { font-family:var(--font-mono); font-size:8px; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-top:8px; }
+.hl-note { font-family:var(--font-body); font-style:italic; font-size:clamp(13px,2vw,17px); color:rgba(255,255,255,.55); margin-top:5px; }
+
+/* ═══════════════════════════════════════
+   ██ RESUME
+═══════════════════════════════════════ */
+.resume-header {
+  background:var(--obsidian); border-radius:var(--r); padding:clamp(28px,4vw,52px);
+  display:flex; gap:clamp(20px,3vw,36px); align-items:flex-start;
+  border:1px solid rgba(200,88,26,.12);
+  position:relative; overflow:hidden;
+}
+.resume-header::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--ember), var(--gold), transparent); }
+.resume-photo {
+  width:clamp(80px,10vw,110px); height:clamp(80px,10vw,110px);
+  border-radius:50%; object-fit:cover; object-position:top center;
+  border:2px solid var(--ember); flex-shrink:0;
+  box-shadow:0 0 0 4px rgba(200,88,26,.15), 0 0 24px rgba(200,88,26,.2);
+}
+.resume-name { font-family:var(--font-display); font-size:clamp(32px,6vw,60px); letter-spacing:.04em; color:var(--cream); line-height:.88; margin-bottom:8px; }
+.resume-name em { color:var(--ember); font-style:normal; }
+.resume-title { font-family:var(--font-body); font-style:italic; font-size:clamp(14px,1.8vw,17px); color:var(--smoke); margin-bottom:20px; line-height:1.55; }
+.resume-contacts { display:flex; flex-wrap:wrap; gap:8px 24px; }
+.resume-contact { font-family:var(--font-mono); font-size:8.5px; color:var(--smoke); display:flex; align-items:center; gap:7px; transition:color .2s; }
+.resume-contact:hover { color:var(--ember); }
+
+.summary-card { padding:clamp(24px,3.5vw,40px); background:linear-gradient(135deg, var(--ember) 0%, #8A3A0A 100%); border-color:transparent; position:relative; overflow:hidden; }
+.summary-card::after { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity:.04; pointer-events:none; }
+.summary-card .eyebrow { color:rgba(255,255,255,.5); }
+.summary-card .eyebrow::after { background:linear-gradient(90deg, rgba(255,255,255,.25), transparent); }
+.summary-card p { font-family:var(--font-body); font-size:clamp(15px,2vw,18px); line-height:1.75; color:rgba(255,255,255,.88); }
+
+.exp-item { padding:clamp(14px,2.2vw,22px) 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.exp-item:first-child { border-top:1px solid rgba(255,255,255,.04); }
+.exp-item:last-child { border-bottom:none; }
+.exp-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:4px; }
+.exp-role { font-family:var(--font-mono); font-size:clamp(10px,1.4vw,12px); letter-spacing:.12em; text-transform:uppercase; color:var(--cream); }
+.exp-period { font-family:var(--font-mono); font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--ember); white-space:nowrap; padding-top:2px; }
+.exp-company { font-family:var(--font-body); font-style:italic; font-size:clamp(13px,1.6vw,15px); color:var(--smoke); margin-bottom:2px; }
+.exp-location { font-family:var(--font-mono); font-size:7px; color:rgba(138,127,116,.4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+.exp-desc { font-family:var(--font-body); font-size:clamp(12px,1.5vw,14px); line-height:1.7; color:rgba(138,127,116,.7); }
+
+.skill-row { display:flex; gap:12px; align-items:flex-start; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.skill-row:last-child { border-bottom:none; }
+.skill-diamond { width:5px; height:5px; background:var(--ember); transform:rotate(45deg); flex-shrink:0; margin-top:8px; }
+.skill-text { font-family:var(--font-body); font-size:clamp(13px,1.7vw,15px); line-height:1.6; color:rgba(242,237,228,.65); }
+.skill-text strong { color:var(--cream); }
+
+.edu-r-item { padding:clamp(12px,2vw,20px) 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.edu-r-item:first-child { border-top:1px solid rgba(255,255,255,.04); }
+.edu-r-item:last-child { border-bottom:none; }
+.edu-r-deg { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--cream); margin-bottom:4px; }
+.edu-r-inst { font-family:var(--font-body); font-style:italic; font-size:13px; color:var(--smoke); margin-bottom:3px; }
+.edu-r-yr { font-family:var(--font-mono); font-size:7.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--ember); }
+
+.cert-r-row { display:flex; justify-content:space-between; align-items:flex-start; padding:clamp(10px,1.5vw,15px) 0; border-bottom:1px solid rgba(255,255,255,.04); gap:12px; }
+.cert-r-row:last-child { border-bottom:none; }
+.cert-r-name { font-family:var(--font-mono); font-size:clamp(8.5px,1.2vw,10px); letter-spacing:.1em; text-transform:uppercase; color:var(--cream); margin-bottom:3px; line-height:1.3; }
+.cert-r-issuer { font-family:var(--font-body); font-style:italic; font-size:11.5px; color:var(--ember); }
+.cert-r-year { font-family:var(--font-mono); font-size:8px; color:var(--smoke); white-space:nowrap; padding-top:2px; }
+
+.profile-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--gap); }
+.profile-chip { background:rgba(255,255,255,.08); border-radius:var(--r); padding:14px 18px; }
+.profile-label-p { font-family:var(--font-mono); font-size:7px; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:5px; }
+.profile-val { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; color:#fff; }
+
+.print-btn {
+  font-family:var(--font-mono); font-size:8.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--smoke); background:none; border:1px solid rgba(255,255,255,.1);
+  padding:8px 18px; border-radius:2px; transition:all .2s; margin-bottom:var(--gap);
+  align-self:flex-end;
+}
+.print-btn:hover { color:var(--ember); border-color:rgba(200,88,26,.4); }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.site-footer {
+  padding:clamp(36px,5vw,60px) 0;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex; justify-content:space-between; align-items:flex-start;
+  flex-wrap:wrap; gap:24px;
+  position:relative;
+}
+.site-footer::before { content:''; position:absolute; top:0; left:0; width:80px; height:1.5px; background:linear-gradient(90deg, var(--ember), transparent); box-shadow:0 0 8px rgba(200,88,26,.4); }
+.footer-name { font-family:var(--font-display); font-size:clamp(18px,3vw,28px); letter-spacing:.06em; color:var(--cream); margin-bottom:5px; }
+.footer-role { font-family:var(--font-mono); font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--smoke); margin-bottom:3px; }
+.footer-loc { font-family:var(--font-mono); font-size:7px; letter-spacing:.18em; text-transform:uppercase; color:rgba(138,127,116,.4); }
+.footer-contact { display:flex; flex-direction:column; gap:7px; margin-top:12px; }
+.footer-contact a { font-family:var(--font-mono); font-size:8.5px; color:var(--smoke); display:flex; align-items:center; gap:7px; transition:color .2s; }
+.footer-contact a:hover { color:var(--ember); }
+.footer-nav { display:flex; flex-wrap:wrap; gap:6px 20px; align-items:center; }
+.footer-nav a { font-family:var(--font-mono); font-size:8.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--smoke); transition:color .2s; padding:5px 0; position:relative; }
+.footer-nav a::after { content:''; position:absolute; bottom:0; left:0; right:100%; height:1px; background:var(--ember); transition:right .3s ease; }
+.footer-nav a:hover { color:var(--cream); }
+.footer-nav a:hover::after { right:0; }
+.footer-copy { font-family:var(--font-mono); font-size:7px; color:rgba(255,255,255,.12); width:100%; margin-top:8px; }
+
+/* ═══════════════════════════════════════
+   PARALLAX MARQUEE
+═══════════════════════════════════════ */
+.marquee-wrap { overflow:hidden; padding:20px 0; border-top:1px solid rgba(255,255,255,.04); border-bottom:1px solid rgba(255,255,255,.04); }
+.marquee-track { display:flex; gap:0; animation:marqueeScroll 20s linear infinite; width:max-content; }
+.marquee-track:hover { animation-play-state:paused; }
+.marquee-item { font-family:var(--font-display); font-size:clamp(14px,2.5vw,20px); letter-spacing:.2em; color:rgba(255,255,255,.08); white-space:nowrap; padding:0 32px; }
+.marquee-item em { color:rgba(200,88,26,.3); font-style:normal; }
+@keyframes marqueeScroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+
+/* ═══════════════════════════════════════
+   COUNTER ANIMATION
+═══════════════════════════════════════ */
+.counter { display:inline-block; }
+
+/* ═══════════════════════════════════════
+   FLOATING AMBER LINE
+═══════════════════════════════════════ */
+.amber-line {
+  width:100%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--ember), transparent);
+  opacity:.3; margin:4px 0;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1100px) { .disc-grid { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:900px) {
+  .g84,.g57 { grid-template-columns:1fr; }
+  .g3 { grid-template-columns:1fr 1fr; }
+  .disc-grid { grid-template-columns:repeat(3,1fr); }
+  .gallery { grid-template-columns:repeat(2,1fr); }
+  .career-grid { grid-template-columns:1fr; }
+  .cert-grid { grid-template-columns:1fr; }
+  .menu-grid { grid-template-columns:1fr; }
+  .cocktail-chip-grid { grid-template-columns:1fr; }
+}
+@media(max-width:768px) {
+  .g2 { grid-template-columns:1fr; }
+  .g4 { grid-template-columns:1fr 1fr; }
+  .nav-tabs { display:none; }
+  .nav-resume { display:none; }
+  .ham { display:flex; }
+  .profile-grid { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:480px) {
+  .g4 { grid-template-columns:1fr; }
+  .disc-grid { grid-template-columns:1fr 1fr; }
+  .gallery { grid-template-columns:1fr 1fr; }
+  .profile-grid { grid-template-columns:1fr; }
+  .cta-band { flex-direction:column; align-items:flex-start; }
+  .career-item { grid-template-columns:1fr; }
+  .highlight-band { flex-direction:column; align-items:flex-start; }
+  .flow-step { flex-direction:column; gap:8px; }
+  .flow-time-block { width:100%; }
+}
+@media print {
+  nav,.drawer,#pl,body::before { display:none!important; }
+  .section { display:block!important; }
+  .section:not(.active) { display:none!important; }
+  body { background:#fff; color:#000; }
+  .page,.page-inner { padding:16px; }
+  .rv,.rv-l,.rv-r { opacity:1!important; transform:none!important; }
+}
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="icon-wrapper">
-      <div class="gear"></div>
-      <div class="inner-circle"></div>
+<div class="cursor" id="cursor-dot" style="top:0;left:0"><div class="cursor-dot"></div></div>
+<div class="cursor" id="cursor-ring" style="top:0;left:0"><div class="cursor-ring"></div></div>
+
+<div id="pl">
+  <div class="pl-logo">EL MAGO</div>
+  <div class="pl-sub">Subhash Sankar &mdash; Molecular Mixologist</div>
+  <div class="pl-bar"><div class="pl-fill" id="pf"></div></div>
+  <div class="pl-pct" id="pp">0%</div>
+</div>
+
+<nav id="nav">
+  <a class="nav-logo" onclick="showSection('portfolio')">S<span>S</span></a>
+  <ul class="nav-tabs">
+    <li><a class="nav-tab active" onclick="showSection('portfolio',this)" data-section="portfolio">Portfolio</a></li>
+    <li><a class="nav-tab" onclick="showSection('cocktail',this)" data-section="cocktail">Cocktail Menu</a></li>
+    <li><a class="nav-tab" onclick="showSection('food',this)" data-section="food">Food Pairings</a></li>
+    <li><a class="nav-tab" onclick="showSection('lab',this)" data-section="lab">Mixology Lab</a></li>
+    <li><a class="nav-resume" onclick="showSection('resume',this)" data-section="resume">R&eacute;sum&eacute;</a></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="drawer" id="drw">
+  <a class="drawer-item active" onclick="showSection('portfolio');closeDrawer();" data-section="portfolio">Portfolio <span>01</span></a>
+  <a class="drawer-item" onclick="showSection('cocktail');closeDrawer();" data-section="cocktail">Cocktail Menu <span>02</span></a>
+  <a class="drawer-item" onclick="showSection('food');closeDrawer();" data-section="food">Food Pairings <span>03</span></a>
+  <a class="drawer-item" onclick="showSection('lab');closeDrawer();" data-section="lab">Mixology Lab <span>04</span></a>
+  <a class="drawer-item" onclick="showSection('resume');closeDrawer();" data-section="resume">R&eacute;sum&eacute; <span>05</span></a>
+</div>
+
+<div id="sec-portfolio" class="section active">
+<div class="page">
+
+  <div class="hero-portfolio">
+    <div class="hero-bg"></div>
+    <div class="particles" id="particles"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Lead Molecular Mixologist &middot; 19 Years of Innovation</div>
+      <div class="hero-name">SUBHASH<span class="hero-name-accent">SANKAR</span></div>
+      <div class="hero-title-line"></div>
+      <p class="hero-sub">Where science meets soul &mdash; cocktails as art, theatre, and memory</p>
+      <div class="hero-btns">
+        <a onclick="showSection('cocktail')" class="btn-primary">View Cocktail Menu</a>
+        <a onclick="showSection('resume')" class="btn-ghost">Full R&eacute;sum&eacute;</a>
+      </div>
     </div>
-    
-    <h1>Final Touches</h1>
-    <p>We are currently deploying the final updates and optimizing the system. Operations will resume shortly.</p>
-    
-    <div class="progress-container">
-      <div class="progress-bar"></div>
-    </div>
-    <div class="status-text">
-      <span>System Update</span>
-      <span>95%</span>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
     </div>
   </div>
 
+  <div class="marquee-wrap rv">
+    <div class="marquee-track" id="mq">
+      <span class="marquee-item">MOLECULAR MIXOLOGY</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">LIQUID ARTISTRY</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">19 YEARS · 10 COUNTRIES</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">FIRE &amp; ASH</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">EL MAGO</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">BARREL AGED</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">SPHERIFICATION</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">MOLECULAR MIXOLOGY</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">LIQUID ARTISTRY</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">19 YEARS · 10 COUNTRIES</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">FIRE &amp; ASH</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">EL MAGO</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">BARREL AGED</span><span class="marquee-item"><em>✦</em></span>
+      <span class="marquee-item">SPHERIFICATION</span><span class="marquee-item"><em>✦</em></span>
+    </div>
+  </div>
+
+  <div class="row g4">
+    <div class="card stat-card rv d1"><div class="stat-num amber"><span class="counter" data-target="19">0</span>+</div><div class="stat-label">Years Experience</div></div>
+    <div class="card stat-card rv d2"><div class="stat-num amber"><span class="counter" data-target="200">0</span>+</div><div class="stat-label">Original Recipes</div></div>
+    <div class="card stat-card rv d3"><div class="stat-num amber"><span class="counter" data-target="10">0</span>+</div><div class="stat-label">Molecular Mixology Yrs</div></div>
+    <div class="card stat-card stat-hi rv d4"><div class="stat-num">&#x221E;</div><div class="stat-label">Creativity</div></div>
+  </div>
+
+  <div class="row g84">
+    <div class="card text-card rv">
+      <div class="eyebrow">The Artisan</div>
+      <div class="display">Crafting <em>liquid</em> experiences</div>
+      <p class="serif-body">In the modern cocktail scene, the terms &ldquo;mixology&rdquo; and &ldquo;mixologist&rdquo; are a regular part of bar vocabulary &mdash; being used more and more to describe a style of mixing cocktails and the people who practice it. Subhash Sankar exemplifies this distinction at the highest level.</p>
+      <p class="serif-body">With 19 years of experience spanning India, the UAE, Bahrain, Qatar, Belize, and the Turks &amp; Caicos Islands, Subhash is a Lead Molecular Mixologist with a deep passion for gastronomy-led cocktail design and elevating every guest experience into a multi-sensory performance.</p>
+    </div>
+    <div class="card text-card ember-bg rv d1">
+      <div class="eyebrow">Global Recognition</div>
+      <div class="display" style="font-size:clamp(22px,3.5vw,36px)">Known <em style="color:rgba(255,255,255,.6)">Worldwide</em></div>
+      <div class="rec-item"><div class="rec-diamond"></div><p class="rec-text">Featured in leading U.S. media including <strong>UPROXX</strong> and <strong>Vision Viral</strong>.</p></div>
+      <div class="rec-item"><div class="rec-diamond"></div><p class="rec-text">International press for one of the <strong>world&rsquo;s best margaritas</strong>.</p></div>
+      <div class="rec-item"><div class="rec-diamond"></div><p class="rec-text">Celebrated for <strong>molecular cocktail techniques</strong> and modern beverage artistry.</p></div>
+      <div class="rec-item"><div class="rec-diamond"></div><p class="rec-text">Elevated <strong>Belize&rsquo;s presence</strong> in global mixology through international exposure.</p></div>
+    </div>
+  </div>
+
+  <div class="row g3">
+    <div class="card img-tile rv"><img src="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" alt="Skull cocktail" loading="lazy"/></div>
+    <div class="card img-tile rv d1"><img src="https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg" alt="Garnished cocktail" loading="lazy"/></div>
+    <div class="card quote-card rv d2">
+      <p class="quote-label">Philosophy</p>
+      <p class="quote-text">&ldquo;A cocktail is not just a drink &mdash; it is a story told in glass, fire, smoke, and flavour.&rdquo;</p>
+      <p class="quote-attr">&mdash; Subhash Sankar</p>
+    </div>
+  </div>
+
+  <div class="row g84">
+    <div class="card vid-tile rv">
+      <iframe src="https://player.vimeo.com/video/577733619?autoplay=0&title=0&byline=0&portrait=0&color=C8581A" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Subhash Sankar Mixology Video"></iframe>
+    </div>
+    <div class="card img-tile rv d1"><img src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Subhash Sankar at the bar" loading="lazy" style="min-height:300px"/></div>
+  </div>
+
+  <div class="row g3">
+    <div class="card fc-card rv">
+      <a onclick="showSection('cocktail')">
+        <div class="fc-img" style="background-image:url('https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg')"></div>
+        <div class="fc-body">
+          <div class="fc-eye">Liquid Artistry</div>
+          <div class="fc-title">The Cocktail Menu</div>
+          <p class="fc-desc">Six chapters &mdash; Fire &amp; Ash, Barrel Aged, Boozy Gelato, Molecular Alchemy, Fat Wash &amp; Clarification, BBQ &amp; Toast.</p>
+          <div class="fc-arrow">Explore</div>
+        </div>
+      </a>
+    </div>
+    <div class="card fc-card rv d1">
+      <a onclick="showSection('food')">
+        <div class="fc-img" style="background-image:url('https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg')"></div>
+        <div class="fc-body">
+          <div class="fc-eye">El Mago — Mexican Peruvian Table</div>
+          <div class="fc-title">Food &amp; Cocktail Pairings</div>
+          <p class="fc-desc">A refined Mexican&ndash;Peruvian menu — bold, vibrant tastes and innovative textures in celebration of artistry.</p>
+          <div class="fc-arrow">Explore</div>
+        </div>
+      </a>
+    </div>
+    <div class="card fc-card rv d2">
+      <a onclick="showSection('lab')">
+        <div class="fc-img" style="background-image:url('https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg')"></div>
+        <div class="fc-body">
+          <div class="fc-eye">Mixology Lab Classes</div>
+          <div class="fc-title">ROI Plan &amp; Class Flow</div>
+          <p class="fc-desc">USD 290++ per person &middot; 3 classes/week &middot; $158K projected revenue &middot; Optional 5-Course Wine Dinner.</p>
+          <div class="fc-arrow">Explore</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="gallery">
+    <div class="gal-item rv"><img src="https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg" alt="" loading="lazy"/></div>
+    <div class="gal-item rv d1"><img src="https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg" alt="" loading="lazy"/></div>
+    <div class="gal-item rv d2"><img src="https://foldr.space/api/view/aZGoN4EiyltIahyK/IMG-20260313-WA0208.jpg" alt="" loading="lazy"/></div>
+    <div class="gal-item rv d3"><img src="https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg" alt="" loading="lazy"/></div>
+  </div>
+  <div style="display:flex; justify-content:center; margin-top:32px;" class="rv d4">
+    <a href="gallery.html" class="btn-ghost">View Full Gallery</a>
+  </div>
+
+  <div class="disc-grid">
+    <div class="disc-card rv"><div class="disc-num">01</div><div class="disc-icon">🧪</div><div class="disc-title">Molecular Mixology</div><p class="disc-desc">Liquid nitrogen, spherification, and culinary science transform cocktails into multi-sensory theatre.</p></div>
+    <div class="disc-card rv d1"><div class="disc-num">02</div><div class="disc-icon">🔥</div><div class="disc-title">Live Presentation</div><p class="disc-desc">Mastery of fire, smoke, and tableside craftsmanship — every pour a performance guests remember.</p></div>
+    <div class="disc-card rv d2"><div class="disc-num">03</div><div class="disc-icon">🌿</div><div class="disc-title">House Infusions</div><p class="disc-desc">Bespoke botanical infusions, barrel-aged spirits, and fermented preparations with distinct terroir.</p></div>
+    <div class="disc-card rv d3"><div class="disc-num">04</div><div class="disc-icon">🎓</div><div class="disc-title">Cocktail Education</div><p class="disc-desc">Immersive Gastronomy &amp; Molecular Mixology Masterclasses for guests and hospitality teams globally.</p></div>
+    <div class="disc-card rv d4"><div class="disc-num">05</div><div class="disc-icon">🍹</div><div class="disc-title">Menu Architecture</div><p class="disc-desc">Cocktail menus that tell a narrative — from concept to flavour balance and guest experience design.</p></div>
+    <div class="disc-card rv d5"><div class="disc-num">06</div><div class="disc-icon">⭐</div><div class="disc-title">Bar Leadership</div><p class="disc-desc">Leading luxury property bar teams with specialist training in Cost Control and Inventory Management.</p></div>
+  </div>
+
+  <div class="rv" style="padding:clamp(24px,4vw,48px) 0">
+    <div class="eyebrow">Work History</div>
+    <div class="display display-lg" style="margin-bottom:clamp(20px,3vw,36px)">A Career of <em>Distinction</em></div>
+    <div class="career-grid">
+      <div class="career-item rv"><div class="career-period">Nov 2024 &mdash; Jan 2026</div><div><div class="career-role">Group Mixology Master</div><div class="career-place">Waterloo Hotel Management Ltd</div><div class="career-loc">Turks and Caicos</div></div></div>
+      <div class="career-item rv d1"><div class="career-period">May 2021 &mdash; Nov 2024</div><div><div class="career-role">Beverage Manager / Head Mixologist</div><div class="career-place">Alaia Marriott Autograph Collection</div><div class="career-loc">San Pedro, Belize</div></div></div>
+      <div class="career-item rv"><div class="career-period">Jul 2019 &mdash; Feb 2021</div><div><div class="career-role">Mixologist / In Charge</div><div class="career-place">Nawlin&rsquo;s Jazz House &mdash; Kempinski</div><div class="career-loc">Doha, Qatar</div></div></div>
+      <div class="career-item rv d1"><div class="career-period">Nov 2018 &mdash; Jun 2019</div><div><div class="career-role">Mixologist / In Charge</div><div class="career-place">Pearl Social by Chef Jason Atherton</div><div class="career-loc">Doha, Qatar</div></div></div>
+      <div class="career-item rv"><div class="career-period">Dec 2016 &mdash; Oct 2018</div><div><div class="career-role">Bar &amp; Lounge Supervisor</div><div class="career-place">Antica Pesa &mdash; Kempinski</div><div class="career-loc">Doha, Qatar</div></div></div>
+      <div class="career-item rv d1"><div class="career-period">Nov 2014 &mdash; Nov 2016</div><div><div class="career-role">Bar Supervisor</div><div class="career-place">El Faro Spanish Cuisine &mdash; Kempinski</div><div class="career-loc">Doha, Qatar</div></div></div>
+      <div class="career-item rv"><div class="career-period">Sep 2011 &mdash; Aug 2014</div><div><div class="career-role">Bar Supervisor</div><div class="career-place">Boudoir &mdash; Kempinski Grand &amp; Ixir</div><div class="career-loc">Bahrain</div></div></div>
+      <div class="career-item rv d1"><div class="career-period">Nov 2007 &mdash; May 2011</div><div><div class="career-role">Head Bartender</div><div class="career-place">Trader Vic&rsquo;s &mdash; Beach Rotana</div><div class="career-loc">Abu Dhabi, UAE</div></div></div>
+    </div>
+  </div>
+
+  <div class="row g57">
+    <div class="card text-card dark rv" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Education</div>
+      <div class="display" style="font-size:clamp(22px,3vw,32px)">Academic <em>Foundations</em></div>
+      <div class="edu-item"><div class="edu-deg">Diploma in Hotel Management</div><div class="edu-inst">Indian Institute of Tourism and Management, Calicut</div><div class="edu-yr">Jun 2003 &mdash; Aug 2006</div></div>
+      <div class="edu-item"><div class="edu-deg">Bachelor of Arts &mdash; Politics</div><div class="edu-inst">Calicut University, Calicut</div><div class="edu-yr">2001 &mdash; 2003</div></div>
+      <div class="edu-item"><div class="edu-deg">Pre-Degree &mdash; History &amp; Politics</div><div class="edu-inst">Calicut University, Calicut</div><div class="edu-yr">1997 &mdash; 1999</div></div>
+    </div>
+    <div class="card rv d1" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Certifications</div>
+      <div class="display" style="font-size:clamp(22px,3vw,32px)">Credentials &amp; <em>Training</em></div>
+      <div class="cert-grid">
+        <div class="cert-item"><div class="cert-name">Whisky Training L1 &amp; L2</div><div class="cert-issuer">Chivas Academy</div><div class="cert-year">2014 &amp; 2020</div></div>
+        <div class="cert-item"><div class="cert-name">Train the Trainer</div><div class="cert-issuer">Kempinski Bahrain</div><div class="cert-year">2013</div></div>
+        <div class="cert-item"><div class="cert-name">PCI DSS Certification</div><div class="cert-issuer">Corporate IT, Kempinski</div><div class="cert-year">2013</div></div>
+        <div class="cert-item"><div class="cert-name">Jameson Irish Whiskey</div><div class="cert-issuer">Old Jameson Distillery</div><div class="cert-year">2009</div></div>
+        <div class="cert-item"><div class="cert-name">Habanos Cigar Training</div><div class="cert-issuer">Baquer Mohebi Est.</div><div class="cert-year">2008</div></div>
+        <div class="cert-item"><div class="cert-name">Food Safety Level 2</div><div class="cert-issuer">Kempinski Marsa Malaz</div><div class="cert-year">2019</div></div>
+        <div class="cert-item"><div class="cert-name">Bacardi Portfolio Training</div><div class="cert-issuer">Bacardi</div><div class="cert-year">2020</div></div>
+        <div class="cert-item"><div class="cert-name">WSET Spirit Level 2</div><div class="cert-issuer">Wine &amp; Spirit Education Trust</div><div class="cert-year">&mdash;</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band rv">
+    <div>
+      <div class="cta-headline">Explore the<br>Full Story</div>
+      <p class="cta-sub">19 years. 10+ countries. One extraordinary career.</p>
+    </div>
+    <a onclick="showSection('resume')" class="btn-primary">View Full R&eacute;sum&eacute;</a>
+  </div>
+
+  <div class="site-footer">
+    <div><div class="footer-name">Subhash Sankar</div><div class="footer-role">Lead Molecular Mixologist &amp; Beverage Program Developer</div><div class="footer-loc">📍 San Pedro, Belize</div><div class="footer-contact"><a href="mailto:subhashsankar@elmago.com">✉ subhashsankar@elmago.com</a><a href="tel:+917994031394">☎ +91 799 403 1394</a></div></div>
+    <div class="footer-nav"><a onclick="showSection('cocktail')">Cocktail Menu</a><a onclick="showSection('food')">Food Pairings</a><a onclick="showSection('lab')">Mixology Lab</a><a onclick="showSection('resume')">R&eacute;sum&eacute;</a></div>
+    <p class="footer-copy">&copy; 2026 Subhash Sankar. All rights reserved.</p>
+  </div>
+
+</div>
+</div><div id="sec-cocktail" class="section">
+<div class="page">
+
+  <div class="hero-alchemy rv">
+    <div class="hero-alchemy-bg"></div>
+    <div class="hero-alchemy-ov"></div>
+    <div class="hero-alchemy-body">
+      <p class="hero-eyebrow" style="position:relative;z-index:2">Subhash Sankar &middot; The Signature Collection</p>
+      <svg class="alchemy-svg-title" viewBox="0 0 1000 155" preserveAspectRatio="xMinYMid meet" aria-label="Alchemy">
+        <defs>
+          <pattern id="imgfill2" patternUnits="userSpaceOnUse" x="0" y="0" width="1000" height="155">
+            <image href="https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg" x="-80" y="-100" width="1200" height="500" preserveAspectRatio="xMidYMid slice"/>
+          </pattern>
+          <filter id="b2"><feComponentTransfer><feFuncR type="linear" slope="1.15"/><feFuncG type="linear" slope="1.05"/><feFuncB type="linear" slope="0.85"/></feComponentTransfer></filter>
+        </defs>
+        <text x="0" y="138" font-family="'Bebas Neue',sans-serif" font-weight="400" font-size="155" letter-spacing="4" text-anchor="start" textLength="1000" lengthAdjust="spacingAndGlyphs" fill="url(#imgfill2)" filter="url(#b2)">ALCHEMY</text>
+      </svg>
+      <span class="alchemy-sub-name">El Mago</span>
+      <p class="hero-sub" style="margin-top:14px">The signature cocktail menu &mdash; six chapters of liquid artistry</p>
+    </div>
+  </div>
+
+  <div class="card text-card rv">
+    <div class="eyebrow">Fuego y Magia</div>
+    <div class="display">The <em>Journey</em></div>
+    <p class="serif-body">Under the masterful touch of El Mago, this mixology odyssey transforms cocktail craft into an enchanting sensory journey. Blending ancient techniques of smoke, flame, and barrel aging with avant-garde molecular mixology, El Mago conjures a lineup of cocktails as visually stunning as they are complex in flavour.</p>
+  </div>
+
+  <div class="ch-div rv"><span>Six Chapters of Liquid Artistry</span></div>
+
+  <div class="card menu-card rv">
+    <div class="eyebrow">⚗️ 01 &mdash; Alchemy</div>
+    <div class="sig-badge"><span>★ Signature Chapter</span></div>
+    <div class="display">El Mago &mdash; <em>Molecular Masterpieces</em></div>
+    <div class="cocktail-chip-grid">
+      <div class="cocktail-chip"><div class="chip-name">Reverse Sphere Antioxidant</div><div class="chip-tech">Spherification</div></div>
+      <div class="cocktail-chip"><div class="chip-name">The Camphor Infinity</div><div class="chip-tech">Aromatic</div></div>
+      <div class="cocktail-chip"><div class="chip-name">Liquid Nitrogen Illusion</div><div class="chip-tech">Cryogenic</div></div>
+      <div class="cocktail-chip"><div class="chip-name">Black Ginger Emulsification</div><div class="chip-tech">Emulsion</div></div>
+      <div class="cocktail-chip"><div class="chip-name">Syphon Mango Bubblegum</div><div class="chip-tech">Syphon</div></div>
+      <div class="cocktail-chip"><div class="chip-name">Gravity Induced Negroni</div><div class="chip-tech">Gravity</div></div>
+    </div>
+  </div>
+
+  <div class="card menu-card rv">
+    <div class="eyebrow">🔥 02 &mdash; Fire &amp; Ash</div>
+    <div class="display">Cocktail Trolley &middot; <em>Smoke &amp; Flamb&eacute; Set</em></div>
+    <div class="menu-grid">
+      <div class="menu-row"><div class="menu-name">Cigar Smoked Flamb&eacute; Old Fashioned</div><div class="menu-desc">Bourbon whiskey, Cointreau, dry vermouth, lime juice</div></div>
+      <div class="menu-row"><div class="menu-name">Cinnamon Smoked Brown Derby</div><div class="menu-desc">Bourbon whiskey, honey syrup, grapefruit</div></div>
+      <div class="menu-row"><div class="menu-name">Rosemary Smoked Blood and Sand</div><div class="menu-desc">Blended Scotch, cherry liqu&eacute;ur, blood orange, sweet vermouth</div></div>
+      <div class="menu-row"><div class="menu-name">Smoked Whiskey Campfire</div><div class="menu-desc">Malt whiskey, fresh tea, orange marmalade, lemon juice</div></div>
+      <div class="menu-row"><div class="menu-name">Bourbon Black Apple Manhattan</div><div class="menu-desc">Black bourbon, apple schnapps, cranberry juice</div></div>
+    </div>
+  </div>
+
+  <div class="card menu-card rv">
+    <div class="eyebrow">🛢️ 03 &mdash; Aged But Not Old</div>
+    <div class="display">Cocktail Trolley &middot; <em>Barrel Aged</em></div>
+    <div class="menu-grid">
+      <div class="menu-row"><div class="menu-name">Aged Old Fashioned</div><div class="menu-desc">Bourbon whiskey, Angostura bitters, sugar cube</div></div>
+      <div class="menu-row"><div class="menu-name">Aged Manhattan</div><div class="menu-desc">Canadian whiskey, sweet vermouth, bitters</div></div>
+      <div class="menu-row"><div class="menu-name">Aged Banana Sazerac</div><div class="menu-desc">Rye whiskey, Cognac, banana liqu&eacute;ur, maple syrup</div></div>
+      <div class="menu-row"><div class="menu-name">Aged Cuban Almond Cigar</div><div class="menu-desc">Gold rum, amaretto, lime juice, cinnamon</div></div>
+      <div class="menu-row"><div class="menu-name">Aged Negroni</div><div class="menu-desc">Gin, sweet vermouth, Campari</div></div>
+    </div>
+  </div>
+
+  <div class="card menu-card dark rv">
+    <div class="eyebrow">🍨 04 &mdash; Crafted Boozy Gelato</div>
+    <div class="display">Table <em>Mixology</em></div>
+    <div class="menu-grid">
+      <div class="menu-row"><div class="menu-name">Perlini Nutmeg Honey Alexander</div><div class="menu-desc">Honey-infused brandy, nutmeg, Grand Marnier ice cream</div></div>
+      <div class="menu-row"><div class="menu-name">Coffee Sphere Frappuccino Martini</div><div class="menu-desc">Vodka, coffee sphere, Frappuccino, coffee liqu&eacute;ur ice cream</div></div>
+      <div class="menu-row"><div class="menu-name">Passionfruit Air Golden Margarita</div><div class="menu-desc">Passionfruit tequila, passion air, lime, Cointreau ice cream</div></div>
+      <div class="menu-row"><div class="menu-name">Purple Candy Rosemary Bramble</div><div class="menu-desc">Rosemary gin, pink cotton candy, lime, blackberry ice cream</div></div>
+      <div class="menu-row"><div class="menu-name">Tigers Milk Bamboo Colada</div><div class="menu-desc">Coconut rum, tiger&rsquo;s milk, bamboo shoots, pineapple ice cream</div></div>
+    </div>
+  </div>
+
+  <div class="card menu-card dark rv">
+    <div class="eyebrow">✨ 05 &mdash; Fat Wash &amp; Clarification</div>
+    <div class="display">Technique &amp; <em>Purity</em></div>
+    <div class="menu-grid">
+      <div class="menu-row"><div class="menu-name">Fat Washed Pearl Manhattan</div><div class="menu-tag">Fat Wash</div></div>
+      <div class="menu-row"><div class="menu-name">Bacon Washed Old Fashioned</div><div class="menu-tag">Fat Wash</div></div>
+      <div class="menu-row"><div class="menu-name">Truffle Washed Negroni</div><div class="menu-tag">Fat Wash</div></div>
+      <div class="menu-row"><div class="menu-name">Parmesan Washed Martini</div><div class="menu-tag">Fat Wash</div></div>
+      <div class="menu-row"><div class="menu-name">Lobster Washed Bloody Mary</div><div class="menu-tag">Fat Wash</div></div>
+      <div class="menu-row"><div class="menu-name">Clarified Pi&ntilde;a Colada</div><div class="menu-tag">Clarification</div></div>
+      <div class="menu-row"><div class="menu-name">Clarified Rum &amp; Coke</div><div class="menu-tag">Clarification</div></div>
+      <div class="menu-row"><div class="menu-name">Clarified Espresso Martini</div><div class="menu-tag">Clarification</div></div>
+      <div class="menu-row"><div class="menu-name">Clarified Brandy Alexander</div><div class="menu-tag">Clarification</div></div>
+      <div class="menu-row"><div class="menu-name">Clarified Negroni</div><div class="menu-tag">Clarification</div></div>
+    </div>
+  </div>
+
+  <div class="card menu-card rv">
+    <div class="eyebrow">🥬 06 &mdash; BBQ &amp; Toast</div>
+    <div class="display">Inspired <em>Cocktails</em></div>
+    <div class="menu-grid">
+      <div class="menu-row"><div class="menu-name">BBQ Spicy Pineapple Margarita</div></div>
+      <div class="menu-row"><div class="menu-name">Toasted Thai Coconut Margarita</div></div>
+      <div class="menu-row"><div class="menu-name">BBQ Blackberry Bramble Martini</div></div>
+      <div class="menu-row"><div class="menu-name">Grilled Beet Purple Colada</div></div>
+      <div class="menu-row"><div class="menu-name">BBQ Mixed Citrus Mojito</div></div>
+      <div class="menu-row"><div class="menu-name">Toasted Mixed Fruit Caribbean Frog</div></div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div><div class="footer-name">Alchemy</div><div class="footer-role">The Signature Cocktail Menu by Subhash Shankar</div></div>
+    <div class="footer-nav"><a onclick="showSection('portfolio')">← Portfolio</a><a onclick="showSection('food')">Food Pairings</a><a onclick="showSection('lab')">Mixology Lab</a></div>
+    <p class="footer-copy">&copy; 2026 Subhash Shankar &mdash; Alchemy. All rights reserved.</p>
+  </div>
+
+</div>
+</div>
+
+<div id="sec-food" class="section">
+<div class="page-inner">
+
+  <div class="hero-food rv">
+    <div class="hero-food-bg"></div>
+    <div class="hero-ov" style="position:absolute;inset:0;background:linear-gradient(165deg,rgba(4,4,4,.92) 28%,rgba(4,4,4,.3) 100%)"></div>
+    <div class="hero-alchemy-body">
+      <p class="hero-eyebrow" style="position:relative;z-index:2">Subhash Sankar &mdash; El Mago</p>
+      <div class="display display-xl" style="position:relative;z-index:2;color:#fff">Food &amp; Cocktail<br><em>Pairings</em></div>
+      <p class="hero-sub" style="margin-top:16px">A refined Mexican&ndash;Peruvian table to complement the cocktail odyssey</p>
+      <p class="hero-credit" style="font-family:var(--font-mono);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:14px">By <strong style="color:var(--ember)">Subhash Sankar</strong> &mdash; Lead Molecular Mixologist</p>
+    </div>
+  </div>
+
+  <div class="row g2">
+    <div class="card text-card rv">
+      <div class="eyebrow">The Mexican Peruvian Table</div>
+      <div class="display">A celebration of <em>artistry</em></div>
+      <p class="serif-body" style="border-left:2px solid var(--ember);padding-left:20px;margin-top:20px">Paired seamlessly with a refined Mexican Peruvian menu, this experience weaves together bold, vibrant tastes and innovative textures, inviting guests to savour every sip and bite in a celebration of artistry and tradition.</p>
+    </div>
+    <div class="row g2" style="align-content:start">
+      <div class="card stat-card rv"><div class="stat-num amber">3</div><div class="stat-label">Courses</div></div>
+      <div class="card stat-card stat-hi rv d1"><div class="stat-num">2</div><div class="stat-label">Cultures</div></div>
+      <div class="card stat-card teal-bg rv d2" style="background:linear-gradient(135deg,var(--teal),#053D3D);border-color:transparent"><div class="stat-num" style="color:#fff">13</div><div class="stat-label" style="color:rgba(255,255,255,.5)">Dishes</div></div>
+      <div class="card stat-card rv d3"><div class="stat-num amber">&infin;</div><div class="stat-label">Flavours</div></div>
+    </div>
+  </div>
+
+  <div class="card food-cat-card light rv">
+    <div class="cat-hd"><div class="cat-num-big">01</div><div><div class="cat-title">Appetizers</div><div class="cat-sub">To open the palate</div></div></div>
+    <div class="food-row"><div class="food-name">Ceviche de Camar&oacute;n y Mango</div><div class="food-desc">Shrimp ceviche with mango, Peruvian chili, and toasted corn.</div></div>
+    <div class="food-row"><div class="food-name">Tlayuda de Pulpo</div><div class="food-desc">Grilled octopus on crispy Oaxacan tlayuda with black olive salsa.</div></div>
+    <div class="food-row"><div class="food-name">Anticuchos de Coraz&oacute;n</div><div class="food-desc">Beef heart skewers marinated in Peruvian spices, served with aj&iacute; verde.</div></div>
+    <div class="food-row"><div class="food-name">Tamal de Pato</div><div class="food-desc">Duck tamal with mole negro and pickled vegetables.</div></div>
+    <div class="food-row"><div class="food-name">Chicharr&oacute;n de Pescado</div><div class="food-desc">Crispy fried fish bites with salsa criolla and lime aioli.</div></div>
+  </div>
+
+  <div class="card food-cat-card dark rv">
+    <div class="cat-hd" style="border-color:rgba(255,255,255,.05)"><div class="cat-num-big" style="color:rgba(255,255,255,.06)">02</div><div><div class="cat-title">Main Courses</div><div class="cat-sub">The heart of the table</div></div></div>
+    <div class="food-row"><div class="food-name">Lomo Saltado con Mole Verde</div><div class="food-desc">Peruvian stir-fried beef with Mexican mole verde, served with jasmine rice.</div></div>
+    <div class="food-row"><div class="food-name">Pescado a la Talla</div><div class="food-desc">Grilled fish marinated in adobo, with Peruvian purple potato pur&eacute;e.</div></div>
+    <div class="food-row"><div class="food-name">Cochinita Pibil con Quinoa</div><div class="food-desc">Slow-roasted pork with achiote, served on a bed of quinoa salad.</div></div>
+    <div class="food-row"><div class="food-name">Arroz con Mariscos y Aj&iacute; Amarillo</div><div class="food-desc">Seafood rice infused with Peruvian yellow chili and Mexican epazote.</div></div>
+    <div class="food-row"><div class="food-name">Pollo a la Brasa con Salsa de Chile Pasilla</div><div class="food-desc">Peruvian rotisserie chicken with smoky pasilla chili sauce.</div></div>
+  </div>
+
+  <div class="card food-cat-card teal rv">
+    <div class="cat-hd"><div class="cat-num-big">03</div><div><div class="cat-title">Desserts</div><div class="cat-sub">A sweet farewell</div></div></div>
+    <div class="food-row"><div class="food-name">Suspiro Lime&ntilde;o con Cajeta</div><div class="food-desc">Traditional Peruvian sweet cream with Mexican caramel sauce.</div></div>
+    <div class="food-row"><div class="food-name">Helado de Ma&iacute;z Morado y Chile Ancho</div><div class="food-desc">Purple corn ice cream with ancho chili caramel.</div></div>
+    <div class="food-row"><div class="food-name">Churros Rellenos de Lucuma</div><div class="food-desc">Crispy churros filled with Peruvian lucuma cream and cinnamon sugar.</div></div>
+  </div>
+
+  <div class="closing-quote rv">
+    <div class="closing-quote-bg" style="background-image:url('https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg')"></div>
+    <div class="closing-quote-glow"></div>
+    <span class="big-q">&ldquo;</span>
+    <p class="quote-body">Paired seamlessly with cocktails that challenge, comfort, and captivate &mdash; every bite and sip a celebration of two great culinary cultures.</p>
+    <p class="quote-by">Subhash Sankar &mdash; El Mago</p>
+  </div>
+
+  <div class="site-footer">
+    <div class="footer-name">Subhash Sankar &mdash; El Mago</div>
+    <div class="footer-nav"><a onclick="showSection('cocktail')">Cocktail Menu</a><a onclick="showSection('lab')">Mixology Lab</a><a onclick="showSection('resume')">R&eacute;sum&eacute;</a><a onclick="showSection('portfolio')">Portfolio</a></div>
+    <p class="footer-copy">&copy; 2026 Subhash Sankar &mdash; El Mago. All rights reserved.</p>
+  </div>
+
+</div>
+</div>
+
+<div id="sec-lab" class="section">
+<div class="page-inner">
+
+  <div class="hero-lab-page rv">
+    <div class="hero-lab-bg"></div>
+    <div class="hero-ov" style="position:absolute;inset:0;background:linear-gradient(165deg,rgba(4,4,4,.94) 30%,rgba(4,4,4,.2) 100%)"></div>
+    <div class="hero-alchemy-body">
+      <p class="hero-eyebrow" style="position:relative;z-index:2">Mixology Lab &mdash; ROI Plan &amp; Class Flow</p>
+      <div class="elmago-wrap" style="position:relative;z-index:2">
+        <span class="elmago-text">El</span>
+        <span class="elmago-italic">Mago</span>
+        <span class="magician">
+          <span class="hat">🎩</span>
+          <span class="star">✨</span><span class="star">⭐</span><span class="star">✨</span><span class="star">🌟</span><span class="star">✨</span>
+        </span>
+      </div>
+      <div class="wand-line" style="position:relative;z-index:2;max-width:500px"><div class="wand-glow"></div></div>
+      <div class="hero-lab-title" style="position:relative;z-index:2">Mixology Lab</div>
+      <p class="hero-sub" style="margin-top:14px">ROI Plan, Class Structure &amp; Wine Dinner Event Flow</p>
+      <p class="hero-credit" style="font-family:var(--font-mono);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:12px">By <strong style="color:var(--ember)">Subhash Sankar</strong> &mdash; Lead Molecular Mixologist</p>
+    </div>
+  </div>
+
+  <div class="row g4">
+    <div class="card metric-card rv"><div class="metric-val">$290<sup>++</sup></div><div class="metric-label">Price Per Person</div><div class="metric-note">Excl. taxes &amp; fees</div></div>
+    <div class="card metric-card rv d1"><div class="metric-val">3<span style="font-size:.5em">×</span></div><div class="metric-label">Classes Per Week</div><div class="metric-note">5:00 pm – 7:00 pm</div></div>
+    <div class="card metric-card rv d2"><div class="metric-val">545</div><div class="metric-label">Total Participants</div><div class="metric-note">18 persons × 30.3 weeks</div></div>
+    <div class="card metric-card metric-hi rv d3"><div class="metric-val">$158K</div><div class="metric-label">Gross Revenue</div><div class="metric-note">18 × 30.3 wks × $290</div></div>
+  </div>
+
+  <div class="row g2">
+    <div class="card text-card rv" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Overview</div>
+      <div class="display">The <em>business case</em></div>
+      <p class="serif-body">This ROI plan outlines the financial forecast for the El Mago Mixology Lab Class program, scheduled for 3 classes per week (5:00–7:00 pm), priced at USD 290++ per person, with an expected attendance of 18 persons per week over 7 months (high season).</p>
+    </div>
+    <div class="card rv d1" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Key Assumptions</div>
+      <div class="display" style="font-size:clamp(20px,3vw,30px)">Program <em>parameters</em></div>
+      <div class="assumption-row"><div class="assumption-key">Class Frequency</div><div class="assumption-val">3 classes / week</div></div>
+      <div class="assumption-row"><div class="assumption-key">Duration</div><div class="assumption-val">2 hours per class</div></div>
+      <div class="assumption-row"><div class="assumption-key">Participants</div><div class="assumption-val">18 per week</div></div>
+      <div class="assumption-row"><div class="assumption-key">Season</div><div class="assumption-val">7 months (~30.3 wks)</div></div>
+      <div class="assumption-row"><div class="assumption-key">Price Per Person</div><div class="assumption-val">USD 290 (+ taxes)</div></div>
+      <div class="assumption-row"><div class="assumption-key">Total Participants</div><div class="assumption-val">545 persons</div></div>
+      <div class="assumption-row"><div class="assumption-key">Gross Revenue</div><div class="assumption-val" style="color:var(--ember)">USD $158,218</div></div>
+    </div>
+  </div>
+
+  <div class="card rv" style="padding:clamp(28px,4vw,52px)">
+    <div class="eyebrow">Event Flow</div>
+    <div class="display">Mixology Class &amp; <em>Wine Dinner</em></div>
+    <p class="serif-body" style="margin-bottom:28px">A seamless evening integrating a 2-hour El Mago Mixology Lab Class followed by a sophisticated 5-course Wine Dinner with pairings at El Mago Wine Room.</p>
+    <div class="flow-step">
+      <div class="flow-time-block"><div class="flow-time">5:00 pm<br>&ndash;<br>7:00 pm</div></div>
+      <div>
+        <div class="flow-title">Mixology Lab Class</div>
+        <div class="flow-desc">Hands-on cocktail making with expert mixologist Subhash Sankar</div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong>Welcome &amp; Introduction (5 min)</strong> &mdash; Guests greeted, overview of the evening shared</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong>Cocktail Demonstrations (20 min)</strong> &mdash; Introduction to techniques, spirits, and ingredients</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong>Hands-On Mixing (90 min)</strong> &mdash; Guests create 3–4 signature cocktails guided by the mixologist</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong>Tasting &amp; Q&amp;A (15 min)</strong> &mdash; Sampling cocktails, discussing flavour profiles and history</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text"><strong>Class Wrap-Up (10 min)</strong> &mdash; Tips for home mixology, recipe handouts, group photo</div></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-time-block"><div class="flow-time">7:00 pm<br>&ndash;<br>7:15 pm</div></div>
+      <div>
+        <div class="flow-title">Transition &amp; Refreshment Break</div>
+        <div class="flow-desc">Photography around the bar lounge, possibly capturing sunset</div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Guests escorted to the El Mago Wine Room</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Light palate cleansers or sparkling wine served</div></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-time-block"><div class="flow-time">7:15 pm<br>&ndash;<br>10:00 pm</div></div>
+      <div>
+        <div class="flow-title">5-Course Wine Dinner &amp; Pairings</div>
+        <div class="flow-desc">Elegant multi-course dinner with expert wine pairings at El Mago Wine Room</div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">~30 minutes per course including wine service and sommelier commentary</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Sommelier introduces each wine and explains the pairing rationale</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Soft background music and elegant table settings enhance the experience</div></div>
+        <div class="flow-detail"><div class="flow-dot"></div><div class="flow-detail-text">Optional cocktail-themed amuse-bouche between courses</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card upsell-card rv">
+    <div class="eyebrow">Upsell &amp; Revenue Strategy</div>
+    <div class="display">Maximising <em style="color:rgba(255,255,255,.5)">returns</em></div>
+    <div class="upsell-row"><div class="upsell-diamond"></div><p class="upsell-text">Share videos and pictures for website, Instagram, and pre-booking options to drive attendance and visibility.</p></div>
+    <div class="upsell-row"><div class="upsell-diamond"></div><p class="upsell-text">Maintain pour costs and ingredient expenses to preserve profit margins throughout the season.</p></div>
+    <div class="upsell-row"><div class="upsell-diamond"></div><p class="upsell-text">Offer merchandise or premium cocktail kits shipped directly to guests&rsquo; postal addresses post-class.</p></div>
+    <div class="upsell-row"><div class="upsell-diamond"></div><p class="upsell-text">Back-to-back <strong>Mixology Class + 5-Course Wine Dinner</strong> at El Mago Wine Room at <em>USD 850++ per person</em>.</p></div>
+    <div class="upsell-row"><div class="upsell-diamond"></div><p class="upsell-text">Reassess pricing if costs or demand shift significantly during the season.</p></div>
+  </div>
+
+  <div class="card highlight-band rv">
+    <div>
+      <div class="hl-val">$850<sup>++</sup></div>
+      <div class="hl-label">Per Person — Mixology Class + 5-Course Wine Dinner</div>
+      <div class="hl-note">The premium back-to-back experience at El Mago Wine Room</div>
+    </div>
+    <a onclick="showSection('portfolio')" class="btn-ghost" style="border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.9)">← Back to Portfolio</a>
+  </div>
+
+  <div class="site-footer">
+    <div class="footer-name">Subhash Sankar &mdash; El Mago</div>
+    <div class="footer-nav"><a onclick="showSection('cocktail')">Cocktail Menu</a><a onclick="showSection('food')">Food Pairings</a><a onclick="showSection('resume')">R&eacute;sum&eacute;</a><a onclick="showSection('portfolio')">Portfolio</a></div>
+    <p class="footer-copy">&copy; 2026 Subhash Sankar &mdash; El Mago Mixology Lab. All rights reserved.</p>
+  </div>
+
+</div>
+</div>
+
+<div id="sec-resume" class="section">
+<div class="page-inner">
+
+  <div style="display:flex;justify-content:flex-end;padding:8px 0">
+    <button class="print-btn" onclick="window.print()">⎙ Print</button>
+  </div>
+
+  <div class="resume-header rv">
+    <img class="resume-photo" src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Subhash Sankar"/>
+    <div>
+      <div class="resume-name">Subhash <em>Sankar</em></div>
+      <div class="resume-title">Lead Molecular Mixologist &amp; Beverage Program Developer<br>19 Years of Innovation &middot; International Mixology Masterclass Presenter</div>
+      <div class="resume-contacts">
+        <a href="mailto:subhashsankar@elmago.com" class="resume-contact">✉ subhashsankar@elmago.com</a>
+        <a href="tel:+917994031394" class="resume-contact">☎ +91 799 403 1394</a>
+        <span class="resume-contact">📍 Karuvarapatta, El Mago</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card summary-card rv">
+    <div class="eyebrow">Professional Summary</div>
+    <p>Passionate for local ingredients, providing friendly and engaging customer service. An internationally acclaimed mixologist with over 19 years of experience across India, UAE, Bahrain, Qatar, Belize, and the Turks &amp; Caicos, recognized for molecular cocktail innovation, gastronomy-led menu design, and elevating hospitality standards at luxury properties worldwide.</p>
+  </div>
+
+  <div class="row g2">
+    <div class="card text-card teal-bg rv" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Global Media &amp; Recognition</div>
+      <div class="display" style="font-size:clamp(20px,3vw,30px)">Known <em style="color:rgba(255,255,255,.5)">Worldwide</em></div>
+      <div class="rec-item"><div class="rec-diamond" style="background:rgba(255,255,255,.5)"></div><p class="rec-text" style="color:rgba(255,255,255,.75)">Featured in leading U.S. media including <strong>UPROXX</strong> and <strong>Vision Viral</strong>.</p></div>
+      <div class="rec-item"><div class="rec-diamond" style="background:rgba(255,255,255,.5)"></div><p class="rec-text" style="color:rgba(255,255,255,.75)">International press for presenting one of the <strong>world&rsquo;s best margaritas</strong>.</p></div>
+      <div class="rec-item"><div class="rec-diamond" style="background:rgba(255,255,255,.5)"></div><p class="rec-text" style="color:rgba(255,255,255,.75)">Recognized for innovative <strong>molecular cocktail techniques</strong> and modern beverage artistry.</p></div>
+      <div class="rec-item"><div class="rec-diamond" style="background:rgba(255,255,255,.5)"></div><p class="rec-text" style="color:rgba(255,255,255,.75)">Elevated <strong>Belize&rsquo;s presence</strong> in the global mixology industry.</p></div>
+    </div>
+    <div class="card rv d1" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Core Skills</div>
+      <div class="display" style="font-size:clamp(20px,3vw,30px)">Areas of <em>Expertise</em></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Conducting exclusive <strong>Gastronomy &amp; Molecular Mixology Masterclasses</strong></p></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Outstanding guest and employee relations, excellent in PR</p></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Excellent communication, organization, and presentation skills</p></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Revenue target achievement and commercial awareness</p></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">10+ years of hands-on <strong>Molecular Mixology</strong> experience</p></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Attended international Mixology Competitions</p></div>
+      <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Specialist training in <strong>Cost Control &amp; Inventory Management</strong></p></div>
+    </div>
+  </div>
+
+  <div class="card rv" style="padding:clamp(24px,3.5vw,44px)">
+    <div class="eyebrow">Work History</div>
+    <div class="display">A Career of <em>Distinction</em></div>
+    <div class="amber-line" style="margin-bottom:20px"></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Group Mixology Master</div><div class="exp-period">Nov 2024 &mdash; Jan 2026</div></div><div class="exp-company">Waterloo Hotel Management Ltd</div><div class="exp-location">Turks and Caicos</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Beverage Manager / Head Mixologist</div><div class="exp-period">May 2021 &mdash; Nov 2024</div></div><div class="exp-company">Alaia Marriott Autograph Collection</div><div class="exp-location">San Pedro, Belize</div><p class="exp-desc">Led beverage operations and molecular mixology program. Elevated Belize&rsquo;s global mixology profile through international media recognition including UPROXX. Designed the signature cocktail menu and conducted guest masterclasses.</p></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Mixologist / In Charge</div><div class="exp-period">Jul 2019 &mdash; Feb 2021</div></div><div class="exp-company">Nawlin&rsquo;s Jazz House &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Mixologist / In Charge</div><div class="exp-period">Nov 2018 &mdash; Jun 2019</div></div><div class="exp-company">Pearl Social by Michelin-starred Chef Jason Atherton &mdash; Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar &amp; Lounge Supervisor</div><div class="exp-period">Dec 2016 &mdash; Oct 2018</div></div><div class="exp-company">Antica Pesa (1922, Rome) &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar Supervisor</div><div class="exp-period">Nov 2014 &mdash; Nov 2016</div></div><div class="exp-company">El Faro Spanish Cuisine &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar Supervisor</div><div class="exp-period">Sep 2011 &mdash; Aug 2014</div></div><div class="exp-company">Boudoir &mdash; Kempinski Grand &amp; Ixir Hotel</div><div class="exp-location">Bahrain</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Head Bartender</div><div class="exp-period">Nov 2007 &mdash; May 2011</div></div><div class="exp-company">Trader Vic&rsquo;s &mdash; Beach Rotana</div><div class="exp-location">Abu Dhabi, UAE</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bartender</div><div class="exp-period">Sep 2006 &mdash; May 2007</div></div><div class="exp-company">Club Mahindra</div><div class="exp-location">Munnar, India</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bartender (Training)</div><div class="exp-period">May 2004 &mdash; Nov 2005</div></div><div class="exp-company">Le M&eacute;ridien</div><div class="exp-location">Cochin, India</div></div>
+  </div>
+
+  <div class="card rv" style="padding:clamp(24px,3.5vw,44px)">
+    <div class="eyebrow">Achievements &amp; Responsibilities</div>
+    <div class="display">Key <em>Contributions</em></div>
+    <div class="amber-line" style="margin-bottom:20px"></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Designed Beverage menus, selecting beverages and cocktails for lounge bars at luxury properties.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Conducted comprehensive staff training on beverages to ensure up-selling techniques are always followed.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Responsible for workplace cleanliness and safety standards for staff and guests.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Planned new events and promotions for outlet activations.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Ensured sufficient supplies for smooth bar and restaurant operations.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Delivered excellent customer service standards across all guest touchpoints.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Oversaw all operational duties from opening to closing, purchase to delivery.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Maintained Par level stock to ensure seamless operations.</p></div>
+    <div class="skill-row"><div class="skill-diamond"></div><p class="skill-text">Established new marketing techniques that increased overall revenue.</p></div>
+  </div>
+
+  <div class="row g2">
+    <div class="card text-card dark rv" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Education</div>
+      <div class="display" style="font-size:clamp(20px,3vw,28px)">Academic <em>Foundations</em></div>
+      <div class="edu-r-item"><div class="edu-r-deg">Diploma in Hotel Management</div><div class="edu-r-inst">Indian Institute of Tourism and Management, Calicut</div><div class="edu-r-yr">Jun 2003 &mdash; Aug 2006</div></div>
+      <div class="edu-r-item"><div class="edu-r-deg">Bachelor of Arts &mdash; Politics</div><div class="edu-r-inst">Calicut University, Calicut</div><div class="edu-r-yr">2001 &mdash; 2003</div></div>
+      <div class="edu-r-item"><div class="edu-r-deg">Pre-Degree &mdash; History &amp; Politics</div><div class="edu-r-inst">Calicut University, Calicut</div><div class="edu-r-yr">1997 &mdash; 1999</div></div>
+    </div>
+    <div class="card rv d1" style="padding:clamp(24px,3.5vw,44px)">
+      <div class="eyebrow">Certificates &amp; Training</div>
+      <div class="display" style="font-size:clamp(20px,3vw,28px)">Credentials &amp; <em>Training</em></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Introductory Whisky Training Level 1</div><div class="cert-r-issuer">Chivas Academy</div></div><div class="cert-r-year">Jan 2014</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Introductory Whisky Training Level 2</div><div class="cert-r-issuer">Chivas Academy</div></div><div class="cert-r-year">Dec 2014</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Train The Trainer &mdash; Certified Trainer</div><div class="cert-r-issuer">Kempinski Bahrain</div></div><div class="cert-r-year">Oct 2013</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Essential PCI DSS Certification</div><div class="cert-r-issuer">Corporate IT, Kempinski</div></div><div class="cert-r-year">2013</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Jameson Irish Whiskey Training</div><div class="cert-r-issuer">Old Jameson Distillery</div></div><div class="cert-r-year">Mar 2009</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Habanos Cigar Training</div><div class="cert-r-issuer">Baquer Mohebi Est.</div></div><div class="cert-r-year">Aug 2008</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Food Safety Level 2</div><div class="cert-r-issuer">Kempinski Marsa Malaz</div></div><div class="cert-r-year">Sep 2019</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">Bacardi Portfolio Training</div><div class="cert-r-issuer">Bacardi</div></div><div class="cert-r-year">Jan 2020</div></div>
+      <div class="cert-r-row"><div><div class="cert-r-name">WSET Master in Spirit Level 2</div><div class="cert-r-issuer">Wine &amp; Spirit Education Trust</div></div><div class="cert-r-year">&mdash;</div></div>
+    </div>
+  </div>
+
+  <div class="card text-card ember-bg rv" style="padding:clamp(24px,3.5vw,44px)">
+    <div class="eyebrow">Personal Profile</div>
+    <div class="display" style="font-size:clamp(20px,3vw,28px)">Personal <em style="color:rgba(255,255,255,.5)">Details</em></div>
+    <div class="profile-grid">
+      <div class="profile-chip"><div class="profile-label-p">Date of Birth</div><div class="profile-val">16 April 1982</div></div>
+      <div class="profile-chip"><div class="profile-label-p">Marital Status</div><div class="profile-val">Married</div></div>
+      <div class="profile-chip"><div class="profile-label-p">Nationality</div><div class="profile-val">Indian</div></div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="footer-name">Subhash Sankar</div>
+    <div class="footer-nav"><a onclick="showSection('portfolio')">← Portfolio</a><a onclick="showSection('cocktail')">Cocktail Menu</a><a onclick="showSection('food')">Food Pairings</a><a onclick="showSection('lab')">Mixology Lab</a></div>
+    <p class="footer-copy">&copy; 2026 Subhash Sankar. All rights reserved.</p>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+
+/* ─── CUSTOM CURSOR ─── */
+var dot = document.getElementById('cursor-dot');
+var ring = document.getElementById('cursor-ring');
+var mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+(function animRing(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+document.querySelectorAll('a,[onclick],button,.fc-card,.card').forEach(function(el){
+  el.addEventListener('mouseenter',function(){ document.body.classList.add('cursor-hover'); });
+  el.addEventListener('mouseleave',function(){ document.body.classList.remove('cursor-hover'); });
+});
+
+/* ─── EMBER PARTICLES ─── */
+var pc = document.getElementById('particles');
+if(pc){
+  for(var i=0;i<18;i++){
+    var p=document.createElement('div');
+    p.className='particle';
+    var size=Math.random()*3+1;
+    p.style.cssText='width:'+size+'px;height:'+size+'px;left:'+(Math.random()*100)+'%;animation-duration:'+(Math.random()*6+4)+'s;animation-delay:'+(Math.random()*8)+'s;opacity:0';
+    pc.appendChild(p);
+  }
+}
+
+/* ─── PRELOADER ─── */
+var pl=document.getElementById('pl'),pf=document.getElementById('pf'),pp=document.getElementById('pp');
+var IMGS=['https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg','https://foldr.space/api/view/7MshvM4aadOJ3l4U/IMG-20260313-WA0226.jpg','https://foldr.space/api/view/Pj4D0EjQgs0IPg1Q/IMG-20260313-WA0220.jpg','https://foldr.space/api/view/aTjIZNsyd67qskJH/IMG-20260313-WA0212.jpg','https://foldr.space/api/view/YhngkRZcs22ahghE/IMG-20260313-WA0209.jpg','https://foldr.space/api/view/aZGoN4EiyltIahyK/IMG-20260313-WA0208.jpg','https://foldr.space/api/view/o3UFlJTSPLm9rksG/IMG-20260313-WA0204.jpg','https://foldr.space/api/view/kxix97gwDY0Sm90D/IMG-20260313-WA0250.jpg'];
+var n=0,total=IMGS.length;
+function done(){ pl.classList.add('out'); triggerReveal(); }
+var timer=setTimeout(done,8000);
+IMGS.forEach(function(src){
+  var i=new Image();
+  i.onload=i.onerror=function(){
+    n++; var pct=Math.round(n/total*100);
+    pf.style.width=pct+'%'; if(pp) pp.textContent=pct+'%';
+    if(n===total){ clearTimeout(timer); setTimeout(done,400); }
+  };
+  i.src=src;
+});
+
+/* ─── SECTION SWITCHING ─── */
+window.showSection=function(id){
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  var sec=document.getElementById('sec-'+id);
+  if(sec) sec.classList.add('active');
+  document.querySelectorAll('.nav-tab,.nav-resume,.drawer-item').forEach(function(a){ a.classList.remove('active'); });
+  document.querySelectorAll('[data-section="'+id+'"]').forEach(function(a){ a.classList.add('active'); });
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(triggerReveal,80);
+};
+
+/* ─── SCROLL REVEAL ─── */
+var revObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('vis'); revObs.unobserve(e.target); }
+  });
+},{threshold:0.06,rootMargin:'0px 0px -30px 0px'});
+
+function triggerReveal(){
+  document.querySelectorAll('.section.active .rv,.section.active .rv-l,.section.active .rv-r').forEach(function(el){
+    if(!el.classList.contains('vis')) revObs.observe(el);
+  });
+}
+
+/* ─── COUNTER ANIMATION ─── */
+function animateCounter(el){
+  var target=parseInt(el.getAttribute('data-target'));
+  var start=0, dur=1600, startTime=null;
+  function step(ts){
+    if(!startTime) startTime=ts;
+    var prog=Math.min((ts-startTime)/dur,1);
+    var ease=1-Math.pow(1-prog,3);
+    el.textContent=Math.floor(ease*target);
+    if(prog<1) requestAnimationFrame(step);
+    else el.textContent=target;
+  }
+  requestAnimationFrame(step);
+}
+var counterObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ animateCounter(e.target); counterObs.unobserve(e.target); }
+  });
+},{threshold:0.5});
+document.querySelectorAll('.counter').forEach(function(el){ counterObs.observe(el); });
+
+/* ─── NAV SCROLL ─── */
+window.addEventListener('scroll',function(){ document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60); },{passive:true});
+
+/* ─── HAMBURGER ─── */
+var ham=document.getElementById('ham'),drw=document.getElementById('drw');
+ham.addEventListener('click',function(){
+  var open=drw.classList.toggle('op');
+  ham.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+window.closeDrawer=function(){
+  drw.classList.remove('op'); ham.classList.remove('open'); document.body.style.overflow='';
+};
+
+/* ─── PARALLAX HERO BG ─── */
+window.addEventListener('scroll',function(){
+  var s=document.querySelector('.section.active .hero-portfolio .hero-bg');
+  if(s) s.style.transform='scale(1) translateY('+(window.scrollY*0.25)+'px)';
+},{passive:true});
+
+})();
+</script>
 </body>
 </html>
