@@ -420,6 +420,47 @@ nav.solid {
 .gal-item.vis { opacity: 1; transform: none; }
 
 /* ─────────────────────────────────────
+   VIDEO ITEMS
+───────────────────────────────────── */
+.gal-item.video-item { cursor: none; }
+.gal-item.video-item .vid-wrap {
+  position: relative; width: 100%; padding-bottom: 56.25%;
+  background: #0a0908; overflow: hidden;
+}
+.gal-item.video-item .vid-wrap iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border: none; pointer-events: none;
+}
+.gal-item.video-item:hover .vid-wrap iframe { pointer-events: auto; }
+.gal-item.video-item .vid-play-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(8,7,6,.35);
+  transition: opacity .35s ease;
+  z-index: 3;
+}
+.gal-item.video-item:hover .vid-play-overlay { opacity: 0; pointer-events: none; }
+.vid-play-btn {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(201,150,58,.18);
+  border: 1.5px solid rgba(201,150,58,.6);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: background .3s, transform .3s;
+}
+.gal-item.video-item:hover .vid-play-btn {
+  background: rgba(201,150,58,.35); transform: scale(1.12);
+}
+.vid-play-btn svg { width: 22px; height: 22px; fill: var(--gold); margin-left: 3px; }
+.vid-label {
+  position: absolute; bottom: 10px; left: 12px; z-index: 4;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .22em;
+  color: rgba(255,255,255,.55); text-transform: uppercase;
+  opacity: 0; transform: translateY(4px); transition: opacity .35s, transform .35s;
+}
+.gal-item.video-item:hover .vid-label { opacity: 1; transform: none; }
+
+/* ─────────────────────────────────────
    LIGHTBOX
 ───────────────────────────────────── */
 #lb {
@@ -664,7 +705,7 @@ footer::before {
 <nav id="nav">
   <div class="nav-logo">El <span>Mago</span></div>
   <div class="nav-right">
-    <div class="nav-count"><em id="visible-count">91</em> / 91 images</div>
+    <div class="nav-count"><em id="visible-count">81</em> / 79 images · 2 videos</div>
     <div class="filter-btns">
       <button class="f-btn active" data-filter="all">All</button>
       <button class="f-btn" data-filter="event">Events</button>
@@ -817,8 +858,6 @@ footer::before {
 
     <div class="gal-item" data-tags="detail" data-idx="30"><img src="https://i.ibb.co/9khsBMjF/IMG-20260313-WA0079.jpg" alt="El Mago Event" loading="lazy"/><span class="num">030</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="craft event" data-idx="31"><img src="https://i.ibb.co/DPLWxDBJ/IMG-20260313-WA0087.jpg" alt="El Mago Event" loading="lazy"/><span class="num">031</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
     <div class="gal-item" data-tags="event people" data-idx="32"><img src="https://i.ibb.co/nM0hwbd5/IMG-20260313-WA0090.jpg" alt="El Mago Event" loading="lazy"/><span class="num">032</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
     <div class="gal-item" data-tags="detail craft" data-idx="33"><img src="https://i.ibb.co/7JphW3n4/IMG-20260313-WA0094.jpg" alt="El Mago Event" loading="lazy"/><span class="num">033</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
@@ -847,15 +886,9 @@ footer::before {
 
     <div class="gal-item" data-tags="craft" data-idx="45"><img src="https://i.ibb.co/Jwb5b7Gb/IMG-20260313-WA0118.jpg" alt="El Mago Event" loading="lazy"/><span class="num">045</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="event people" data-idx="46"><img src="https://i.ibb.co/ZpGRV341/IMG-20260313-WA0120.jpg" alt="El Mago Event" loading="lazy"/><span class="num">046</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
     <div class="gal-item" data-tags="detail event" data-idx="47"><img src="https://i.ibb.co/rKkW0wk5/IMG-20260313-WA0122.jpg" alt="El Mago Event" loading="lazy"/><span class="num">047</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="craft event" data-idx="48"><img src="https://i.ibb.co/dwn3Pj5J/IMG-20260313-WA0123.jpg" alt="El Mago Event" loading="lazy"/><span class="num">048</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
     <div class="gal-item" data-tags="people event" data-idx="49"><img src="https://i.ibb.co/cX1FbxHY/IMG-20260313-WA0125.jpg" alt="El Mago Event" loading="lazy"/><span class="num">049</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
-    <div class="gal-item" data-tags="event craft" data-idx="50"><img src="https://i.ibb.co/FLy09BWY/IMG-20260313-WA0126.jpg" alt="El Mago Event" loading="lazy"/><span class="num">050</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
     <div class="gal-item" data-tags="detail" data-idx="51"><img src="https://i.ibb.co/pBKryShx/IMG-20260313-WA0128.jpg" alt="El Mago Event" loading="lazy"/><span class="num">051</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
@@ -875,17 +908,11 @@ footer::before {
 
     <div class="gal-item" data-tags="craft event" data-idx="59"><img src="https://i.ibb.co/NdSWQgZG/IMG-20260313-WA0145.jpg" alt="El Mago Event" loading="lazy"/><span class="num">059</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="detail" data-idx="60"><img src="https://i.ibb.co/3yWjLTq9/IMG-20260313-WA0146.jpg" alt="El Mago Event" loading="lazy"/><span class="num">060</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
     <div class="gal-item" data-tags="event craft" data-idx="61"><img src="https://i.ibb.co/vCFQPS90/IMG-20260313-WA0147.jpg" alt="El Mago Event" loading="lazy"/><span class="num">061</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
     <div class="gal-item" data-tags="people event" data-idx="62"><img src="https://i.ibb.co/0p7TB8gh/IMG-20260313-WA0148.jpg" alt="El Mago Event" loading="lazy"/><span class="num">062</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
     <div class="gal-item" data-tags="craft detail" data-idx="63"><img src="https://i.ibb.co/7Bp2nwj/IMG-20260313-WA0149.jpg" alt="El Mago Event" loading="lazy"/><span class="num">063</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
-    <div class="gal-item" data-tags="event" data-idx="64"><img src="https://i.ibb.co/TxCn4pVt/IMG-20260313-WA0150.jpg" alt="El Mago Event" loading="lazy"/><span class="num">064</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
-    <div class="gal-item" data-tags="people craft" data-idx="65"><img src="https://i.ibb.co/S4WsDJ1H/IMG-20260313-WA0151.jpg" alt="El Mago Event" loading="lazy"/><span class="num">065</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
     <div class="gal-item" data-tags="event detail" data-idx="66"><img src="https://i.ibb.co/Y7rYr1v0/IMG-20260313-WA0152.jpg" alt="El Mago Event" loading="lazy"/><span class="num">066</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
@@ -913,8 +940,6 @@ footer::before {
 
     <div class="gal-item" data-tags="event" data-idx="78"><img src="https://i.ibb.co/WNV32QsK/IMG-20260313-WA0172.jpg" alt="El Mago Event" loading="lazy"/><span class="num">078</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="people craft" data-idx="79"><img src="https://i.ibb.co/21hfKGC4/IMG-20260313-WA0196.jpg" alt="El Mago Event" loading="lazy"/><span class="num">079</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
     <div class="gal-item" data-tags="event detail" data-idx="80"><img src="https://i.ibb.co/wh3dYRn1/IMG-20260313-WA0197.jpg" alt="El Mago Event" loading="lazy"/><span class="num">080</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
     <div class="gal-item" data-tags="craft event" data-idx="81"><img src="https://i.ibb.co/C58XSfnH/IMG-20260313-WA0198.jpg" alt="El Mago Event" loading="lazy"/><span class="num">081</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
@@ -929,16 +954,31 @@ footer::before {
 
     <div class="gal-item" data-tags="event" data-idx="86"><img src="https://i.ibb.co/sJ5zJ3mc/IMG-20260313-WA0206.jpg" alt="El Mago Event" loading="lazy"/><span class="num">086</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="detail craft" data-idx="87"><img src="https://i.ibb.co/RkyYgcBM/IMG-20260313-WA0207.jpg" alt="El Mago Event" loading="lazy"/><span class="num">087</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
-
     <div class="gal-item" data-tags="event people" data-idx="88"><img src="https://i.ibb.co/TxZQyJv5/IMG-20260313-WA0208.jpg" alt="El Mago Event" loading="lazy"/><span class="num">088</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <div class="gal-item" data-tags="craft event" data-idx="89"><img src="https://i.ibb.co/QvXSD0ZQ/IMG-20260313-WA0233.jpg" alt="El Mago Event" loading="lazy"/><span class="num">089</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
+    <!-- VIDEO 01 — Facebook -->
+    <div class="gal-item video-item" data-tags="video event" data-idx="v1">
+      <div class="vid-wrap">
+        <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fv%2F17FHXbqNpM%2F&show_text=false&width=560&t=0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class="vid-play-overlay">
+          <div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="vid-label">video · 01</span>
+      </div>
+    </div>
 
-    <div class="gal-item" data-tags="people event" data-idx="90"><img src="https://i.ibb.co/1YypkkzM/IMG-20260314-WA0015.jpg" alt="El Mago Event" loading="lazy"/><span class="num">090</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
+    <!-- VIDEO 02 — YouTube -->
+    <div class="gal-item video-item" data-tags="video event" data-idx="v2">
+      <div class="vid-wrap">
+        <iframe src="https://www.youtube.com/embed/Y5oNDKDIILY?si=o1g77eKeJDQ7wIkW&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class="vid-play-overlay">
+          <div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <span class="vid-label">video · 02</span>
+      </div>
+    </div>
 
     <!-- 91st image (first image again as bonus/end cap) -->
-    <div class="gal-item" data-tags="event craft" data-idx="91"><img src="https://i.ibb.co/qMKCfCC6/20260318-162926.jpg" alt="El Mago Event" loading="lazy"/><span class="num">091</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
   </div>
 </div>
@@ -993,8 +1033,8 @@ imgs.forEach(function(img,i){
   im.src=img.src;
 });
 
-/* ── COLLECT ALL IMAGES ── */
-var allItems=Array.from(document.querySelectorAll('.gal-item'));
+/* ── COLLECT ALL IMAGES (exclude video items) ── */
+var allItems=Array.from(document.querySelectorAll('.gal-item:not(.video-item)'));
 var allSrcs=allItems.map(function(el){return el.querySelector('img').src;});
 
 /* ── BUILD LIGHTBOX THUMBS ── */
@@ -1079,17 +1119,23 @@ function applyFilter(f){
   activeFilter=f;
   filteredIdxs=[];
   var count=0;
+  // handle image items
   allItems.forEach(function(el,i){
     var tags=el.dataset.tags||'';
     var show=(f==='all'||tags.indexOf(f)>-1);
     el.style.display=show?'':'none';
     if(show){filteredIdxs.push(i);count++;}
-    // reset vis for re-animation
     if(show&&!el.classList.contains('vis')){
       el.style.opacity='0'; el.style.transform='translateY(18px)';
       el.classList.remove('vis');
       setTimeout(function(){el.classList.add('vis');},Math.random()*200);
     }
+  });
+  // handle video items — always visible on 'all', hide on other filters
+  document.querySelectorAll('.gal-item.video-item').forEach(function(el){
+    var show=(f==='all');
+    el.style.display=show?'':'none';
+    if(show) count++;
   });
   document.getElementById('visible-count').textContent=count;
 }
@@ -1122,10 +1168,15 @@ document.getElementById('search').addEventListener('input',function(){
     var num=String(el.dataset.idx||i+1).padStart(3,'0');
     var tags=el.dataset.tags||'';
     var match=!q||num.indexOf(q)>-1||tags.indexOf(q)>-1;
-    // respect active filter too
     var tags2=el.dataset.tags||'';
     var filterOk=(activeFilter==='all'||tags2.indexOf(activeFilter)>-1);
     var show=match&&filterOk;
+    el.style.display=show?'':'none';
+    if(show) count++;
+  });
+  // video items: show if query matches 'video' or is empty
+  document.querySelectorAll('.gal-item.video-item').forEach(function(el){
+    var show=(!q||'video'.indexOf(q)>-1)&&(activeFilter==='all');
     el.style.display=show?'':'none';
     if(show) count++;
   });
