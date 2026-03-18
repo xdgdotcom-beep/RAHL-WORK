@@ -1,158 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>R&eacute;sum&eacute; — Subash Shankar</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>R&eacute;sum&eacute; — Subhash Sankar</title>
+<meta name="description" content="Subhash Sankar — Lead Molecular Mixologist &amp; Beverage Program Developer. Full professional résumé."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
 <style>
-  :root { --gold:#C9A84C;--gold-light:#E2C374;--gold-dim:#8B6F30;--black:#0A0A0A;--dark:#111111;--dark2:#1A1A1A;--dark3:#242424;--text:#E8E0D0;--text-muted:#999080;--white:#F5F0E8; }
-  * { margin:0;padding:0;box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body { background:var(--dark);color:var(--text);font-family:'Cormorant Garamond',Georgia,serif;overflow-x:hidden; }
+:root{
+  --bg:#F0EBE3;
+  --ink:#16120E;
+  --am:#E07820;
+  --al:#FF9040;
+  --tl:#0E6868;
+  --li:#DDD6CC;
+  --gap:clamp(8px,1.2vw,12px);
+  --px:clamp(14px,3vw,40px);
+  --r:clamp(10px,1.5vw,16px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:"Syne",sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
 
-  .topbar { background:var(--black);padding:16px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(201,168,76,0.15);position:sticky;top:0;z-index:50; }
-  .topbar-back { font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.3s; }
-  .topbar-back:hover { color:var(--gold); }
-  .topbar-back::before { content:'\2190';font-size:14px; }
-  .topbar-title { font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold); }
-  .topbar-print { font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);background:none;border:1px solid rgba(201,168,76,0.3);padding:8px 16px;cursor:pointer;transition:all 0.3s; }
-  .topbar-print:hover { color:var(--gold);border-color:var(--gold); }
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(240,235,227,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--li);padding:12px var(--px);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.topbar-back{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#8A7868;display:flex;align-items:center;gap:8px;transition:color .2s}
+.topbar-back:hover{color:var(--am)}
+.topbar-back::before{content:'\2190';font-size:13px}
+.topbar-title{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+.topbar-title em{color:var(--am);font-style:normal}
+.topbar-print{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#8A7868;background:none;border:1px solid var(--li);padding:7px 14px;cursor:pointer;border-radius:4px;transition:all .2s}
+.topbar-print:hover{color:var(--am);border-color:var(--am)}
 
-  .resume-header { background:var(--black);padding:52px 32px 40px;position:relative;overflow:hidden;border-bottom:1px solid rgba(201,168,76,0.12); }
-  .resume-header-inner { display:flex;align-items:flex-start;gap:24px; }
-  .resume-photo { width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid var(--gold-dim);flex-shrink:0; }
-  .resume-name { font-family:'Playfair Display',serif;font-size:clamp(26px,7vw,38px);font-weight:700;color:var(--white);line-height:1.1;margin-bottom:4px; }
-  .resume-name em { font-style:italic;color:var(--gold); }
-  .resume-title { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--text-muted);margin-bottom:14px;line-height:1.5; }
-  .resume-contact-row { display:flex;flex-wrap:wrap;gap:14px 20px; }
-  .resume-contact-item { font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;color:var(--text-muted);display:flex;align-items:center;gap:6px;text-decoration:none;transition:color 0.3s; }
-  .resume-contact-item:hover { color:var(--gold); }
+/* PAGE */
+.page{padding:var(--px);display:flex;flex-direction:column;gap:var(--gap);max-width:1100px;margin:0 auto}
 
-  .resume-summary { background:var(--dark2);padding:32px;border-left:3px solid var(--gold-dim);margin:32px 24px; }
-  .resume-summary p { font-size:16px;line-height:1.8;color:#BBB0A0;font-weight:300; }
+/* TILE BASE */
+.tile{background:#fff;border-radius:var(--r);overflow:hidden}
 
-  .r-section { padding:32px 24px 8px; }
-  .r-section-header { display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(201,168,76,0.18); }
-  .r-section-title { font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold); }
-  .r-section-rule { flex:1;height:1px;background:rgba(201,168,76,0.12); }
+/* ROWS */
+.row{display:grid;gap:var(--gap)}
+.cols-2{grid-template-columns:1fr 1fr}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-hero{grid-template-columns:auto 1fr}
 
-  .exp-item { padding:20px 0 24px;border-bottom:1px solid rgba(255,255,255,0.05); }
-  .exp-item:last-child { border-bottom:none; }
-  .exp-top { display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px; }
-  .exp-role { font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--white);line-height:1.2; }
-  .exp-period { font-family:'Montserrat',sans-serif;font-size:9px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);white-space:nowrap;padding-top:3px; }
-  .exp-company { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--text-muted);margin-bottom:2px; }
-  .exp-location { font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(153,144,128,0.55);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px; }
-  .exp-desc { font-size:14px;line-height:1.7;color:rgba(187,176,160,0.8);font-weight:300; }
+/* SHARED TYPOGRAPHY */
+.ey{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--am);margin-bottom:8px}
+.sec-title{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(16px,2.5vw,22px);letter-spacing:-.02em;color:var(--ink);margin-bottom:16px}
+.sec-title em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--am);font-weight:400}
 
-  .edu-item-r { padding:18px 0 20px;border-bottom:1px solid rgba(255,255,255,0.05); }
-  .edu-item-r:last-child { border-bottom:none; }
-  .edu-degree-r { font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px; }
-  .edu-inst-r { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--text-muted);margin-bottom:3px; }
-  .edu-period-r { font-family:'Montserrat',sans-serif;font-size:9px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase; }
+/* HEADER TILE */
+.t-header{background:var(--ink);border-radius:var(--r);padding:clamp(24px,4vw,44px);display:flex;align-items:flex-start;gap:clamp(16px,3vw,28px)}
+.resume-photo{width:clamp(70px,10vw,96px);height:clamp(70px,10vw,96px);border-radius:50%;object-fit:cover;object-position:top center;border:2px solid var(--am);flex-shrink:0}
+.hd-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(26px,5vw,44px);color:#fff;letter-spacing:-.03em;line-height:.92;margin-bottom:6px}
+.hd-name em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--am);font-weight:400}
+.hd-title{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(13px,2vw,16px);color:rgba(255,255,255,.45);margin-bottom:16px;line-height:1.5}
+.hd-contacts{display:flex;flex-wrap:wrap;gap:8px 20px}
+.hd-contact{font-family:"JetBrains Mono",monospace;font-size:8px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px;transition:color .2s}
+.hd-contact:hover{color:var(--am)}
 
-  .skills-list { display:flex;flex-direction:column;gap:10px;padding-bottom:8px; }
-  .skill-row { display:flex;align-items:flex-start;gap:12px; }
-  .skill-dot { width:5px;height:5px;border-radius:50%;background:var(--gold);margin-top:8px;flex-shrink:0; }
-  .skill-text { font-size:15px;line-height:1.55;color:#BBB0A0;font-weight:300; }
+/* SUMMARY TILE */
+.t-summary{padding:clamp(20px,3vw,32px);background:var(--am)}
+.t-summary .ey{color:rgba(255,255,255,.6)}
+.t-summary p{font-family:"Instrument Serif",serif;font-size:clamp(14px,2vw,17px);line-height:1.75;color:#fff}
 
-  .cert-list { display:flex;flex-direction:column;gap:0; }
-  .cert-row { display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);gap:12px; }
-  .cert-row:last-child { border-bottom:none; }
-  .cert-name-r { font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--white);line-height:1.3; }
-  .cert-issuer-r { font-family:'Montserrat',sans-serif;font-size:9px;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px; }
-  .cert-year-r { font-family:'Montserrat',sans-serif;font-size:9px;color:var(--gold);letter-spacing:0.1em;white-space:nowrap; }
+/* SECTION TILE */
+.t-section{padding:clamp(20px,3vw,32px)}
+.sec-divider{width:100%;height:1px;background:var(--li);margin-bottom:20px}
 
-  .recog-list { display:flex;flex-direction:column;gap:12px;padding-bottom:8px; }
-  .recog-item { display:flex;gap:12px;align-items:flex-start; }
-  .recog-dot { width:5px;height:5px;border-radius:50%;background:var(--gold);margin-top:8px;flex-shrink:0; }
-  .recog-text { font-size:15px;line-height:1.6;color:#BBB0A0;font-weight:300; }
+/* RECOGNITION */
+.t-rec-r{padding:clamp(20px,3vw,32px);background:var(--tl)}
+.t-rec-r .ey{color:rgba(255,255,255,.55)}
+.t-rec-r .sec-title{color:#fff}
+.recog-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.recog-item:last-child{border-bottom:none}
+.recog-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);margin-top:8px;flex-shrink:0}
+.recog-text{font-family:"Instrument Serif",serif;font-size:clamp(13px,1.8vw,15px);line-height:1.6;color:rgba(255,255,255,.82)}
+.recog-text strong{color:#fff}
 
-  .ref-card { background:var(--dark2);border:1px solid rgba(201,168,76,0.12);border-left:3px solid var(--gold-dim);padding:20px;margin-top:8px; }
-  .ref-name { font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px; }
-  .ref-title { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--text-muted);margin-bottom:12px; }
-  .ref-contact { display:flex;flex-direction:column;gap:6px; }
-  .ref-contact a { font-family:'Montserrat',sans-serif;font-size:10px;color:var(--text-muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.3s; }
-  .ref-contact a:hover { color:var(--gold); }
+/* SKILLS */
+.skill-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--li)}
+.skill-row:last-child{border-bottom:none}
+.skill-dot{width:5px;height:5px;border-radius:50%;background:var(--am);margin-top:9px;flex-shrink:0}
+.skill-text{font-family:"Instrument Serif",serif;font-size:clamp(13px,1.8vw,15px);line-height:1.6;color:#5A4A38}
+.skill-text strong{color:var(--ink)}
 
-  .resume-footer { background:var(--black);padding:32px 24px;text-align:center;border-top:1px solid rgba(201,168,76,0.12);margin-top:16px; }
-  .resume-footer p { font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px; }
-  .resume-footer a { display:inline-block;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:13px 28px;text-decoration:none;transition:background 0.3s; }
-  .resume-footer a:hover { background:var(--gold-light); }
+/* EXPERIENCE */
+.exp-item{padding:clamp(14px,2vw,20px) 0;border-bottom:1px solid var(--li)}
+.exp-item:last-child{border-bottom:none}
+.exp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:3px}
+.exp-role{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(13px,2vw,16px);color:var(--ink);letter-spacing:-.01em}
+.exp-period{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--am);white-space:nowrap;padding-top:3px}
+.exp-company{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(12px,1.8vw,14px);color:#8A7868;margin-bottom:2px}
+.exp-location{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(138,120,104,.45);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.exp-desc{font-family:"Instrument Serif",serif;font-size:clamp(12px,1.6vw,14px);line-height:1.7;color:#7A6A58}
 
-  @media print { .topbar { display:none; } body { background:#fff;color:#111; } }
+/* EDUCATION */
+.t-edu-r{padding:clamp(20px,3vw,32px);background:var(--ink)}
+.t-edu-r .ey{color:var(--am)}
+.t-edu-r .sec-title{color:#fff}
+.edu-item{padding:clamp(12px,2vw,18px) 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.edu-item:first-of-type{border-top:1px solid rgba(255,255,255,.07)}
+.edu-item:last-child{border-bottom:none}
+.edu-deg{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(12px,1.8vw,15px);color:#fff;margin-bottom:3px}
+.edu-inst{font-family:"Instrument Serif",serif;font-style:italic;font-size:12px;color:rgba(255,255,255,.38);margin-bottom:3px}
+.edu-yr{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--am)}
+
+/* CERTIFICATES */
+.cert-row-r{display:flex;justify-content:space-between;align-items:flex-start;padding:clamp(10px,1.5vw,14px) 0;border-bottom:1px solid var(--li);gap:12px}
+.cert-row-r:last-child{border-bottom:none}
+.cert-name-r{font-family:"Syne",sans-serif;font-weight:600;font-size:clamp(11px,1.6vw,13px);color:var(--ink);margin-bottom:3px;line-height:1.3}
+.cert-issuer-r{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--am)}
+.cert-year-r{font-family:"JetBrains Mono",monospace;font-size:8px;color:#8A7868;white-space:nowrap;padding-top:2px}
+
+/* PERSONAL PROFILE */
+.t-profile{padding:clamp(20px,3vw,32px);background:var(--am)}
+.t-profile .ey{color:rgba(255,255,255,.6)}
+.t-profile .sec-title{color:#fff}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+.profile-item{background:rgba(255,255,255,.15);border-radius:8px;padding:14px 16px}
+.profile-label{font-family:"JetBrains Mono",monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:4px}
+.profile-val{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(12px,1.8vw,15px);color:#fff}
+
+/* REFERENCE */
+.t-ref{padding:clamp(20px,3vw,32px)}
+.ref-card{background:var(--bg);border-radius:var(--r);border-left:3px solid var(--am);padding:clamp(16px,2.5vw,24px)}
+.ref-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(16px,2.5vw,20px);color:var(--ink);margin-bottom:4px}
+.ref-title-r{font-family:"Instrument Serif",serif;font-style:italic;font-size:clamp(12px,1.8vw,14px);color:#8A7868;margin-bottom:14px;line-height:1.4}
+.ref-contacts{display:flex;flex-direction:column;gap:6px}
+.ref-contacts a{font-family:"JetBrains Mono",monospace;font-size:8px;color:#8A7868;display:flex;align-items:center;gap:8px;transition:color .2s}
+.ref-contacts a:hover{color:var(--am)}
+
+/* FOOTER */
+.t-resume-footer{padding:clamp(20px,3vw,32px) 0;border-top:1px solid var(--li);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.rf-name{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(14px,2vw,18px);letter-spacing:-.02em;color:var(--ink)}
+.rf-copy{font-family:"JetBrains Mono",monospace;font-size:7px;color:rgba(22,18,14,.22)}
+.rf-back{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--am);display:flex;align-items:center;gap:6px;transition:opacity .2s}
+.rf-back:hover{opacity:.7}
+
+/* SCROLL REVEAL */
+.r{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+.r.in{opacity:1;transform:none}
+
+/* PRINT */
+@media print{
+  .topbar{display:none}
+  body{background:#fff}
+  .page{padding:16px;max-width:100%}
+  .r{opacity:1;transform:none}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .cols-2{grid-template-columns:1fr}
+  .cols-3{grid-template-columns:1fr}
+  .profile-grid{grid-template-columns:1fr 1fr}
+  .t-header{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .profile-grid{grid-template-columns:1fr}
+  .exp-top{flex-direction:column;gap:2px}
+  .cert-row-r{flex-direction:column;gap:4px}
+}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <a href="subash-shankar.html" class="topbar-back">Back to Portfolio</a>
-  <span class="topbar-title">R&eacute;sum&eacute;</span>
+  <a href="index.html" class="topbar-back">Back to Portfolio</a>
+  <span class="topbar-title">S<em>S</em> Mixology &mdash; R&eacute;sum&eacute;</span>
   <button class="topbar-print" onclick="window.print()">&#x1F5A8; Print</button>
 </div>
 
-<div class="resume-header">
-  <div class="resume-header-inner">
-    <img class="resume-photo" src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Subash Shankar" />
-    <div class="resume-name-block">
-      <div class="resume-name">Subash <em>Shankar</em></div>
-      <div class="resume-title">Lead Molecular Mixologist &amp; Beverage Program Developer<br>19 Years of Innovation &middot; International Mixology Masterclass Presenter</div>
-      <div class="resume-contact-row">
-        <a href="mailto:subhashkaruvarapatta@gmail.com" class="resume-contact-item"><span>&#x2709;</span> subhashkaruvarapatta@gmail.com</a>
-        <a href="tel:+917994031394" class="resume-contact-item"><span>&#x260E;</span> +91 799 403 1394</a>
-        <span class="resume-contact-item"><span>&#x1F4CD;</span> Karuvarapatta, Elmago</span>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="t-header r">
+    <img class="resume-photo" src="https://foldr.space/api/view/bnEeSbhvM7Z0iVOC/IMG-20260313-WA0248.jpg" alt="Subhash Sankar"/>
+    <div>
+      <div class="hd-name">Subhash <em>Sankar</em></div>
+      <div class="hd-title">Lead Molecular Mixologist &amp; Beverage Program Developer<br>19 Years of Innovation &middot; International Mixology Masterclass Presenter</div>
+      <div class="hd-contacts">
+        <a href="mailto:subhashkaruvarapatta@gmail.com" class="hd-contact"><span>&#x2709;</span> subhashkaruvarapatta@gmail.com</a>
+        <a href="tel:+917994031394" class="hd-contact"><span>&#x260E;</span> +91 799 403 1394</a>
+        <span class="hd-contact"><span>&#x1F4CD;</span> Karuvarapatta, El Mago</span>
       </div>
     </div>
   </div>
-</div>
 
-<div class="resume-summary">
-  <p>Passionate for local ingredients, providing friendly and engaging customer service. Acquired a rich knowledge of the Beverage World. An internationally acclaimed mixologist with over 19 years of experience across India, UAE, Bahrain, Qatar, Belize, and the Turks &amp; Caicos, recognized for molecular cocktail innovation, gastronomy-led menu design, and elevating hospitality standards at luxury properties worldwide.</p>
-</div>
-
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Global Media &amp; Recognition</div><div class="r-section-rule"></div></div>
-  <div class="recog-list">
-    <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">Featured across leading U.S. digital media including <strong style="color:var(--white)">UPROXX</strong> and <strong style="color:var(--white)">Vision Viral</strong>.</p></div>
-    <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">International press for presenting one of the <strong style="color:var(--white)">world&rsquo;s best margaritas</strong> in the United States.</p></div>
-    <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">Recognized for innovative <strong style="color:var(--white)">molecular cocktail techniques</strong> and modern beverage artistry.</p></div>
-    <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">Elevated <strong style="color:var(--white)">Belize&rsquo;s presence</strong> in the global mixology industry through international media exposure.</p></div>
+  <!-- SUMMARY -->
+  <div class="t-summary r">
+    <p class="ey">Professional Summary</p>
+    <p>Passionate for local ingredients, providing friendly and engaging customer service. Acquired a rich knowledge of the Beverage World. An internationally acclaimed mixologist with over 19 years of experience across India, UAE, Bahrain, Qatar, Belize, and the Turks &amp; Caicos, recognized for molecular cocktail innovation, gastronomy-led menu design, and elevating hospitality standards at luxury properties worldwide.</p>
   </div>
-</div>
 
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Core Skills</div><div class="r-section-rule"></div></div>
-  <div class="skills-list">
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Conducting exclusive <strong style="color:var(--white)">Gastronomy &amp; Molecular Mixology Masterclasses</strong> for guests</p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Outstanding guest and employee relations, excellent in PR</p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Excellent communication, organization, and presentation skills</p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Revenue target achievement and commercial awareness</p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">10+ years of hands-on <strong style="color:var(--white)">Molecular Mixology</strong> experience</p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Attended international Mixology Competitions</p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Six-month specialist training in <strong style="color:var(--white)">Cost Control &amp; Inventory Management</strong></p></div>
+  <!-- RECOGNITION + CORE SKILLS -->
+  <div class="row cols-2">
+    <div class="tile t-rec-r r">
+      <p class="ey">Global Media &amp; Recognition</p>
+      <h2 class="sec-title" style="color:#fff">Known <em style="color:rgba(255,255,255,.65)">Worldwide</em></h2>
+      <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">Featured across leading U.S. digital media including <strong>UPROXX</strong> and <strong>Vision Viral</strong>.</p></div>
+      <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">International press for presenting one of the <strong>world&rsquo;s best margaritas</strong> in the United States.</p></div>
+      <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">Recognized for innovative <strong>molecular cocktail techniques</strong> and modern beverage artistry.</p></div>
+      <div class="recog-item"><div class="recog-dot"></div><p class="recog-text">Elevated <strong>Belize&rsquo;s presence</strong> in the global mixology industry through international media exposure.</p></div>
+    </div>
+    <div class="tile t-section r">
+      <p class="ey">Core Skills</p>
+      <h2 class="sec-title">Areas of <em>Expertise</em></h2>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Conducting exclusive <strong>Gastronomy &amp; Molecular Mixology Masterclasses</strong> for guests</p></div>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Outstanding guest and employee relations, excellent in PR</p></div>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Excellent communication, organization, and presentation skills</p></div>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Revenue target achievement and commercial awareness</p></div>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">10+ years of hands-on <strong>Molecular Mixology</strong> experience</p></div>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Attended international Mixology Competitions</p></div>
+      <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Six-month specialist training in <strong>Cost Control &amp; Inventory Management</strong></p></div>
+    </div>
   </div>
-</div>
 
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Work History</div><div class="r-section-rule"></div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Group Mixology Master</div><div class="exp-period">Nov 2024 &mdash; Jan 2026</div></div><div class="exp-company">Waterloo Hotel Management Ltd</div><div class="exp-location">Turks and Caicos</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Beverage Manager / Head Mixologist</div><div class="exp-period">May 2021 &mdash; Nov 2024</div></div><div class="exp-company">Alaia Marriott Autograph Collection</div><div class="exp-location">San Pedro, Belize</div><p class="exp-desc">Led beverage operations and molecular mixology program. Elevated Belize&rsquo;s global mixology profile through international media recognition including UPROXX. Designed the Ambergris Alchemy cocktail menu and conducted guest masterclasses.</p></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Mixologist / In Charge</div><div class="exp-period">Jul 2019 &mdash; Feb 2021</div></div><div class="exp-company">Nawlin&rsquo;s Jazz House &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Mixologist / In Charge</div><div class="exp-period">Nov 2018 &mdash; Jun 2019</div></div><div class="exp-company">Pearl Social by Michelin-starred Chef Jason Atherton &mdash; Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar &amp; Lounge Supervisor</div><div class="exp-period">Dec 2016 &mdash; Oct 2018</div></div><div class="exp-company">Antica Pesa (1922, Rome) &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar Supervisor</div><div class="exp-period">Nov 2014 &mdash; Nov 2016</div></div><div class="exp-company">El Faro Spanish Cuisine &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar Supervisor</div><div class="exp-period">Sep 2011 &mdash; Aug 2014</div></div><div class="exp-company">Boudoir &mdash; Kempinski Grand &amp; Ixir Hotel</div><div class="exp-location">Bahrain</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Head Bartender</div><div class="exp-period">Nov 2007 &mdash; May 2011</div></div><div class="exp-company">Trader Vic&rsquo;s &mdash; Beach Rotana</div><div class="exp-location">Abu Dhabi, UAE</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Bartender</div><div class="exp-period">Sep 2006 &mdash; May 2007</div></div><div class="exp-company">Club Mahindra</div><div class="exp-location">Munnar, India</div></div>
-  <div class="exp-item"><div class="exp-top"><div class="exp-role">Bartender (Training)</div><div class="exp-period">May 2004 &mdash; Nov 2005</div></div><div class="exp-company">Le M&eacute;ridien</div><div class="exp-location">Cochin, India</div></div>
-</div>
+  <!-- WORK HISTORY -->
+  <div class="tile t-section r">
+    <p class="ey">Work History</p>
+    <h2 class="sec-title">A Career of <em>Distinction</em></h2>
+    <div class="sec-divider"></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Group Mixology Master</div><div class="exp-period">Nov 2024 &mdash; Jan 2026</div></div><div class="exp-company">Waterloo Hotel Management Ltd</div><div class="exp-location">Turks and Caicos</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Beverage Manager / Head Mixologist</div><div class="exp-period">May 2021 &mdash; Nov 2024</div></div><div class="exp-company">Alaia Marriott Autograph Collection</div><div class="exp-location">San Pedro, Belize</div><p class="exp-desc">Led beverage operations and molecular mixology program. Elevated Belize&rsquo;s global mixology profile through international media recognition including UPROXX. Designed the signature cocktail menu and conducted guest masterclasses.</p></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Mixologist / In Charge</div><div class="exp-period">Jul 2019 &mdash; Feb 2021</div></div><div class="exp-company">Nawlin&rsquo;s Jazz House &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Mixologist / In Charge</div><div class="exp-period">Nov 2018 &mdash; Jun 2019</div></div><div class="exp-company">Pearl Social by Michelin-starred Chef Jason Atherton &mdash; Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar &amp; Lounge Supervisor</div><div class="exp-period">Dec 2016 &mdash; Oct 2018</div></div><div class="exp-company">Antica Pesa (1922, Rome) &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar Supervisor</div><div class="exp-period">Nov 2014 &mdash; Nov 2016</div></div><div class="exp-company">El Faro Spanish Cuisine &mdash; Marsa Malaz Kempinski</div><div class="exp-location">Doha, Qatar</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bar Supervisor</div><div class="exp-period">Sep 2011 &mdash; Aug 2014</div></div><div class="exp-company">Boudoir &mdash; Kempinski Grand &amp; Ixir Hotel</div><div class="exp-location">Bahrain</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Head Bartender</div><div class="exp-period">Nov 2007 &mdash; May 2011</div></div><div class="exp-company">Trader Vic&rsquo;s &mdash; Beach Rotana</div><div class="exp-location">Abu Dhabi, UAE</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bartender</div><div class="exp-period">Sep 2006 &mdash; May 2007</div></div><div class="exp-company">Club Mahindra</div><div class="exp-location">Munnar, India</div></div>
+    <div class="exp-item"><div class="exp-top"><div class="exp-role">Bartender (Training)</div><div class="exp-period">May 2004 &mdash; Nov 2005</div></div><div class="exp-company">Le M&eacute;ridien</div><div class="exp-location">Cochin, India</div></div>
+  </div>
 
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Achievements &amp; Responsibilities</div><div class="r-section-rule"></div></div>
-  <div class="skills-list">
+  <!-- ACHIEVEMENTS -->
+  <div class="tile t-section r">
+    <p class="ey">Achievements &amp; Responsibilities</p>
+    <h2 class="sec-title">Key <em>Contributions</em></h2>
+    <div class="sec-divider"></div>
     <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Designed Beverage menus, selecting beverages and cocktails for lounge bars at luxury properties.</p></div>
     <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Conducted comprehensive staff training on beverages to ensure up-selling techniques are always followed.</p></div>
     <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Responsible for workplace cleanliness and safety standards for staff and guests.</p></div>
@@ -164,55 +255,70 @@
     <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Established new marketing techniques that increased overall revenue.</p></div>
     <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Overall responsibility for Bar and Lounge operations.</p></div>
   </div>
-</div>
 
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Education</div><div class="r-section-rule"></div></div>
-  <div class="edu-item-r"><div class="edu-degree-r">Diploma in Hotel Management</div><div class="edu-inst-r">Indian Institute of Tourism and Management, Calicut</div><div class="edu-period-r">Jun 2003 &mdash; Aug 2006</div></div>
-  <div class="edu-item-r"><div class="edu-degree-r">Bachelor of Arts &mdash; Politics</div><div class="edu-inst-r">Calicut University, Calicut</div><div class="edu-period-r">2001 &mdash; 2003</div></div>
-  <div class="edu-item-r"><div class="edu-degree-r">Pre-Degree &mdash; History &amp; Politics</div><div class="edu-inst-r">Calicut University, Calicut</div><div class="edu-period-r">1997 &mdash; 1999</div></div>
-</div>
-
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Certificates &amp; Training</div><div class="r-section-rule"></div></div>
-  <div class="cert-list">
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Introductory Whisky Training Level 1</div><div class="cert-issuer-r">Chivas Academy</div></div><div class="cert-year-r">Jan 2014</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Introductory Whisky Training Level 2</div><div class="cert-issuer-r">Chivas Academy</div></div><div class="cert-year-r">Dec 2014</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Train The Trainer &mdash; Certified Trainer</div><div class="cert-issuer-r">Kempinski Bahrain</div></div><div class="cert-year-r">Oct 2013</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Essential PCI DSS Certification</div><div class="cert-issuer-r">Corporate IT Training, Kempinski</div></div><div class="cert-year-r">2013</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Jameson Irish Whiskey Training</div><div class="cert-issuer-r">Old Jameson Distillery</div></div><div class="cert-year-r">Mar 2009</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Habanos Cigar Training</div><div class="cert-issuer-r">Baquer Mohebi Est.</div></div><div class="cert-year-r">Aug 2008</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Food Safety Level 2</div><div class="cert-issuer-r">Kempinski Marsa Malaz Qatar</div></div><div class="cert-year-r">Sep 2019</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">Bacardi Portfolio Training</div><div class="cert-issuer-r">Bacardi</div></div><div class="cert-year-r">Jan 2020</div></div>
-    <div class="cert-row"><div class="cert-left"><div class="cert-name-r">WSET Master in Spirit Level 2</div><div class="cert-issuer-r">Wine &amp; Spirit Education Trust</div></div><div class="cert-year-r">&mdash;</div></div>
-  </div>
-</div>
-
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">Personal Profile</div><div class="r-section-rule"></div></div>
-  <div class="skills-list" style="padding-bottom:16px;">
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Date of Birth: <strong style="color:var(--white)">16 April 1982</strong></p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Marital Status: <strong style="color:var(--white)">Married</strong></p></div>
-    <div class="skill-row"><div class="skill-dot"></div><p class="skill-text">Nationality: <strong style="color:var(--white)">Indian</strong></p></div>
-  </div>
-</div>
-
-<div class="r-section">
-  <div class="r-section-header"><div class="r-section-title">References</div><div class="r-section-rule"></div></div>
-  <div class="ref-card">
-    <div class="ref-name">Avi Phookan</div>
-    <div class="ref-title">General Manager &mdash; Four Seasons Hotels and Resorts, Nevis, Saint Kitts</div>
-    <div class="ref-contact">
-      <a href="tel:+12022304087"><span>&#x260E;</span> +1 (202) 230-4087</a>
-      <a href="mailto:avi.phookan@fourseasons.com"><span>&#x2709;</span> avi.phookan@fourseasons.com</a>
+  <!-- EDUCATION + CERTIFICATES -->
+  <div class="row cols-2">
+    <div class="tile t-edu-r r">
+      <p class="ey">Education</p>
+      <h2 class="sec-title" style="color:#fff">Academic <em>Foundations</em></h2>
+      <div class="edu-item"><div class="edu-deg">Diploma in Hotel Management</div><div class="edu-inst">Indian Institute of Tourism and Management, Calicut</div><div class="edu-yr">Jun 2003 &mdash; Aug 2006</div></div>
+      <div class="edu-item"><div class="edu-deg">Bachelor of Arts &mdash; Politics</div><div class="edu-inst">Calicut University, Calicut</div><div class="edu-yr">2001 &mdash; 2003</div></div>
+      <div class="edu-item"><div class="edu-deg">Pre-Degree &mdash; History &amp; Politics</div><div class="edu-inst">Calicut University, Calicut</div><div class="edu-yr">1997 &mdash; 1999</div></div>
+    </div>
+    <div class="tile t-section r">
+      <p class="ey">Certificates &amp; Training</p>
+      <h2 class="sec-title">Credentials &amp; <em>Training</em></h2>
+      <div class="cert-row-r"><div><div class="cert-name-r">Introductory Whisky Training Level 1</div><div class="cert-issuer-r">Chivas Academy</div></div><div class="cert-year-r">Jan 2014</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Introductory Whisky Training Level 2</div><div class="cert-issuer-r">Chivas Academy</div></div><div class="cert-year-r">Dec 2014</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Train The Trainer &mdash; Certified Trainer</div><div class="cert-issuer-r">Kempinski Bahrain</div></div><div class="cert-year-r">Oct 2013</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Essential PCI DSS Certification</div><div class="cert-issuer-r">Corporate IT Training, Kempinski</div></div><div class="cert-year-r">2013</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Jameson Irish Whiskey Training</div><div class="cert-issuer-r">Old Jameson Distillery</div></div><div class="cert-year-r">Mar 2009</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Habanos Cigar Training</div><div class="cert-issuer-r">Baquer Mohebi Est.</div></div><div class="cert-year-r">Aug 2008</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Food Safety Level 2</div><div class="cert-issuer-r">Kempinski Marsa Malaz Qatar</div></div><div class="cert-year-r">Sep 2019</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">Bacardi Portfolio Training</div><div class="cert-issuer-r">Bacardi</div></div><div class="cert-year-r">Jan 2020</div></div>
+      <div class="cert-row-r"><div><div class="cert-name-r">WSET Master in Spirit Level 2</div><div class="cert-issuer-r">Wine &amp; Spirit Education Trust</div></div><div class="cert-year-r">&mdash;</div></div>
     </div>
   </div>
+
+  <!-- PERSONAL PROFILE -->
+  <div class="t-profile r">
+    <p class="ey">Personal Profile</p>
+    <h2 class="sec-title" style="color:#fff">Personal <em style="color:rgba(255,255,255,.7)">Details</em></h2>
+    <div class="profile-grid">
+      <div class="profile-item"><div class="profile-label">Date of Birth</div><div class="profile-val">16 April 1982</div></div>
+      <div class="profile-item"><div class="profile-label">Marital Status</div><div class="profile-val">Married</div></div>
+      <div class="profile-item"><div class="profile-label">Nationality</div><div class="profile-val">Indian</div></div>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="tile t-ref r">
+    <p class="ey">References</p>
+    <h2 class="sec-title">Professional <em>References</em></h2>
+    <div class="ref-card">
+      <div class="ref-name">Avi Phookan</div>
+      <div class="ref-title-r">General Manager &mdash; Four Seasons Hotels and Resorts, Nevis, Saint Kitts</div>
+      <div class="ref-contacts">
+        <a href="tel:+12022304087"><span>&#x260E;</span> +1 (202) 230-4087</a>
+        <a href="mailto:avi.phookan@fourseasons.com"><span>&#x2709;</span> avi.phookan@fourseasons.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="t-resume-footer">
+    <div class="rf-name">Subhash Sankar</div>
+    <p class="rf-copy">&copy; 2026 Subhash Sankar. All rights reserved.</p>
+    <a href="index.html" class="rf-back">&#x2190; Back to Portfolio</a>
+  </div>
+
 </div>
 
-<div class="resume-footer">
-  <p>&copy; 2026 Subash Shankar &mdash; All rights reserved</p>
-  <a href="subash-shankar.html">&#x2190; Back to Portfolio</a>
-</div>
-
+<script>
+(function(){
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
+  document.querySelectorAll('.r').forEach(function(el){obs.observe(el);});
+})();
+</script>
 </body>
 </html>
