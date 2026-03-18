@@ -706,12 +706,6 @@ footer::before {
   <div class="nav-logo">El <span>Mago</span></div>
   <div class="nav-right">
     <div class="nav-count"><em id="visible-count">81</em> / 79 images · 2 videos</div>
-    <div class="filter-btns">
-      <button class="f-btn active" data-filter="all">All</button>
-      <button class="f-btn" data-filter="event">Events</button>
-      <button class="f-btn" data-filter="craft">Craft</button>
-      <button class="f-btn" data-filter="people">People</button>
-    </div>
   </div>
 </nav>
 
@@ -786,11 +780,12 @@ footer::before {
 
 <!-- FILTER STRIP -->
 <div class="filter-strip">
-  <button class="f-btn active" data-filter="all">All Photos</button>
-  <button class="f-btn" data-filter="event">Events</button>
-  <button class="f-btn" data-filter="craft">Craft &amp; Technique</button>
-  <button class="f-btn" data-filter="people">People</button>
-  <button class="f-btn" data-filter="detail">Details</button>
+  <button class="f-btn media-toggle active" id="btn-photos" data-media="photos">
+    <svg viewBox="0 0 16 16" style="width:10px;height:10px;fill:currentColor;margin-right:5px;vertical-align:middle"><path d="M14 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM2 13V3h12v10H2zm4.5-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm-2 4 2-2.5 1.5 1.8 2-2.8 2.5 3.5H4.5z"/></svg>Photos
+  </button>
+  <button class="f-btn media-toggle" id="btn-videos" data-media="videos">
+    <svg viewBox="0 0 16 16" style="width:10px;height:10px;fill:currentColor;margin-right:5px;vertical-align:middle"><path d="M11 5.5 6 3v10l5-2.5V5.5zM2 3h3v10H2z"/></svg>Videos
+  </button>
 </div>
 
 <!-- GALLERY -->
@@ -1190,6 +1185,39 @@ lb.addEventListener('touchend',function(e){
   var dx=e.changedTouches[0].clientX-touchStartX;
   if(Math.abs(dx)>60){dx<0?nextImg():prevImg();}
 });
+
+/* ── MEDIA TOGGLE (Photos / Videos) ── */
+var activeMedia='photos';
+function applyMediaToggle(media){
+  activeMedia=media;
+  document.querySelectorAll('.media-toggle').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('btn-'+media).classList.add('active');
+
+  var imgItems=Array.from(document.querySelectorAll('.gal-item:not(.video-item)'));
+  var vidItems=Array.from(document.querySelectorAll('.gal-item.video-item'));
+
+  if(media==='photos'){
+    imgItems.forEach(function(el){el.style.display='';});
+    vidItems.forEach(function(el){el.style.display='none';});
+    // re-apply active tag filter
+    var activeFBtn=document.querySelector('.filter-strip .f-btn[data-filter].active');
+    if(activeFBtn) applyFilter(activeFBtn.dataset.filter);
+  } else {
+    imgItems.forEach(function(el){el.style.display='none';});
+    vidItems.forEach(function(el){el.style.display='';el.classList.add('vis');});
+    // hide tag filter buttons while in video mode
+    document.getElementById('visible-count').textContent=vidItems.length;
+  }
+}
+document.getElementById('btn-photos').addEventListener('click',function(){applyMediaToggle('photos');});
+document.getElementById('btn-videos').addEventListener('click',function(){applyMediaToggle('videos');});
+
+// Override applyFilter to respect media toggle
+var _origApplyFilter=applyFilter;
+applyFilter=function(f){
+  if(activeMedia==='videos') return; // don't change anything in video mode
+  _origApplyFilter(f);
+};
 
 })();
 </script>
