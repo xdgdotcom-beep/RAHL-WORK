@@ -1023,53 +1023,23 @@ footer::before {
 
     <!-- VIDEO 01 -->
     <div class="gal-item video-item paused vis" data-tags="video event" data-idx="v1">
-      <div class="vid-player paused" id="vp1">
-        <video src="/video/vid1.mp4" preload="metadata" playsinline></video>
+      <div class="vid-player playing" id="vp1" style="background:#000;">
         <div class="vid-badge">video · 01</div>
-        <div class="vid-big-play" id="vbp1">
-          <div class="vid-big-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div style="padding:56.25% 0 0 0;position:relative;">
+          <iframe src="https://player.vimeo.com/video/1175152679?badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="El Mago · Event · Video 01"></iframe>
         </div>
-        <div class="vid-controls">
-          <div class="vid-seek-wrap" id="vs1"><div class="vid-seek-fill" id="vsf1"></div><div class="vid-seek-thumb"></div></div>
-          <div class="vid-ctrl-row">
-            <button class="vid-btn" title="Back 10s" onclick="vidSkip('vp1',-10)"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6 8.5 6V6l-8.5 6z"/></svg></button>
-            <button class="vid-btn play-pause" id="vpp1" title="Play/Pause" onclick="vidToggle('vp1')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <button class="vid-btn" title="Forward 10s" onclick="vidSkip('vp1',10)"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg></button>
-            <span class="vid-time" id="vt1"><em>0:00</em> / 0:00</span>
-            <span class="vid-title-tag">El Mago · Event</span>
-            <div class="vid-vol-wrap">
-              <button class="vid-btn" title="Mute" onclick="vidMute('vp1')"><svg viewBox="0 0 24 24" id="vvi1"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/></svg></button>
-              <input class="vid-vol-slider" id="vvs1" type="range" min="0" max="1" step="0.05" value="1" oninput="vidVol('vp1',this)"/>
-            </div>
-            <button class="vid-btn" title="Fullscreen" onclick="vidFull('vp1')"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
-          </div>
-        </div>
+        <script src="https://player.vimeo.com/api/player.js"></script>
       </div>
     </div>
 
     <!-- VIDEO 02 -->
     <div class="gal-item video-item paused vis" data-tags="video event" data-idx="v2">
-      <div class="vid-player paused" id="vp2">
-        <video src="/video/vid2.mp4" preload="metadata" playsinline></video>
+      <div class="vid-player playing" id="vp2" style="background:#000;">
         <div class="vid-badge">video · 02</div>
-        <div class="vid-big-play" id="vbp2">
-          <div class="vid-big-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div style="padding:56.25% 0 0 0;position:relative;">
+          <iframe src="https://player.vimeo.com/video/1175152460?badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="El Mago · Event · Video 02"></iframe>
         </div>
-        <div class="vid-controls">
-          <div class="vid-seek-wrap" id="vs2"><div class="vid-seek-fill" id="vsf2"></div><div class="vid-seek-thumb"></div></div>
-          <div class="vid-ctrl-row">
-            <button class="vid-btn" title="Back 10s" onclick="vidSkip('vp2',-10)"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6 8.5 6V6l-8.5 6z"/></svg></button>
-            <button class="vid-btn play-pause" id="vpp2" title="Play/Pause" onclick="vidToggle('vp2')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <button class="vid-btn" title="Forward 10s" onclick="vidSkip('vp2',10)"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg></button>
-            <span class="vid-time" id="vt2"><em>0:00</em> / 0:00</span>
-            <span class="vid-title-tag">El Mago · Event</span>
-            <div class="vid-vol-wrap">
-              <button class="vid-btn" title="Mute" onclick="vidMute('vp2')"><svg viewBox="0 0 24 24" id="vvi2"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/></svg></button>
-              <input class="vid-vol-slider" id="vvs2" type="range" min="0" max="1" step="0.05" value="1" oninput="vidVol('vp2',this)"/>
-            </div>
-            <button class="vid-btn" title="Fullscreen" onclick="vidFull('vp2')"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
-          </div>
-        </div>
+        <script src="https://player.vimeo.com/api/player.js"></script>
       </div>
     </div>
 
@@ -1438,8 +1408,8 @@ function vidFull(id){
   else if(p.webkitRequestFullscreen) p.webkitRequestFullscreen();
 }
 
-// Init all players
-['vp1','vp2','vp3'].forEach(initVidPlayer);
+// Init all players (vp1 and vp2 are Vimeo iframes; only vp3 uses native video)
+['vp3'].forEach(initVidPlayer);
 
 var activeMedia='photos';
 function applyMediaToggle(media){
