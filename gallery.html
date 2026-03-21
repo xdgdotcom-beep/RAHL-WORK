@@ -420,117 +420,6 @@ nav.solid {
 .gal-item.vis { opacity: 1; transform: none; }
 
 /* ─────────────────────────────────────
-   VIDEO PLAYER
-───────────────────────────────────── */
-.vid-player {
-  position: relative; width: 100%; background: #060504;
-  border-radius: 4px; overflow: hidden;
-  font-family: var(--font-mono);
-}
-.vid-player video {
-  display: block; width: 100%; max-height: 72vh;
-  object-fit: contain; background: #000; cursor: pointer;
-}
-/* Big centre play overlay (shown when paused) */
-.vid-big-play {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(6,5,4,.55); z-index: 4;
-  transition: opacity .25s ease;
-  pointer-events: none;
-}
-.vid-player.playing .vid-big-play { opacity: 0; }
-.vid-big-play-btn {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: rgba(201,150,58,.15);
-  border: 1.5px solid rgba(201,150,58,.7);
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(10px);
-}
-.vid-big-play-btn svg { width: 28px; height: 28px; fill: var(--gold); margin-left: 4px; }
-/* Controls bar */
-.vid-controls {
-  position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
-  padding: 28px 14px 12px;
-  background: linear-gradient(transparent, rgba(4,3,2,.88));
-  display: flex; flex-direction: column; gap: 8px;
-  transform: translateY(4px); opacity: 0;
-  transition: opacity .3s ease, transform .3s ease;
-}
-.vid-player:hover .vid-controls,
-.vid-player.paused .vid-controls { opacity: 1; transform: none; }
-/* Progress / seek bar */
-.vid-seek-wrap {
-  position: relative; height: 3px; background: rgba(255,255,255,.15);
-  border-radius: 2px; cursor: pointer;
-  transition: height .2s;
-}
-.vid-seek-wrap:hover { height: 5px; }
-.vid-seek-fill {
-  height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-  border-radius: 2px; pointer-events: none;
-  box-shadow: 0 0 8px rgba(201,150,58,.5);
-  width: 0%;
-}
-.vid-seek-thumb {
-  position: absolute; top: 50%; right: -6px;
-  width: 12px; height: 12px; border-radius: 50%;
-  background: var(--gold-lt); transform: translateY(-50%) scale(0);
-  transition: transform .2s; pointer-events: none;
-  box-shadow: 0 0 6px rgba(201,150,58,.8);
-}
-.vid-seek-wrap:hover .vid-seek-thumb { transform: translateY(-50%) scale(1); }
-/* Bottom row of controls */
-.vid-ctrl-row {
-  display: flex; align-items: center; gap: 10px;
-}
-.vid-btn {
-  background: none; border: none; color: var(--cream);
-  display: flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: 4px; cursor: pointer;
-  transition: color .2s, background .2s;
-  flex-shrink: 0;
-}
-.vid-btn:hover { color: var(--gold); background: rgba(201,150,58,.1); }
-.vid-btn svg { width: 16px; height: 16px; fill: currentColor; }
-.vid-btn.play-pause svg { width: 18px; height: 18px; }
-.vid-time {
-  font-size: 9px; letter-spacing: .12em; color: rgba(240,232,216,.6);
-  white-space: nowrap; flex-shrink: 0;
-}
-.vid-time em { color: var(--cream); font-style: normal; }
-.vid-title-tag {
-  font-size: 8px; letter-spacing: .25em; text-transform: uppercase;
-  color: rgba(201,150,58,.6); flex: 1; text-align: center;
-}
-/* Volume */
-.vid-vol-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.vid-vol-slider {
-  -webkit-appearance: none; appearance: none;
-  width: 60px; height: 3px; border-radius: 2px; outline: none; cursor: pointer;
-  background: linear-gradient(90deg, var(--gold) var(--vol,100%), rgba(255,255,255,.15) var(--vol,100%));
-}
-.vid-vol-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 10px; height: 10px;
-  border-radius: 50%; background: var(--gold-lt); cursor: pointer;
-}
-/* Label badge top-left */
-.vid-badge {
-  position: absolute; top: 12px; left: 14px; z-index: 4;
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: .28em;
-  text-transform: uppercase; color: rgba(255,255,255,.45);
-  pointer-events: none;
-}
-/* Fullscreen */
-.vid-player:-webkit-full-screen video { max-height: 100vh; }
-.vid-player:fullscreen video { max-height: 100vh; }
-/* reveal */
-.gal-item.video-item {
-  break-inside: avoid; margin-bottom: clamp(6px,1vw,12px);
-  border-radius: 3px; overflow: hidden;
-}
-
-/* ─────────────────────────────────────
    LIGHTBOX
 ───────────────────────────────────── */
 #lb {
@@ -775,7 +664,10 @@ footer::before {
 <nav id="nav">
   <div class="nav-logo">El <span>Mago</span></div>
   <div class="nav-right">
-    <div class="nav-count"><em id="visible-count">82</em> / 79 images · 3 videos</div>
+    <div class="nav-count"><em id="visible-count">79</em> / 79 images</div>
+    <a href="videos.html" style="font-family:var(--font-mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--smoke);text-decoration:none;border:1px solid rgba(255,255,255,.06);padding:6px 14px;border-radius:2px;display:flex;align-items:center;gap:6px;transition:color .25s,border-color .25s,background .25s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)';this.style.background='rgba(201,150,58,.06)'" onmouseout="this.style.color='var(--smoke)';this.style.borderColor='rgba(255,255,255,.06)';this.style.background='none'">
+      <svg viewBox="0 0 16 16" style="width:10px;height:10px;fill:currentColor;flex-shrink:0"><path d="M11 5.5 6 3v10l5-2.5V5.5zM2 3h3v10H2z"/></svg>Videos
+    </a>
   </div>
 </nav>
 
@@ -850,12 +742,11 @@ footer::before {
 
 <!-- FILTER STRIP -->
 <div class="filter-strip">
-  <button class="f-btn media-toggle active" id="btn-photos" data-media="photos">
-    <svg viewBox="0 0 16 16" style="width:10px;height:10px;fill:currentColor;margin-right:5px;vertical-align:middle"><path d="M14 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM2 13V3h12v10H2zm4.5-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm-2 4 2-2.5 1.5 1.8 2-2.8 2.5 3.5H4.5z"/></svg>Photos
-  </button>
-  <button class="f-btn media-toggle" id="btn-videos" data-media="videos">
-    <svg viewBox="0 0 16 16" style="width:10px;height:10px;fill:currentColor;margin-right:5px;vertical-align:middle"><path d="M11 5.5 6 3v10l5-2.5V5.5zM2 3h3v10H2z"/></svg>Videos
-  </button>
+  <button class="f-btn active" data-filter="all">All</button>
+  <button class="f-btn" data-filter="event">Event</button>
+  <button class="f-btn" data-filter="craft">Craft</button>
+  <button class="f-btn" data-filter="people">People</button>
+  <button class="f-btn" data-filter="detail">Detail</button>
 </div>
 
 <!-- GALLERY -->
@@ -1021,54 +912,6 @@ footer::before {
 
     <div class="gal-item" data-tags="event people" data-idx="88"><img src="https://i.ibb.co/TxZQyJv5/IMG-20260313-WA0208.jpg" alt="El Mago Event" loading="lazy"/><span class="num">088</span><span class="zoom-ic"><svg viewBox="0 0 16 16"><path d="M6.5 11C8.985 11 11 8.985 11 6.5S8.985 2 6.5 2 2 4.015 2 6.5 4.015 11 6.5 11zm0-1.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3.793.5 2.854 2.854-1.061 1.06L9.232 10.06l1.06-1.06z"/></svg></span></div>
 
-    <!-- VIDEO 01 -->
-    <div class="gal-item video-item paused vis" data-tags="video event" data-idx="v1">
-      <div class="vid-player playing" id="vp1" style="background:#000;">
-        <div class="vid-badge">video · 01</div>
-        <div style="padding:56.25% 0 0 0;position:relative;">
-          <iframe src="https://player.vimeo.com/video/1175152679?title=0&byline=0&portrait=0&badge=0&autopause=0&dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="El Mago · Event · Video 01"></iframe>
-        </div>
-        <script src="https://player.vimeo.com/api/player.js"></script>
-      </div>
-    </div>
-
-    <!-- VIDEO 02 -->
-    <div class="gal-item video-item paused vis" data-tags="video event" data-idx="v2">
-      <div class="vid-player playing" id="vp2" style="background:#000;">
-        <div class="vid-badge">video · 02</div>
-        <div style="padding:56.25% 0 0 0;position:relative;">
-          <iframe src="https://player.vimeo.com/video/1175152460?title=0&byline=0&portrait=0&badge=0&autopause=0&dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="El Mago · Event · Video 02"></iframe>
-        </div>
-        <script src="https://player.vimeo.com/api/player.js"></script>
-      </div>
-    </div>
-
-    <!-- VIDEO 03 -->
-    <div class="gal-item video-item paused vis" data-tags="video event" data-idx="v3">
-      <div class="vid-player paused" id="vp3">
-        <video src="/video/vid3.mp4" preload="metadata" playsinline></video>
-        <div class="vid-badge">video · 03</div>
-        <div class="vid-big-play" id="vbp3">
-          <div class="vid-big-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-        </div>
-        <div class="vid-controls">
-          <div class="vid-seek-wrap" id="vs3"><div class="vid-seek-fill" id="vsf3"></div><div class="vid-seek-thumb"></div></div>
-          <div class="vid-ctrl-row">
-            <button class="vid-btn" title="Back 10s" onclick="vidSkip('vp3',-10)"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6 8.5 6V6l-8.5 6z"/></svg></button>
-            <button class="vid-btn play-pause" id="vpp3" title="Play/Pause" onclick="vidToggle('vp3')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <button class="vid-btn" title="Forward 10s" onclick="vidSkip('vp3',10)"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg></button>
-            <span class="vid-time" id="vt3"><em>0:00</em> / 0:00</span>
-            <span class="vid-title-tag">El Mago · Event</span>
-            <div class="vid-vol-wrap">
-              <button class="vid-btn" title="Mute" onclick="vidMute('vp3')"><svg viewBox="0 0 24 24" id="vvi3"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/></svg></button>
-              <input class="vid-vol-slider" id="vvs3" type="range" min="0" max="1" step="0.05" value="1" oninput="vidVol('vp3',this)"/>
-            </div>
-            <button class="vid-btn" title="Fullscreen" onclick="vidFull('vp3')"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- 91st image (first image again as bonus/end cap) -->
 
   </div>
@@ -1124,8 +967,8 @@ imgs.forEach(function(img,i){
   im.src=img.src;
 });
 
-/* ── COLLECT ALL IMAGES (exclude video items) ── */
-var allItems=Array.from(document.querySelectorAll('.gal-item:not(.video-item)'));
+/* ── COLLECT ALL IMAGES ── */
+var allItems=Array.from(document.querySelectorAll('.gal-item'));
 var allSrcs=allItems.map(function(el){return el.querySelector('img').src;});
 
 /* ── BUILD LIGHTBOX THUMBS ── */
@@ -1145,12 +988,9 @@ function openLb(i){
   curIdx=i;
   lbImg.src=allSrcs[i];
   var dispNum=String(i+1).padStart(3,'0');
-  var total=filteredIdxs.length;
-  var pos=filteredIdxs.indexOf(i);
   lbCap.textContent=dispNum+' / '+String(allSrcs.length).padStart(3,'0');
   lb.classList.add('open');
   document.body.style.overflow='hidden';
-  // scroll thumb into view
   var thumb=lbThumbs.children[i];
   if(thumb){
     Array.from(lbThumbs.children).forEach(function(t){t.classList.remove('cur');});
@@ -1180,11 +1020,11 @@ allItems.forEach(function(el,i){
 
 /* ── NAV SCROLL ── */
 var nav=document.getElementById('nav');
-window.addEventListener('scroll',function(){nav.classList.toggle('solid',window.scrollY>80);},{ passive:true});
+window.addEventListener('scroll',function(){nav.classList.toggle('solid',window.scrollY>80);},{passive:true});
 
 /* ── SCROLL REVEAL ── */
 var obs=new IntersectionObserver(function(entries){
-  entries.forEach(function(e,idx){
+  entries.forEach(function(e){
     if(e.isIntersecting){
       var delay=parseFloat(e.target.dataset.delay||0);
       setTimeout(function(){e.target.classList.add('vis');},delay);
@@ -1210,29 +1050,22 @@ function applyFilter(f){
   activeFilter=f;
   filteredIdxs=[];
   var count=0;
-  // handle image items
   allItems.forEach(function(el,i){
     var tags=el.dataset.tags||'';
     var show=(f==='all'||tags.indexOf(f)>-1);
     el.style.display=show?'':'none';
     if(show){filteredIdxs.push(i);count++;}
     if(show&&!el.classList.contains('vis')){
-      el.style.opacity='0'; el.style.transform='translateY(18px)';
+      el.style.opacity='0';el.style.transform='translateY(18px)';
       el.classList.remove('vis');
       setTimeout(function(){el.classList.add('vis');},Math.random()*200);
     }
   });
-  // handle video items — always visible on 'all', hide on other filters
-  document.querySelectorAll('.gal-item.video-item').forEach(function(el){
-    var show=(f==='all');
-    el.style.display=show?'':'none';
-    if(show) count++;
-  });
   document.getElementById('visible-count').textContent=count;
 }
-document.querySelectorAll('.f-btn').forEach(function(btn){
+document.querySelectorAll('.filter-strip .f-btn').forEach(function(btn){
   btn.addEventListener('click',function(){
-    document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.filter-strip .f-btn').forEach(function(b){b.classList.remove('active');});
     this.classList.add('active');
     applyFilter(this.dataset.filter);
   });
@@ -1259,189 +1092,21 @@ document.getElementById('search').addEventListener('input',function(){
     var num=String(el.dataset.idx||i+1).padStart(3,'0');
     var tags=el.dataset.tags||'';
     var match=!q||num.indexOf(q)>-1||tags.indexOf(q)>-1;
-    var tags2=el.dataset.tags||'';
-    var filterOk=(activeFilter==='all'||tags2.indexOf(activeFilter)>-1);
+    var filterOk=(activeFilter==='all'||tags.indexOf(activeFilter)>-1);
     var show=match&&filterOk;
-    el.style.display=show?'':'none';
-    if(show) count++;
-  });
-  // video items: show if query matches 'video' or is empty
-  document.querySelectorAll('.gal-item.video-item').forEach(function(el){
-    var show=(!q||'video'.indexOf(q)>-1)&&(activeFilter==='all');
     el.style.display=show?'':'none';
     if(show) count++;
   });
   document.getElementById('visible-count').textContent=count;
 });
 
-/* Touch swipe in lightbox */
+/* ── TOUCH SWIPE IN LIGHTBOX ── */
 var touchStartX=0;
 lb.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
 lb.addEventListener('touchend',function(e){
   var dx=e.changedTouches[0].clientX-touchStartX;
   if(Math.abs(dx)>60){dx<0?nextImg():prevImg();}
 });
-
-/* ── VIDEO PLAYER ENGINE ── */
-function fmtTime(s){
-  s=Math.floor(s||0);
-  var m=Math.floor(s/60),sec=s%60;
-  return m+':'+(sec<10?'0':'')+sec;
-}
-function initVidPlayer(id){
-  var p=document.getElementById(id);
-  if(!p)return;
-  var n=id.replace('vp','');
-  var video=p.querySelector('video');
-  var seekWrap=document.getElementById('vs'+n);
-  var seekFill=document.getElementById('vsf'+n);
-  var bigPlay=document.getElementById('vbp'+n);
-  var timeEl=document.getElementById('vt'+n);
-
-  // Click video area = play/pause
-  video.addEventListener('click',function(){vidToggle(id);});
-  // Click big play = play
-  bigPlay.addEventListener('click',function(){vidToggle(id);});
-
-  // Time update → seek bar + clock
-  video.addEventListener('timeupdate',function(){
-    if(!video.duration)return;
-    var pct=(video.currentTime/video.duration)*100;
-    seekFill.style.width=pct+'%';
-    seekFill.parentElement.querySelector('.vid-seek-thumb').style.left=pct+'%';
-    timeEl.innerHTML='<em>'+fmtTime(video.currentTime)+'</em> / '+fmtTime(video.duration);
-  });
-  video.addEventListener('loadedmetadata',function(){
-    timeEl.innerHTML='<em>0:00</em> / '+fmtTime(video.duration);
-  });
-  video.addEventListener('ended',function(){
-    p.classList.remove('playing');
-    p.classList.add('paused');
-    var ppBtn=document.getElementById('vpp'+n);
-    ppBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';
-  });
-
-  // Seek bar click/drag
-  var seeking=false;
-  function doSeek(e){
-    var rect=seekWrap.getBoundingClientRect();
-    var x=Math.max(0,Math.min(e.clientX-rect.left,rect.width));
-    var pct=x/rect.width;
-    video.currentTime=pct*(video.duration||0);
-  }
-  seekWrap.addEventListener('mousedown',function(e){seeking=true;doSeek(e);e.stopPropagation();});
-  document.addEventListener('mousemove',function(e){if(seeking)doSeek(e);});
-  document.addEventListener('mouseup',function(){seeking=false;});
-  // Touch seek
-  seekWrap.addEventListener('touchstart',function(e){seeking=true;doSeek(e.touches[0]);},{passive:true});
-  document.addEventListener('touchmove',function(e){if(seeking)doSeek(e.touches[0]);},{passive:true});
-  document.addEventListener('touchend',function(){seeking=false;});
-}
-
-function vidToggle(id){
-  var p=document.getElementById(id);
-  var video=p.querySelector('video');
-  var n=id.replace('vp','');
-  var ppBtn=document.getElementById('vpp'+n);
-  if(video.paused){
-    // pause all other players first
-    document.querySelectorAll('.vid-player').forEach(function(op){
-      if(op.id!==id){
-        var ov=op.querySelector('video');
-        if(!ov.paused){
-          ov.pause();
-          op.classList.remove('playing');
-          op.classList.add('paused');
-          var on=op.id.replace('vp','');
-          var ob=document.getElementById('vpp'+on);
-          if(ob)ob.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';
-        }
-      }
-    });
-    video.play().catch(function(){});
-    p.classList.add('playing');
-    p.classList.remove('paused');
-    ppBtn.querySelector('svg').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-  } else {
-    video.pause();
-    p.classList.remove('playing');
-    p.classList.add('paused');
-    ppBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';
-  }
-}
-function vidSkip(id,sec){
-  var video=document.getElementById(id).querySelector('video');
-  video.currentTime=Math.max(0,Math.min(video.currentTime+sec,video.duration||0));
-}
-function vidMute(id){
-  var video=document.getElementById(id).querySelector('video');
-  var n=id.replace('vp','');
-  var icon=document.getElementById('vvi'+n);
-  var slider=document.getElementById('vvs'+n);
-  video.muted=!video.muted;
-  if(video.muted){
-    icon.innerHTML='<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 15.64 19l1.09 1.09L18 18.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
-    slider.value=0;
-    slider.style.setProperty('--vol','0%');
-  } else {
-    icon.innerHTML='<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/>';
-    slider.value=video.volume;
-    slider.style.setProperty('--vol',(video.volume*100)+'%');
-  }
-}
-function vidVol(id,slider){
-  var video=document.getElementById(id).querySelector('video');
-  video.volume=slider.value;
-  video.muted=(slider.value==0);
-  slider.style.setProperty('--vol',(slider.value*100)+'%');
-  var n=id.replace('vp','');
-  var icon=document.getElementById('vvi'+n);
-  if(video.muted||video.volume===0){
-    icon.innerHTML='<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 15.64 19l1.09 1.09L18 18.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
-  } else {
-    icon.innerHTML='<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z"/>';
-  }
-}
-function vidFull(id){
-  var p=document.getElementById(id);
-  if(p.requestFullscreen) p.requestFullscreen();
-  else if(p.webkitRequestFullscreen) p.webkitRequestFullscreen();
-}
-
-// Init all players (vp1 and vp2 are Vimeo iframes; only vp3 uses native video)
-['vp3'].forEach(initVidPlayer);
-
-var activeMedia='photos';
-function applyMediaToggle(media){
-  activeMedia=media;
-  document.querySelectorAll('.media-toggle').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('btn-'+media).classList.add('active');
-
-  var imgItems=Array.from(document.querySelectorAll('.gal-item:not(.video-item)'));
-  var vidItems=Array.from(document.querySelectorAll('.gal-item.video-item'));
-
-  if(media==='photos'){
-    imgItems.forEach(function(el){el.style.display='';});
-    vidItems.forEach(function(el){el.style.display='none';});
-    // re-apply active tag filter
-    var activeFBtn=document.querySelector('.filter-strip .f-btn[data-filter].active');
-    if(activeFBtn) applyFilter(activeFBtn.dataset.filter);
-  } else {
-    imgItems.forEach(function(el){el.style.display='none';});
-    vidItems.forEach(function(el){el.style.display='';el.classList.add('vis');});
-    // hide tag filter buttons while in video mode
-    document.getElementById('visible-count').textContent=vidItems.length;
-  }
-}
-document.getElementById('btn-photos').addEventListener('click',function(){applyMediaToggle('photos');});
-document.getElementById('btn-videos').addEventListener('click',function(){applyMediaToggle('videos');});
-
-// Override applyFilter to respect media toggle
-var _origApplyFilter=applyFilter;
-applyFilter=function(f){
-  if(activeMedia==='videos') return; // don't change anything in video mode
-  _origApplyFilter(f);
-};
 
 })();
 </script>
