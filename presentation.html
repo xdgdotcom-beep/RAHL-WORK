@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ELMAGO MIXOLOGY - Brand Expansion & Digital Ecosystem</title>
+    <!-- Reveal.js Core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <!-- Base Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <!-- Google Fonts for Mixology Premium Vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mixology-gold: #D4AF37;
+            --mixology-copper: #b87333;
+            --mixology-dark: #121212;
+            --text-light: #f5f5f5;
+            --accent-glow: rgba(212, 175, 55, 0.4);
+        }
+        .reveal.mixology-theme {
+            font-family: 'Lato', sans-serif;
+            background: radial-gradient(circle at center, #1f1f1f 0%, #0a0a0a 100%);
+            color: var(--text-light);
+        }
+        .reveal.mixology-theme h1, 
+        .reveal.mixology-theme h2, 
+        .reveal.mixology-theme h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--mixology-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        .reveal.mixology-theme h1 {
+            font-size: 3.2em;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            margin-bottom: 20px;
+        }
+        .reveal.mixology-theme h2 {
+            font-size: 2.2em;
+            border-bottom: 2px solid var(--mixology-copper);
+            padding-bottom: 15px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .reveal.mixology-theme h3 {
+            font-size: 1.5em;
+            color: var(--mixology-copper);
+        }
+        .reveal.mixology-theme p, 
+        .reveal.mixology-theme li {
+            color: var(--text-light);
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .reveal.mixology-theme ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .reveal.mixology-theme li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+        }
+        .reveal.mixology-theme li::before {
+            content: '❖';
+            position: absolute;
+            left: 0;
+            color: var(--mixology-gold);
+            font-size: 1.2em;
+        }
+        .highlight-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 0 15px rgba(212,175,55,0.05);
+            transition: all 0.3s ease;
+        }
+        .highlight-box:hover {
+            box-shadow: 0 4px 25px rgba(212,175,55,0.2), inset 0 0 20px rgba(212,175,55,0.1);
+            transform: translateY(-5px);
+            border-color: var(--mixology-gold);
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            text-align: left;
+            margin-top: 30px;
+        }
+        .grid-item {
+            background: rgba(0,0,0,0.6);
+            padding: 25px;
+            border-left: 4px solid var(--mixology-copper);
+            border-radius: 0 8px 8px 0;
+        }
+        .accent { color: var(--mixology-gold); font-weight: bold; }
+        .tagline {
+            font-size: 1.3em !important;
+            font-style: italic;
+            color: #dcdcdc;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal mixology-theme">
+        <div class="slides">
+            
+            <!-- Slide 1: Title -->
+            <section data-transition="zoom">
+                <h1>ELMAGO MIXOLOGY</h1>
+                <p class="tagline">Digital Ecosystem & Brand Fame Strategy</p>
+                <div class="highlight-box" style="margin-top: 50px; background: transparent; border: none; box-shadow: none;">
+                    <p style="text-transform: uppercase; font-size: 0.9em; letter-spacing: 4px; color: var(--mixology-copper);">Project Roadmap & Architecture</p>
+                </div>
+            </section>
+
+            <!-- Slide 2: The Vision -->
+            <section data-transition="slide">
+                <h2>The Vision</h2>
+                <div class="grid-container">
+                    <div class="grid-item fragment fade-up">
+                        <h3>1. Elevate The Brand</h3>
+                        <p>Establish ELMAGO MIXOLOGY as the undisputed premium authority in the mixology space.</p>
+                    </div>
+                    <div class="grid-item fragment fade-up" data-fragment-index="1">
+                        <h3>2. Monetize Expertise</h3>
+                        <p>Create a seamless, high-converting funnel for selling exclusive mixology courses.</p>
+                    </div>
+                    <div class="grid-item fragment fade-up" data-fragment-index="2">
+                        <h3>3. Delight The Client</h3>
+                        <p>Provide a state-of-the-art interactive platform for students and customers.</p>
+                    </div>
+                    <div class="grid-item fragment fade-up" data-fragment-index="3">
+                        <h3>4. Empower Operations</h3>
+                        <p>Deliver powerful back-office tools (Admin UI/APIs) to scale the business effortlessly.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: Phase 1 -->
+            <section data-transition="slide">
+                <h2>Phase 1: The Front-End Experience</h2>
+                <p>A striking, conversion-optimized public face.</p>
+                <div class="highlight-box fragment fade-in">
+                    <h3>Premium Landing Page</h3>
+                    <ul>
+                        <li><span class="accent">Immersive Design:</span> High-end visuals, animations, and zero-friction UX.</li>
+                        <li><span class="accent">Course Showcase:</span> Highlight course value, curriculum, and Elmago's expertise.</li>
+                    </ul>
+                </div>
+                <div class="highlight-box fragment fade-in">
+                    <h3>E-Commerce & Checkout</h3>
+                    <ul>
+                        <li><span class="accent">Secure Payments:</span> Integrated, elegant checkout flow.</li>
+                        <li><span class="accent">Upsell Architecture:</span> Strategic placements for bar kits or advanced modules.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 4: Phase 2 -->
+            <section data-transition="slide">
+                <h2>Phase 2: User Engagement & Scale</h2>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <h3>Client Interface (Dashboard)</h3>
+                        <ul>
+                            <li>Secure Login Portal</li>
+                            <li>Course Video Player & Progress Tracking</li>
+                            <li>Resource Downloads (Recipes, Guides)</li>
+                            <li>Community/Feedback channels</li>
+                        </ul>
+                    </div>
+                    <div class="grid-item">
+                        <h3>SEO & Brand Fame</h3>
+                        <ul>
+                            <li>Technical SEO Optimization (Core Web Vitals)</li>
+                            <li>Content Strategy (Blog/Mixology Tips structure)</li>
+                            <li>Schema markup for Courses and Recipes</li>
+                            <li>Social sharing integrations</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 5: Phase 3 -->
+            <section data-transition="slide">
+                <h2>Phase 3: Behind the Scenes</h2>
+                <p>Tools designed to give the company complete control over growth.</p>
+                
+                <div class="highlight-box fragment zoom-in">
+                    <h3>Admin Interface & Tools</h3>
+                    <ul>
+                        <li><span class="accent">Sales Dashboard:</span> Real-time revenue, conversion rates, and student metrics.</li>
+                        <li><span class="accent">Content Management:</span> Easy uploads for new course chapters and resources.</li>
+                        <li><span class="accent">User Management:</span> Handle student accounts, refunds, and support tickets.</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box fragment zoom-in">
+                    <h3>EasyUI Portal Setup</h3>
+                    <ul>
+                        <li>Utilizing streamlined data-grids and admin templates for rapid internal tool deployment without sacrificing reliability.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 6: Phase 4 -->
+            <section data-transition="slide">
+                <h2>Phase 4: Core Infrastructure</h2>
+                <p>The technical foundation mapping out long-term scalability.</p>
+                <div class="grid-container" style="display: block;">
+                    <div class="grid-item" style="border-radius: 8px; border-left: none; border-top: 4px solid var(--mixology-gold); text-align: center;">
+                        <h3>Custom APIs</h3>
+                        <p style="text-align: left;"><span class="accent">Decoupled Architecture:</span> The frontend (Landing/Client UI) communicates with the secure backend via Custom REST or GraphQL APIs.</p>
+                        <p style="text-align: left;"><span class="accent">Third-Party Integrations:</span> Ready hooks for payment gateways (Stripe/PayPal), email marketing (Mailchimp/Klaviyo), and CRM systems.</p>
+                        <p style="text-align: left;"><span class="accent">Security First:</span> JWT Authentication, rate limiting, and encrypted client data processing.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 7: Business Benefits -->
+            <section data-transition="convex">
+                <h2>Why This Architecture?</h2>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>Brand Synergy:</strong> The platform will look and feel as premium as a high-end cocktail, increasing perceived value.</li>
+                        <li><strong>Scalability:</strong> Custom APIs and separated Admin/Client UIs mean the platform won't break when user traffic spikes.</li>
+                        <li><strong>Data Ownership:</strong> Moving away from generic course platforms gives Elmago Mixology 100% control over student data and margins.</li>
+                        <li><strong>Future-Proof:</strong> Easy to add mobile apps or physical merch stores later using the same Custom APIs.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 8: Next Steps -->
+            <section data-transition="zoom">
+                <h2>Implementation Next Steps</h2>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <h3>1. Design Approval</h3>
+                        <p>Finalize brand guidelines, colors, and layout wireframes.</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3>2. API & DB Setup</h3>
+                        <p>Construct the backend logic and database schema.</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3>3. UI Development</h3>
+                        <p>Build the Client Portal, Landing, and Admin UI.</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3>4. Testing & Launch</h3>
+                        <p>Beta testing the courses, SEO audits, and Go-Live.</p>
+                    </div>
+                </div>
+                 <h3 style="margin-top: 50px; text-transform: none;" class="accent">Questions & Discussion</h3>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+            // Optional plugins can be added here
+        });
+    </script>
+</body>
+</html>
