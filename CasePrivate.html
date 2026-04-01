@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>El Mago — Mixology Lab · Business Case 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Bebas+Neue&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --e:#C8581A; --f:#E8722A; --g:#D4A843; --cr:#F2EDE4;
+  --sm:#8A7F74; --ash:#252118; --tl:#0C5252;
+  --void:#040302; --obs:#090807; --ch:#0d0c0b;
+  --px:clamp(18px,5vw,72px); --gap:clamp(10px,1.5vw,18px); --r:3px;
+}
+
+/* ═══ RESET ═══ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{background:var(--void);color:var(--cr);font-family:'Cormorant Garamond',serif;
+     overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ═══ GRAIN — static SVG, zero JS, zero paint ═══ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.024;mix-blend-mode:overlay;
+}
+
+/* ═══ CURSOR ═══ */
+#CUR{position:fixed;top:0;left:0;z-index:99999;pointer-events:none;will-change:transform}
+#CDT{width:7px;height:7px;background:#fff;border-radius:50%;position:absolute;
+     transform:translate(-50%,-50%);mix-blend-mode:difference}
+#CRG{width:30px;height:30px;border:1px solid rgba(255,255,255,.3);border-radius:50%;
+     position:absolute;transform:translate(-50%,-50%);mix-blend-mode:difference;
+     transition:width .22s ease,height .22s ease}
+body.hov #CRG{width:48px;height:48px;opacity:.2}
+
+/* ═══ PROGRESS BAR ═══ */
+#PBAR{position:fixed;top:0;left:0;right:0;height:2px;z-index:600;
+  background:linear-gradient(90deg,var(--e),var(--g));
+  transform:scaleX(0);transform-origin:left;pointer-events:none;
+  will-change:transform}
+
+/* ═══ SECTION NAV DOTS ═══ */
+#SNAV{position:fixed;right:20px;top:50%;transform:translateY(-50%);
+      z-index:500;display:flex;flex-direction:column;gap:11px}
+.snd{width:5px;height:5px;border-radius:50%;background:var(--ash);
+     border:1px solid rgba(138,127,116,.18);
+     transition:background .25s,transform .25s;position:relative;cursor:none}
+.snd.on{background:var(--e);transform:scale(1.6)}
+.snd::after{content:attr(data-l);position:absolute;right:10px;top:50%;
+  transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:6px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--sm);
+  white-space:nowrap;opacity:0;transition:opacity .18s;pointer-events:none}
+.snd:hover::after{opacity:1}
+@media(max-width:768px){#SNAV{display:none}}
+
+/* ═══ SCROLL RING ═══ */
+#PRING{position:fixed;bottom:20px;right:20px;z-index:500;width:36px;height:36px;pointer-events:none}
+#PRING svg{transform:rotate(-90deg)}
+.rbg{fill:none;stroke:rgba(255,255,255,.04);stroke-width:2}
+.rfg{fill:none;stroke:var(--e);stroke-width:2;stroke-linecap:round;
+     stroke-dasharray:107;stroke-dashoffset:107;will-change:stroke-dashoffset}
+#RNUM{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      font-family:'DM Mono',monospace;font-size:6px;color:var(--sm)}
+
+/* ═══ PRELOADER ═══ */
+#PL{position:fixed;inset:0;z-index:9998;background:var(--void);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transition:opacity .7s,visibility .7s}
+#PL.gone{opacity:0;visibility:hidden;pointer-events:none}
+.pl-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,11vw,100px);
+  letter-spacing:.1em;background:linear-gradient(135deg,var(--e),var(--g),var(--f));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  opacity:0;animation:ploIn .8s ease .08s both}
+@keyframes ploIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.pl-sub{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.38em;
+  text-transform:uppercase;color:var(--sm);margin-top:5px;
+  opacity:0;animation:fadeUp .55s ease .32s both}
+.pl-bar{width:160px;height:1px;background:var(--ash);margin-top:22px;position:relative;overflow:hidden}
+.pl-fill{position:absolute;inset:0;width:0%;
+  background:linear-gradient(90deg,var(--e),var(--g));transition:width .18s}
+.pl-pct{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--e);margin-top:5px;
+  opacity:0;animation:fadeUp .55s ease .58s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ══════════════════════════════════════════════════════════════
+   TOPIC ANIMATIONS — 100% CSS, only transform + opacity
+   No box-shadow/filter animation. All on compositor thread.
+══════════════════════════════════════════════════════════════ */
+
+/* — LIQUID DROPS — amber orbs rising (hero atmosphere) */
+.liq-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.liq-drop{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(232,114,42,.28),rgba(200,88,26,.06) 70%);
+  border:1px solid rgba(200,88,26,.14);
+  animation:liqRise linear infinite;
+  /* will-change NOT set — browser promotes only if needed */
+}
+@keyframes liqRise{
+  0%  {transform:translateY(108vh) scale(.08);opacity:0}
+  8%  {opacity:1}
+  90% {opacity:.55}
+  100%{transform:translateY(-18vh) scale(1);opacity:0}
+}
+
+/* — MOLECULAR ORBIT RINGS — decorative behind section headings */
+.mol-orbit{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(200,88,26,.1);
+  animation:orbitSpin linear infinite;
+  pointer-events:none;
+}
+@keyframes orbitSpin{from{transform:rotate(0deg) translateZ(0)}to{transform:rotate(360deg) translateZ(0)}}
+
+/* — STEAM WISPS — at hero base */
+.steam-field{position:absolute;bottom:0;left:0;right:0;height:200px;overflow:hidden;pointer-events:none;z-index:0}
+.steam{
+  position:absolute;bottom:0;
+  width:1.5px;
+  background:linear-gradient(180deg,rgba(138,127,116,0),rgba(138,127,116,.22) 40%,rgba(138,127,116,0));
+  border-radius:2px;transform-origin:bottom center;
+  animation:steamRise ease-in-out infinite;
+}
+@keyframes steamRise{
+  0%  {transform:scaleX(1) scaleY(0) translateY(0);opacity:0}
+  15% {opacity:1}
+  60% {transform:scaleX(2.8) scaleY(1) translateY(-90px);opacity:.32}
+  100%{transform:scaleX(4.5) scaleY(1) translateY(-200px);opacity:0}
+}
+
+/* — CONDENSATION BEADS — inside spotlight card */
+.bead-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+.bead{
+  position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  animation:beadFall linear infinite;
+}
+@keyframes beadFall{
+  0%  {transform:translateY(-10px) translateX(var(--bx,0px));opacity:0}
+  12% {opacity:.8}
+  88% {opacity:.4}
+  100%{transform:translateY(calc(100% + 20px)) translateX(calc(var(--bx,0px) * 1.4));opacity:0}
+}
+
+/* — WAND SWEEP — hero divider */
+.wand{
+  height:1.5px;max-width:500px;
+  background:linear-gradient(90deg,transparent,var(--e),var(--g),transparent);
+  position:relative;overflow:hidden;margin:10px 0 24px;
+  clip-path:inset(0 100% 0 0);animation:wandIn 1s cubic-bezier(.16,1,.3,1) 1.02s both;
+}
+@keyframes wandIn{to{clip-path:inset(0 0% 0 0)}}
+.wand-beam{
+  position:absolute;top:-3px;left:-18%;width:14%;height:8px;
+  background:radial-gradient(ellipse,rgba(255,145,55,.82),transparent 70%);
+  border-radius:50%;animation:beamSweep 2.1s ease-in-out infinite;
+}
+@keyframes beamSweep{
+  0%  {transform:translateX(0);opacity:0}
+  12% {opacity:1}
+  86% {opacity:1}
+  100%{transform:translateX(640px);opacity:0}
+}
+
+/* — HAT BOB — */
+.hat{
+  font-size:clamp(26px,4vw,50px);display:inline-block;
+  filter:drop-shadow(0 0 10px rgba(200,88,26,.6));
+  animation:hatBob 3s ease-in-out infinite;
+}
+@keyframes hatBob{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-8px) rotate(3deg)}
+}
+
+/* — STAR SPARKS — */
+.hstar{position:absolute;opacity:0;font-size:10px;pointer-events:none;animation:starPop ease-in-out infinite}
+@keyframes starPop{
+  0%  {opacity:0;transform:translate(0,0) scale(.2)}
+  25% {opacity:1;transform:translate(var(--sx,0),var(--sy,0)) scale(1)}
+  70% {opacity:.3;transform:translate(calc(var(--sx,0)*1.4),calc(var(--sy,0)*1.6)) scale(.7)}
+  100%{opacity:0;transform:translate(calc(var(--sx,0)*2),calc(var(--sy,0)*2.2)) scale(.1)}
+}
+
+/* — SCROLL ROD — */
+.scroll-rod{width:1px;height:40px;position:relative;overflow:hidden;background:rgba(138,127,116,.09)}
+.scroll-rod::after{
+  content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;
+  background:linear-gradient(180deg,transparent,var(--e),transparent);
+  animation:rodDrop 1.8s ease-in-out infinite;
+}
+@keyframes rodDrop{0%{transform:translateY(0)}100%{transform:translateY(300%)}}
+
+/* — PULSING TAG DOTS — */
+.tag-dot{
+  width:4px;height:4px;border-radius:50%;background:var(--e);flex-shrink:0;
+  animation:tagPulse 2s ease-in-out infinite;
+}
+@keyframes tagPulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.5);opacity:.6}
+}
+
+/* — SPOTLIGHT BORDER GLOW — */
+.spotlight-wrap::after{
+  content:'';position:absolute;inset:0;border-radius:var(--r);
+  border:1px solid rgba(200,88,26,.14);z-index:3;pointer-events:none;
+  animation:spGlow 3.5s ease-in-out infinite;
+}
+@keyframes spGlow{
+  0%,100%{border-color:rgba(200,88,26,.14)}
+  50%{border-color:rgba(200,88,26,.45)}
+}
+
+/* — SPHERE SVG SPIN — */
+.sphere-svg{animation:sphereSpin 9s linear infinite}
+@keyframes sphereSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* — N2 DROPS — */
+.n2-drop{animation:n2Fall ease-in infinite}
+.n2-drop:nth-child(2){animation-delay:.55s}
+.n2-drop:nth-child(3){animation-delay:1.1s}
+@keyframes n2Fall{
+  0%  {opacity:0;transform:translateY(-8px)}
+  28% {opacity:.9}
+  100%{opacity:0;transform:translateY(28px)}
+}
+
+/* — SMOKE PATH WAVER — */
+.smoke-path{transform-origin:50% 100%;animation:smokeWave 2.8s ease-in-out infinite}
+.smoke-path:nth-child(2){animation-delay:.45s}
+.smoke-path:nth-child(3){animation-delay:.9s}
+@keyframes smokeWave{
+  0%,100%{transform:scaleX(1);opacity:.35}
+  50%{transform:scaleX(1.3);opacity:.75}
+}
+
+/* — COST BARS — */
+.cost-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--e),var(--g));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 1.2s cubic-bezier(.16,1,.3,1);
+  will-change:transform;
+}
+.cost-fill.go{transform:scaleX(1)}
+
+/* — EMBER SPARKS on metric hover — */
+.spark{
+  position:absolute;width:2px;height:2px;border-radius:50%;
+  background:var(--g);pointer-events:none;
+  animation:sparkUp ease-out forwards;
+}
+@keyframes sparkUp{
+  0%  {transform:translateY(0) scale(1);opacity:1}
+  100%{transform:translateY(-65px) scale(0);opacity:0}
+}
+
+/* ═══ MARQUEE ═══ */
+.mq-wrap{overflow:hidden;padding:13px 0;
+  border-top:1px solid rgba(255,255,255,.03);
+  border-bottom:1px solid rgba(255,255,255,.03);z-index:2;position:relative}
+.mq-track{display:flex;width:max-content}
+.mq-fwd{animation:mqFwd 26s linear infinite}
+.mq-rev{animation:mqRev 32s linear infinite}
+@keyframes mqFwd{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mqRev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.mq-wrap:hover .mq-track{animation-play-state:paused}
+.mqi{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.4vw,15px);
+     letter-spacing:.2em;color:rgba(255,255,255,.055);white-space:nowrap;padding:0 22px}
+.mqi em{color:rgba(200,88,26,.2);font-style:normal}
+.mqi.lit{color:rgba(200,88,26,.12)}
+
+/* ═══ HERO ═══ */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+#HBGIMG{position:absolute;inset:-6%;background:url('images/FB_IMG_1773395215420.jpg') center/cover;
+  filter:brightness(.42) saturate(.48);will-change:transform}
+.hero-overlay{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(158deg,rgba(4,3,2,.97) 22%,rgba(4,3,2,.15) 56%,rgba(4,3,2,.85) 100%)}
+.hero-content{position:relative;z-index:3;
+  padding:clamp(76px,9vw,118px) var(--px) clamp(52px,6.5vw,82px);max-width:1400px;width:100%}
+
+.h-kick{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.38em;
+  text-transform:uppercase;color:var(--e);display:flex;align-items:center;gap:13px;margin-bottom:18px;
+  clip-path:inset(0 100% 0 0);animation:wandIn .75s cubic-bezier(.16,1,.3,1) .28s both}
+.h-kick::before{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--e))}
+
+.n-wrap{display:flex;align-items:baseline;gap:clamp(5px,1.2vw,14px);flex-wrap:wrap;margin-bottom:9px}
+.h-el{font-family:'Bebas Neue',sans-serif;font-size:clamp(66px,14vw,192px);
+  color:#fff;line-height:.84;opacity:0;animation:heroNameIn .95s cubic-bezier(.16,1,.3,1) .44s both}
+.h-mago{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(58px,12vw,170px);color:var(--e);line-height:.84;
+  opacity:0;animation:heroNameIn .95s cubic-bezier(.16,1,.3,1) .6s both}
+@keyframes heroNameIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+.hat-wrap{position:relative;display:inline-flex;align-items:center;
+  opacity:0;animation:fadeUp .65s ease .8s both}
+.hstar{position:absolute;opacity:0;font-size:9px;pointer-events:none;animation:starPop ease-in-out infinite}
+.hstar:nth-child(2){top:-13px;left:14%;--sx:-7px;--sy:-46px;animation-duration:2.3s}
+.hstar:nth-child(3){top:-19px;left:44%;--sx:6px;--sy:-52px;animation-duration:2.7s;animation-delay:.4s}
+.hstar:nth-child(4){top:-11px;left:66%;--sx:-4px;--sy:-40px;animation-duration:2.5s;animation-delay:.78s}
+.hstar:nth-child(5){top:-25px;left:31%;--sx:9px;--sy:-58px;animation-duration:2.9s;animation-delay:1.1s}
+
+.h-tag{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(14px,1.7vw,19px);color:rgba(242,237,228,.42);
+  max-width:490px;line-height:1.7;margin-bottom:28px;
+  opacity:0;animation:fadeUp .65s ease .98s both}
+.h-metrics{display:flex;gap:clamp(17px,3vw,48px);flex-wrap:wrap;
+  opacity:0;animation:fadeUp .65s ease 1.12s both}
+.hmi{display:flex;flex-direction:column;gap:2px;position:relative}
+.hmi::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:1px;
+  background:linear-gradient(90deg,var(--e),transparent);transition:width .36s}
+.hmi:hover::after{width:100%}
+.hmv{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3.7vw,46px);letter-spacing:.04em;color:var(--e);line-height:1}
+.hml{font-family:'DM Mono',monospace;font-size:6px;letter-spacing:.2em;text-transform:uppercase;color:var(--sm)}
+
+.scroll-ind{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:5px;
+  opacity:0;animation:fadeUp .65s ease 1.54s both}
+.scroll-ind span{font-family:'DM Mono',monospace;font-size:6px;letter-spacing:.24em;text-transform:uppercase;color:var(--sm)}
+
+/* ═══ LAYOUT ═══ */
+main{position:relative;z-index:2}
+.sec{padding:0 var(--px);max-width:1400px;margin:0 auto}
+.fb{padding:0 var(--px);position:relative;z-index:2}
+.fbi{max-width:1400px;margin:0 auto}
+.gap{height:clamp(30px,5vw,76px)}
+.gap-sm{height:18px}
+
+.sdiv{display:flex;align-items:center;gap:16px;padding:5px 0;position:relative}
+.sdiv span{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--sm);white-space:nowrap}
+.sdiv::before,.sdiv::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.055),transparent)}
+.snum{font-family:'Bebas Neue',sans-serif;font-size:60px;color:rgba(200,88,26,.038);line-height:1;
+  position:absolute;right:0;top:-12px;pointer-events:none;user-select:none}
+
+.row{display:grid;gap:var(--gap)}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g64{grid-template-columns:6fr 4fr}
+.g57{grid-template-columns:5fr 7fr}
+
+/* ═══ CARDS ═══ */
+.card{background:var(--ch);border:1px solid rgba(255,255,255,.032);
+  border-radius:var(--r);overflow:hidden;position:relative}
+.card>*{position:relative;z-index:1}
+.c-e{background:linear-gradient(135deg,var(--e),#5e1d06);border-color:transparent}
+.c-t{background:linear-gradient(135deg,var(--tl),#021818);border-color:transparent}
+.c-o{background:var(--obs)}
+.p{padding:clamp(20px,3vw,42px)}
+
+/* ═══ TYPOGRAPHY ═══ */
+.ey{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--e);margin-bottom:9px;display:flex;align-items:center;gap:11px}
+.ey::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(200,88,26,.28),transparent);max-width:46px}
+.ey.lt{color:rgba(255,255,255,.32)}.ey.lt::after{background:linear-gradient(90deg,rgba(255,255,255,.14),transparent)}
+.disp{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3.5vw,48px);
+  letter-spacing:.04em;color:var(--cr);line-height:1;margin-bottom:13px}
+.disp em{color:var(--e);font-style:normal}
+.dsm{font-size:clamp(18px,2.6vw,32px)}
+.bdy{font-family:'Cormorant Garamond',serif;font-size:clamp(13.5px,1.5vw,16.5px);line-height:1.82;color:rgba(242,237,228,.5);font-weight:300}
+.aln{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--e),var(--g),transparent);opacity:.24;margin:3px 0 16px}
+
+/* ═══ METRICS ═══ */
+.mc{padding:clamp(18px,2.8vw,36px);position:relative;overflow:hidden}
+.mc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,var(--e),transparent);
+  transform:scaleX(0);transform-origin:left;transition:transform .38s;will-change:transform}
+.card:hover .mc::after{transform:scaleX(1)}
+.mv{font-family:'Bebas Neue',sans-serif;font-size:clamp(35px,5vw,62px);letter-spacing:.04em;line-height:1;color:var(--e);margin-bottom:4px}
+.ml{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sm);margin-bottom:2px}
+.mn{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(138,127,116,.5)}
+.mhi .mv{color:#fff}.mhi .ml{color:rgba(255,255,255,.4)}.mhi .mn{color:rgba(255,255,255,.28)}
+
+/* ═══ TABLE ═══ */
+.rtab{width:100%;border-collapse:collapse}
+.rtab th{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--sm);padding:8px 11px;text-align:left;border-bottom:1px solid rgba(255,255,255,.064)}
+.rtab td{font-family:'Cormorant Garamond',serif;font-size:clamp(12px,1.3vw,14px);
+  color:rgba(242,237,228,.62);padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s}
+.rtab tr:hover td{background:rgba(200,88,26,.028)}
+.rtab tr:last-child td{border-bottom:none}
+.rtab td.amb{color:var(--e);font-family:'DM Mono',monospace;font-size:11px}
+.rtab td.gld{color:var(--g);font-family:'DM Mono',monospace}
+.rtab tr.tot td{border-top:1px solid rgba(200,88,26,.2);padding-top:12px;color:var(--cr)}
+.rtab tr.tot td.big{font-family:'Bebas Neue',sans-serif;font-size:clamp(17px,2.2vw,25px);color:var(--g)}
+
+/* ═══ ASSUMPTION ROWS ═══ */
+.arow{display:flex;justify-content:space-between;align-items:center;
+  padding:clamp(7px,1vw,11px) 0;border-bottom:1px solid rgba(255,255,255,.03);
+  gap:12px;transition:padding-left .18s}
+.arow:hover{padding-left:6px}.arow:last-child{border-bottom:none}
+.ak{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sm)}
+.av{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--cr)}
+.av.amb{color:var(--e)}.av.gld{color:var(--g)}
+
+/* ═══ TIMELINE ═══ */
+.tl{display:flex;flex-direction:column;position:relative}
+.tl-line{position:absolute;left:0;top:0;width:1px;height:100%;
+  background:linear-gradient(180deg,var(--e),var(--g));
+  transform:scaleY(0);transform-origin:top;will-change:transform;pointer-events:none;z-index:5}
+.fstep{display:flex;gap:clamp(16px,2.7vw,38px);padding:clamp(18px,2.5vw,30px) 0;
+  border-bottom:1px solid rgba(255,255,255,.03);position:relative}
+.fstep:last-child{border-bottom:none}
+.fline{position:absolute;left:clamp(70px,9.5vw,94px);top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(200,88,26,.12),transparent);pointer-events:none}
+.tcol{flex-shrink:0;width:clamp(65px,9.5vw,92px)}
+.tbadge{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--e);line-height:1.7}
+.fdot{width:7px;height:7px;border-radius:50%;background:var(--e);
+  border:1px solid rgba(200,88,26,.3);flex-shrink:0;margin-top:4px}
+.fbody{flex:1}
+.spill{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;
+  background:rgba(200,88,26,.065);border:1px solid rgba(200,88,26,.15);
+  border-radius:16px;margin-bottom:9px}
+.spn{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--e);line-height:1}
+.spt{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sm)}
+.ftit{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,2vw,23px);letter-spacing:.04em;color:var(--cr);margin-bottom:2px}
+.fsub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(11.5px,1.3vw,14px);color:var(--sm);margin-bottom:11px}
+.fd{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px}
+.fdd{width:2.5px;height:2.5px;border-radius:50%;background:var(--e);flex-shrink:0;margin-top:9px}
+.fdt{font-family:'Cormorant Garamond',serif;font-size:clamp(11.5px,1.3vw,13.5px);color:rgba(138,127,116,.7);line-height:1.65}
+.fdt strong{color:var(--cr)}.fdt em{color:var(--g);font-style:normal}
+
+/* ═══ UPSELL ═══ */
+.urow{display:flex;gap:11px;align-items:flex-start;padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.044);transition:padding-left .18s}
+.urow:hover{padding-left:4px}.urow:last-child{border-bottom:none}
+.udia{width:4px;height:4px;background:rgba(255,255,255,.2);transform:rotate(45deg);flex-shrink:0;margin-top:7px}
+.ut{font-family:'Cormorant Garamond',serif;font-size:clamp(12.5px,1.5vw,15.5px);color:rgba(255,255,255,.66);line-height:1.65}
+.ut strong{color:#fff}.ut em{color:var(--g);font-style:normal;font-weight:600}
+
+/* ═══ IMAGES ═══ */
+.itile{overflow:hidden;border-radius:var(--r);position:relative}
+.itile img{width:100%;height:100%;object-fit:cover;
+  transition:transform .65s cubic-bezier(.16,1,.3,1),filter .36s;
+  filter:brightness(.62) saturate(.7)}
+.itile:hover img{transform:scale(1.055);filter:brightness(.88) saturate(.96)}
+
+/* ═══ HORIZONTAL STRIP ═══ */
+.hs-wrap{overflow:hidden;position:relative}
+.hs-inner{display:flex;gap:var(--gap);padding:0 var(--px);will-change:transform}
+.hs-inner .itile{flex-shrink:0;width:clamp(220px,29vw,370px);height:clamp(240px,31vw,410px)}
+.hs-fl{position:absolute;left:0;top:0;bottom:0;width:64px;background:linear-gradient(90deg,var(--void),transparent);pointer-events:none;z-index:2}
+.hs-fr{position:absolute;right:0;top:0;bottom:0;width:64px;background:linear-gradient(270deg,var(--void),transparent);pointer-events:none;z-index:2}
+
+/* ═══ HIGHLIGHT BAND ═══ */
+.hl-band{position:relative;overflow:hidden;border-radius:var(--r);
+  padding:clamp(30px,4.8vw,60px) clamp(22px,3.8vw,52px);
+  background:linear-gradient(135deg,var(--e),#5c1c05);border-color:transparent;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px}
+.hlv{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,8vw,92px);color:#fff;letter-spacing:.04em;line-height:1}
+.hll{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.42);margin-top:4px}
+.hln{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(11px,1.4vw,16px);color:rgba(255,255,255,.4);margin-top:2px}
+.btn-ghost{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.26);padding:9px 20px;border-radius:2px;
+  display:inline-block;transition:background .2s}
+.btn-ghost:hover{background:rgba(255,255,255,.07)}
+
+/* ═══ QUOTE ═══ */
+.bq{position:relative;overflow:hidden;border-radius:var(--r);
+  padding:clamp(42px,6vw,76px) clamp(22px,5vw,64px);text-align:center;background:var(--obs)}
+.bq-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:280px;background:radial-gradient(ellipse,rgba(200,88,26,.08),transparent 70%);pointer-events:none}
+.bq-mark{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,12vw,148px);
+  color:rgba(200,88,26,.1);line-height:.5;display:block;margin-bottom:16px}
+.bq-text{position:relative;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(16px,2.5vw,26px);color:var(--cr);line-height:1.7;max-width:580px;margin:0 auto}
+.bq-by{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--sm);margin-top:20px}
+
+/* ═══ PROFILE ═══ */
+.pcard{display:flex;gap:14px;align-items:center}
+.pimg{width:62px;height:62px;border-radius:50%;object-fit:cover;object-position:top;
+  border:1.5px solid var(--e);flex-shrink:0}
+.pname{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.04em;color:#fff;line-height:1}
+.prole{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(255,255,255,.5);margin-top:1px}
+.pstat{font-family:'DM Mono',monospace;font-size:6px;color:rgba(255,255,255,.25);margin-top:2px;letter-spacing:.09em}
+
+/* ═══ EXEC SUMMARY ═══ */
+.excol{display:flex;flex-direction:column;gap:6px}
+.exlab{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--e);margin-bottom:2px}
+
+/* ═══ SPOTLIGHT ═══ */
+.spotlight-wrap{position:relative;overflow:hidden;border-radius:var(--r)}
+.spotlight-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.spotlight-wrap:hover img{transform:scale(1.034)}
+.sp-over{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(4,3,2,.86) 100%);pointer-events:none;z-index:1}
+.sp-badge{position:absolute;bottom:0;left:0;right:0;padding:clamp(14px,2vw,24px);z-index:2}
+.sp-tag{position:absolute;top:13px;right:13px;z-index:4;
+  background:rgba(200,88,26,.84);backdrop-filter:blur(6px);padding:4px 11px;border-radius:14px}
+.sp-tag span{font-family:'DM Mono',monospace;font-size:6px;letter-spacing:.2em;text-transform:uppercase;color:#fff}
+
+/* ═══ EQUIPMENT PILLS ═══ */
+.eq-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.eq-pill{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.08em;
+  text-transform:uppercase;padding:3.5px 9px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.054);color:rgba(255,255,255,.35);
+  transition:border-color .2s,color .2s,background .2s}
+.eq-pill:hover{border-color:var(--e);color:var(--e);background:rgba(200,88,26,.042)}
+.eq-pill.mol{border-color:rgba(200,88,26,.16);color:rgba(200,88,26,.48)}
+.eq-pill.mol:hover{background:rgba(200,88,26,.068);color:var(--e)}
+
+/* ═══ COST BARS ═══ */
+.cost-wrap{margin-top:18px}
+.cost-row{margin-bottom:10px}
+.cost-head{display:flex;justify-content:space-between;margin-bottom:3.5px}
+.cost-label{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--sm)}
+.cost-val{font-family:'DM Mono',monospace;font-size:8px;color:var(--e)}
+.cost-track{width:100%;height:1.5px;background:rgba(255,255,255,.044);border-radius:1px;overflow:hidden}
+
+/* ═══ TECH TAGS ═══ */
+.tech-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.ttag{display:flex;align-items:center;gap:6px;padding:5px 12px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.044);border-radius:2px;
+  transition:border-color .2s,background .2s}
+.ttag:hover{border-color:rgba(200,88,26,.24);background:rgba(200,88,26,.032)}
+.ttt{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.34)}
+
+/* ═══ GLOW DIVIDER ═══ */
+.g-div{height:1px;background:linear-gradient(90deg,transparent,rgba(200,88,26,.42),transparent);margin:0 var(--px);position:relative}
+.g-div::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:46%;height:9px;background:radial-gradient(ellipse,rgba(200,88,26,.1),transparent 70%);pointer-events:none}
+
+/* ═══ TECH SHOWCASE ═══ */
+.tech-show{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+.tech-card{background:var(--ch);border:1px solid rgba(255,255,255,.034);border-radius:var(--r);
+  padding:clamp(18px,2.7vw,33px);text-align:center;transition:border-color .28s;position:relative;overflow:hidden}
+.tech-card:hover{border-color:rgba(200,88,26,.18)}
+/* Orbital decoration rings per card */
+.tech-card .mol-orbit:nth-child(1){width:90px;height:90px;top:50%;left:50%;margin:-45px 0 0 -45px}
+.tech-card .mol-orbit:nth-child(2){width:130px;height:130px;top:50%;left:50%;margin:-65px 0 0 -65px;animation-direction:reverse;animation-duration:14s}
+.tech-icon{width:52px;height:52px;margin:0 auto 13px;position:relative;z-index:1}
+.tech-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.8vw,20px);letter-spacing:.04em;color:var(--cr);margin-bottom:5px;position:relative;z-index:1}
+.tech-desc{font-family:'Cormorant Garamond',serif;font-size:clamp(11.5px,1.25vw,13.5px);line-height:1.65;color:rgba(138,127,116,.62);position:relative;z-index:1}
+
+/* ═══ REVEAL ═══ */
+[data-r]{opacity:0}
+
+/* ═══ FOOTER ═══ */
+footer{padding:clamp(30px,4vw,52px) var(--px);border-top:1px solid rgba(255,255,255,.034);
+  max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;
+  align-items:flex-start;flex-wrap:wrap;gap:18px;position:relative;z-index:2}
+footer::before{content:'';position:absolute;top:0;left:var(--px);width:66px;height:1.5px;background:linear-gradient(90deg,var(--e),transparent)}
+.f-brand{font-family:'Bebas Neue',sans-serif;font-size:clamp(15px,2.5vw,24px);letter-spacing:.06em;color:var(--cr)}
+.f-sub{font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sm);margin-top:2px}
+.f-copy{font-family:'DM Mono',monospace;font-size:6px;color:rgba(255,255,255,.07);margin-top:7px}
+.f-nav{display:flex;gap:3px 15px;flex-wrap:wrap}
+.f-nav a{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.15em;text-transform:uppercase;color:var(--sm);transition:color .15s;position:relative}
+.f-nav a::after{content:'';position:absolute;bottom:-1px;left:0;right:100%;height:1px;background:var(--e);transition:right .24s}
+.f-nav a:hover{color:var(--cr)}.f-nav a:hover::after{right:0}
+
+@media(max-width:900px){
+  .g4{grid-template-columns:1fr 1fr}
+  .g57,.g64{grid-template-columns:1fr}
+  .hl-band{flex-direction:column;align-items:flex-start}
+  .tech-show{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr}
+  .fstep{flex-direction:column;gap:6px}.fline{display:none}.tcol{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div id="CUR"><div id="CDT"></div><div id="CRG"></div></div>
+<div id="PBAR"></div>
+<div id="SNAV" aria-hidden="true"></div>
+<div id="PRING" aria-hidden="true">
+  <svg width="36" height="36" viewBox="0 0 36 36">
+    <circle class="rbg" cx="18" cy="18" r="16"/>
+    <circle class="rfg" id="RFG" cx="18" cy="18" r="16"/>
+  </svg>
+  <div id="RNUM">0%</div>
+</div>
+<div id="PL">
+  <div class="pl-logo">EL MAGO</div>
+  <div class="pl-sub">Mixology Lab — Business Case 2026</div>
+  <div class="pl-bar"><div class="pl-fill" id="PLF"></div></div>
+  <div class="pl-pct" id="PLP">0%</div>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" data-section="Overview" id="S0">
+  <div id="HBGIMG"></div>
+  <div class="hero-overlay"></div>
+  <!-- LIQUID DROPS — pure CSS, spawned once -->
+  <div class="liq-field" id="LF"></div>
+  <!-- STEAM WISPS — pure CSS -->
+  <div class="steam-field" id="SF"></div>
+  <div class="hero-content">
+    <div class="h-kick">El Mago Mixology Lab — ROI Plan &amp; Class Flow 2026</div>
+    <div class="n-wrap">
+      <span class="h-el">EL</span>
+      <span class="h-mago">Mago</span>
+      <div class="hat-wrap">
+        <span class="hat">🎩</span>
+        <span class="hstar">✨</span>
+        <span class="hstar">⭐</span>
+        <span class="hstar">✨</span>
+        <span class="hstar">🌟</span>
+      </div>
+    </div>
+    <div class="wand"><div class="wand-beam"></div></div>
+    <p class="h-tag">A world-class molecular mixology experience — ROI projections, class structure &amp; premium event flow by Subhash Sankar</p>
+    <div class="h-metrics">
+      <div class="hmi"><div class="hmv" data-cnt="290" data-pre="$" data-suf="++">$0++</div><div class="hml">Per Person</div></div>
+      <div class="hmi"><div class="hmv" data-cnt="158" data-pre="$" data-suf="K">$0K</div><div class="hml">Projected Revenue</div></div>
+      <div class="hmi"><div class="hmv" data-cnt="3" data-pre="" data-suf="×">0×</div><div class="hml">Classes / Week</div></div>
+      <div class="hmi"><div class="hmv" data-cnt="19" data-pre="" data-suf="+">0+</div><div class="hml">Years of Craft</div></div>
+    </div>
+  </div>
+  <div class="scroll-ind"><span>Scroll</span><div class="scroll-rod"></div></div>
+</section>
+
+<!-- MARQUEE 1 -->
+<div class="mq-wrap">
+  <div class="mq-track mq-fwd">
+    <span class="mqi">MOLECULAR MIXOLOGY</span><span class="mqi"><em>✦</em></span><span class="mqi">EL MAGO LAB CLASS</span><span class="mqi"><em>✦</em></span><span class="mqi">USD 290 PER PERSON</span><span class="mqi"><em>✦</em></span><span class="mqi">3 CLASSES PER WEEK</span><span class="mqi"><em>✦</em></span><span class="mqi">5-COURSE WINE DINNER</span><span class="mqi"><em>✦</em></span><span class="mqi">USD 850 PREMIUM</span><span class="mqi"><em>✦</em></span><span class="mqi">EL MAGO WINE ROOM</span><span class="mqi"><em>✦</em></span><span class="mqi">LIQUID ARTISTRY</span><span class="mqi"><em>✦</em></span>
+    <span class="mqi">MOLECULAR MIXOLOGY</span><span class="mqi"><em>✦</em></span><span class="mqi">EL MAGO LAB CLASS</span><span class="mqi"><em>✦</em></span><span class="mqi">USD 290 PER PERSON</span><span class="mqi"><em>✦</em></span><span class="mqi">3 CLASSES PER WEEK</span><span class="mqi"><em>✦</em></span><span class="mqi">5-COURSE WINE DINNER</span><span class="mqi"><em>✦</em></span><span class="mqi">USD 850 PREMIUM</span><span class="mqi"><em>✦</em></span><span class="mqi">EL MAGO WINE ROOM</span><span class="mqi"><em>✦</em></span><span class="mqi">LIQUID ARTISTRY</span><span class="mqi"><em>✦</em></span>
+  </div>
+</div>
+
+<main>
+<!-- ═══ 01 OVERVIEW ═══ -->
+<div class="gap"></div>
+<div class="sec" id="S1" data-section="Program">
+  <div class="sdiv" data-r data-rt="up"><span>01 — Program Overview</span><div class="snum">01</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g64">
+    <!-- SPOTLIGHT FEATURED IMAGE -->
+    <div class="spotlight-wrap" style="min-height:500px" data-r data-rt="left">
+      <img src="https://i.ibb.co/vCKRHDvY/IMG-20260331-WA0530-1.jpg" alt="El Mago Lab Live" style="min-height:500px"/>
+      <div class="sp-over"></div>
+      <div class="sp-tag"><span>El Mago Lab — Live 2026</span></div>
+      <div class="sp-badge">
+        <div class="ey lt">The Experience</div>
+        <div class="disp" style="color:#fff;margin-bottom:0">Liquid <em style="color:rgba(255,255,255,.28)">Theatre</em></div>
+      </div>
+      <!-- Condensation beads -->
+      <div class="bead-field" id="BF"></div>
+    </div>
+    <!-- TEXT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:var(--gap)">
+      <div class="card p" data-r data-rt="right">
+        <div class="ey">The Vision</div>
+        <div class="disp">The <em>Business Case</em></div>
+        <p class="bdy">This document outlines the complete financial forecast and operational flow for the El Mago Mixology Lab Class — a premium, immersive cocktail experience designed to generate significant seasonal revenue while elevating the property's cultural identity.</p>
+        <p class="bdy" style="margin-top:9px">3 classes per week, 5:00–7:00 pm, USD 290++ per person with 18 guests per session over 7 high-season months — projecting gross revenue of <strong style="color:var(--g)">USD $158,218</strong>.</p>
+        <p class="bdy" style="margin-top:9px">Optional premium package: Mixology Class + 5-Course Wine Dinner at El Mago Wine Room at <strong style="color:var(--g)">USD $850++</strong> per person.</p>
+        <div class="tech-tags">
+          <div class="ttag"><div class="tag-dot"></div><div class="ttt">Spherification</div></div>
+          <div class="ttag"><div class="tag-dot"></div><div class="ttt">Liquid Nitrogen</div></div>
+          <div class="ttag"><div class="tag-dot"></div><div class="ttt">Smoke &amp; Flame</div></div>
+          <div class="ttag"><div class="tag-dot"></div><div class="ttt">Molecular Gastronomy</div></div>
+          <div class="ttag"><div class="tag-dot"></div><div class="ttt">Flavour Profiling</div></div>
+          <div class="ttag"><div class="tag-dot"></div><div class="ttt">Wine Pairing</div></div>
+        </div>
+      </div>
+      <div class="card p c-e" data-r data-rt="right" data-d="90">
+        <div class="ey lt">By the Magician</div>
+        <div class="pcard">
+          <img src="images/FB_IMG_1773382390551.jpg" class="pimg" alt="Subhash Sankar"/>
+          <div><div class="pname">Subhash Sankar</div><div class="prole">Lead Molecular Mixologist</div><div class="pstat">19 YRS · UAE · BAHRAIN · QATAR · BELIZE · TURKS &amp; CAICOS</div></div>
+        </div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:13px;line-height:1.72;color:rgba(255,255,255,.68);margin-top:11px">Internationally acclaimed — featured in UPROXX, recognized for one of the world's best margaritas. 200+ original recipes. 10+ years molecular mixology.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- METRICS -->
+<div class="gap-sm"></div>
+<div class="sec">
+  <div class="row g4">
+    <div class="card" data-r data-rt="scale" data-d="0"><div class="mc"><div class="ml">Price Per Person</div><div class="mv" data-cnt="290" data-pre="$" data-suf="++">$0++</div><div class="mn">Excl. taxes &amp; service fees</div></div></div>
+    <div class="card" data-r data-rt="scale" data-d="68"><div class="mc"><div class="ml">Classes Per Week</div><div class="mv" style="color:var(--cr)" data-cnt="3" data-pre="" data-suf=" sessions">0 sessions</div><div class="mn">5:00 pm – 7:00 pm</div></div></div>
+    <div class="card" data-r data-rt="scale" data-d="136"><div class="mc"><div class="ml">Total Participants</div><div class="mv" style="color:var(--cr)" data-cnt="545" data-pre="" data-suf=" guests">0 guests</div><div class="mn">18 pp × 30.3 weeks</div></div></div>
+    <div class="card c-e" data-r data-rt="scale" data-d="204"><div class="mc mhi"><div class="ml">Projected Gross Revenue</div><div class="mv" data-cnt="158218" data-pre="$" data-fmt="comma">$0</div><div class="mn">18 × 30.3 wks × $290</div></div></div>
+  </div>
+</div>
+
+<!-- STRIP -->
+<div class="gap"></div>
+<div class="hs-wrap" id="HSW">
+  <div class="hs-fl"></div>
+  <div class="hs-inner" id="HSI">
+    <div class="itile"><img src="images/FB_IMG_1773395215420.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="https://i.ibb.co/vCKRHDvY/IMG-20260331-WA0530-1.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/FB_IMG_1773382737405.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/FB_IMG_1773395175807.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/FB_IMG_1773382708558.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/20260318_162926.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/FB_IMG_1773395142757.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/20260318_163111.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+    <div class="itile"><img src="images/FB_IMG_1773382390551.jpg" alt="" loading="lazy" style="min-height:340px"/></div>
+  </div>
+  <div class="hs-fr"></div>
+</div>
+
+<!-- ═══ 02 MOLECULAR TECHNIQUES ═══ -->
+<div class="gap"></div>
+<div class="sec" id="S2" data-section="Techniques">
+  <div class="sdiv" data-r data-rt="up"><span>02 — Signature Molecular Techniques</span><div class="snum">02</div></div>
+  <div class="gap-sm"></div>
+  <div class="tech-show">
+    <!-- SPHERIFICATION -->
+    <div class="tech-card" data-r data-rt="up" data-d="0">
+      <div class="mol-orbit"></div>
+      <div class="mol-orbit" style="animation-duration:11s"></div>
+      <div class="tech-icon">
+        <svg class="sphere-svg" viewBox="0 0 52 52" fill="none" width="52" height="52">
+          <circle cx="26" cy="26" r="19" stroke="rgba(200,88,26,.36)" stroke-width="1"/>
+          <ellipse cx="26" cy="26" rx="7" ry="19" stroke="rgba(200,88,26,.2)" stroke-width="1"/>
+          <ellipse cx="26" cy="26" rx="19" ry="6" stroke="rgba(200,88,26,.17)" stroke-width="1"/>
+          <circle cx="26" cy="26" r="2.5" fill="rgba(200,88,26,.62)"/>
+          <circle cx="18" cy="20" r="1.4" fill="rgba(212,168,67,.42)"/>
+          <circle cx="33" cy="31" r="1" fill="rgba(212,168,67,.32)"/>
+        </svg>
+      </div>
+      <div class="tech-title">Spherification</div>
+      <div class="tech-desc">Sodium alginate &amp; calcium chloride transform liquid into perfect orbs — a cocktail-in-a-sphere that bursts on the palate.</div>
+    </div>
+    <!-- LIQUID NITROGEN -->
+    <div class="tech-card" data-r data-rt="up" data-d="72">
+      <div class="mol-orbit" style="border-color:rgba(13,92,92,.15);animation-duration:10s"></div>
+      <div class="mol-orbit" style="width:120px;height:120px;margin:-60px 0 0 -60px;border-color:rgba(13,92,92,.08);animation-direction:reverse;animation-duration:15s"></div>
+      <div class="tech-icon">
+        <svg viewBox="0 0 52 52" fill="none" width="52" height="52">
+          <path d="M20 12 L20 23 L13 39 L39 39 L32 23 L32 12 Z" stroke="rgba(13,92,92,.52)" stroke-width="1.5" fill="rgba(13,92,92,.065)"/>
+          <line x1="18" y1="12" x2="34" y2="12" stroke="rgba(13,92,92,.42)" stroke-width="1.5"/>
+          <ellipse class="n2-drop" cx="20" cy="29" rx="2" ry="2.7" fill="rgba(13,185,185,.3)"/>
+          <ellipse class="n2-drop" cx="26" cy="32" rx="1.5" ry="2.2" fill="rgba(13,185,185,.26)"/>
+          <ellipse class="n2-drop" cx="31" cy="30" rx="1.5" ry="2.2" fill="rgba(13,185,185,.23)"/>
+        </svg>
+      </div>
+      <div class="tech-title">Liquid Nitrogen</div>
+      <div class="tech-desc">Flash-freezing at −196°C creates instant ice creams, frozen garnishes and dramatic theatrical fog that rolls over the bar.</div>
+    </div>
+    <!-- SMOKE & FLAME -->
+    <div class="tech-card" data-r data-rt="up" data-d="144">
+      <div class="mol-orbit" style="border-color:rgba(200,88,26,.08);animation-duration:12s"></div>
+      <div class="mol-orbit" style="width:120px;height:120px;margin:-60px 0 0 -60px;border-color:rgba(200,88,26,.05);animation-direction:reverse"></div>
+      <div class="tech-icon">
+        <svg viewBox="0 0 52 52" fill="none" width="52" height="52">
+          <path d="M26 42 C18 42 14 36 16 30 C18 24 22 22 22 16 C24 20 23 24 25 26 C25 22 27 18 30 14 C31 20 28 24 30 30 C32 24 34 22 36 26 C38 32 34 42 26 42Z" fill="rgba(200,88,26,.22)" stroke="rgba(200,88,26,.42)" stroke-width=".5"/>
+          <path class="smoke-path" d="M22 16 C20 12 23 8 21 4" stroke="rgba(138,127,116,.28)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path class="smoke-path" d="M26 14 C25 10 28 6 26 2" stroke="rgba(138,127,116,.22)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path class="smoke-path" d="M30 16 C31 12 29 8 31 4" stroke="rgba(138,127,116,.18)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="tech-title">Smoke &amp; Flame</div>
+      <div class="tech-desc">Smoking guns infuse wood, herb or spice aromas. Open flame caramelises sugars and scorches citrus for complex layered profiles.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 03 FINANCIALS ═══ -->
+<div class="gap"></div>
+<div class="g-div"></div>
+<div class="gap"></div>
+<div class="sec" id="S3" data-section="Financials">
+  <div class="sdiv" data-r data-rt="up"><span>03 — Key Assumptions &amp; Revenue Model</span><div class="snum">03</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g2">
+    <div class="card p c-o" data-r data-rt="left">
+      <div class="ey">Program Parameters</div>
+      <div class="disp dsm">Key <em>Assumptions</em></div>
+      <div class="aln"></div>
+      <div class="arow"><div class="ak">Class Frequency</div><div class="av">3 classes / week</div></div>
+      <div class="arow"><div class="ak">Time Slot</div><div class="av">5:00 pm – 7:00 pm</div></div>
+      <div class="arow"><div class="ak">Duration Per Class</div><div class="av">2 hours</div></div>
+      <div class="arow"><div class="ak">Participants / Week</div><div class="av">18 persons</div></div>
+      <div class="arow"><div class="ak">High Season</div><div class="av">7 months ≈ 30.3 wks</div></div>
+      <div class="arow"><div class="ak">Total Participants</div><div class="av">545 persons</div></div>
+      <div class="arow"><div class="ak">Base Price</div><div class="av amb">USD $290 (+ taxes)</div></div>
+      <div class="arow"><div class="ak">Gross Revenue</div><div class="av gld">USD $158,218</div></div>
+      <div class="arow"><div class="ak">Premium Package</div><div class="av gld">USD $850++ per person</div></div>
+      <div class="arow"><div class="ak">Lab Setup Investment</div><div class="av gld">~USD $35,000</div></div>
+    </div>
+    <div class="card p" data-r data-rt="right" data-d="100">
+      <div class="ey">Revenue Breakdown</div>
+      <div class="disp dsm">Revenue <em>Model</em></div>
+      <div class="aln"></div>
+      <table class="rtab">
+        <thead><tr><th>Component</th><th>Detail</th><th>Revenue</th></tr></thead>
+        <tbody>
+          <tr><td>Mixology Class (base)</td><td>18 guests × 30.3 wks</td><td class="amb">$158,218</td></tr>
+          <tr><td>Premium Wine Package</td><td>Class + 5-Course Dinner</td><td class="amb">$850<sup style="font-size:.7em">++</sup> pp</td></tr>
+          <tr><td>Merchandise &amp; Kits</td><td>Take-home cocktail sets</td><td class="amb">+ Additional</td></tr>
+          <tr><td>Photography / Social</td><td>Branded content value</td><td class="amb">Earned Media</td></tr>
+          <tr><td>Repeat Guest Loyalty</td><td>Return booking incentive</td><td class="amb">+RevPAR</td></tr>
+          <tr class="tot"><td><strong>Gross (base season)</strong></td><td>Conservative estimate</td><td class="big">$158K+</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(138,127,116,.4);margin-top:12px;line-height:1.62">Pre-tax projection. Wine Dinner upsell at $850++ significantly increases yield per guest. Lab setup (~$35K) recovered within the first 3 months.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 04 LAB SPEC ═══ -->
+<div class="gap"></div>
+<div class="sec" id="S4" data-section="Lab Spec">
+  <div class="sdiv" data-r data-rt="up"><span>04 — Laboratory Design &amp; Equipment</span><div class="snum">04</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g2">
+    <div class="card p c-o" data-r data-rt="left" style="border:1px solid rgba(200,88,26,.072)">
+      <div class="ey">Advanced Arsenal</div>
+      <div class="disp dsm">Molecular <em>Equipment</em></div>
+      <div class="aln"></div>
+      <p class="bdy" style="margin-bottom:12px">El Mago Lab operates a fully equipped molecular mixology laboratory — blending scientific precision with hospitality craft. Stainless-steel central island with 360° guest access anchors the space.</p>
+      <div class="eq-grid">
+        <span class="eq-pill mol">Immersion Blenders</span>
+        <span class="eq-pill mol">ISI Whippers</span>
+        <span class="eq-pill mol">Smoking Guns</span>
+        <span class="eq-pill mol">Liquid Nitrogen Dewars</span>
+        <span class="eq-pill mol">Digital Scales (0.1g)</span>
+        <span class="eq-pill mol">pH Meters</span>
+        <span class="eq-pill mol">Ultrasonic Baths</span>
+        <span class="eq-pill mol">Rotary Evaporators</span>
+        <span class="eq-pill mol">Centrifuge</span>
+        <span class="eq-pill">Boston Shakers</span>
+        <span class="eq-pill">Hawthorne Strainers</span>
+        <span class="eq-pill">Precision Jiggers</span>
+        <span class="eq-pill">Muddlers &amp; Juicers</span>
+        <span class="eq-pill">Commercial Ice Machine</span>
+        <span class="eq-pill">High-Speed Blenders</span>
+        <span class="eq-pill">Draft Beer System</span>
+        <span class="eq-pill">Lecithin / Alginate / Agar</span>
+      </div>
+    </div>
+    <div class="card p" data-r data-rt="right" data-d="100">
+      <div class="ey">Lab Infrastructure</div>
+      <div class="disp dsm">Setup <em>Investment</em></div>
+      <div class="aln"></div>
+      <div class="cost-wrap" id="CW">
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Traditional Bartending Toolkit</span><span class="cost-val">~$300</span></div><div class="cost-track"><div class="cost-fill" style="--tw:.9"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Molecular Equipment Set</span><span class="cost-val">~$7,500</span></div><div class="cost-track"><div class="cost-fill" style="--tw:.21"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Large Appliances</span><span class="cost-val">~$9,000+</span></div><div class="cost-track"><div class="cost-fill" style="--tw:.26"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Comprehensive Glassware</span><span class="cost-val">~$2,000</span></div><div class="cost-track"><div class="cost-fill" style="--tw:.06"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Ergonomic Lab Seating</span><span class="cost-val">~$300/stool</span></div><div class="cost-track"><div class="cost-fill" style="--tw:.02"></div></div></div>
+      </div>
+      <div style="margin-top:20px;padding-top:14px;border-top:1px solid rgba(200,88,26,.1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:6.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--sm);margin-bottom:2px">Total Setup Investment</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3.4vw,42px);color:var(--g);letter-spacing:.04em;line-height:1">~$35,000</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-size:6px;color:rgba(138,127,116,.4);margin-bottom:1px">Payback Period</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--e);letter-spacing:.04em">&lt; 3 Months</div>
+        </div>
+      </div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(138,127,116,.4);margin-top:9px;line-height:1.62">Adjustable lab stools (17–22″ pneumatic). Equipment zones by function — molecular, preparation, garnish. Wine coolers, back bar coolers, and commercial dishwasher included.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 05 CLASS FLOW ═══ -->
+<div class="gap"></div>
+<div class="sec" id="S5" data-section="Class Flow">
+  <div class="sdiv" data-r data-rt="up"><span>05 — Event Flow</span><div class="snum">05</div></div>
+  <div class="gap-sm"></div>
+  <div class="card p" data-r data-rt="up">
+    <div class="ey">Full Evening Structure</div>
+    <div class="disp">Mixology Class &amp; <em>Wine Dinner</em></div>
+    <p class="bdy" style="max-width:630px;margin-bottom:24px">A seamlessly integrated evening — a hands-on 2-hour El Mago Mixology Lab Class followed by a sophisticated 5-course Wine Dinner with expert pairings at El Mago Wine Room.</p>
+    <div class="tl" id="TL">
+      <div class="tl-line" id="TLL"></div>
+      <div class="fstep" data-r data-rt="left" data-d="0">
+        <div class="fline"></div><div class="tcol"><div class="tbadge">5:00 pm<br>—<br>7:00 pm</div></div>
+        <div class="fdot"></div>
+        <div class="fbody">
+          <div class="spill"><span class="spn">01</span><span class="spt">Mixology Lab Class</span></div>
+          <div class="ftit">Hands-On Cocktail Experience</div>
+          <div class="fsub">Guided by Master Mixologist Subhash Sankar — El Mago</div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Welcome &amp; Introduction (5 min)</strong> — Guests greeted; overview of the evening and the El Mago story.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Cocktail Demonstrations (20 min)</strong> — Spherification, smoke &amp; flame, liquid nitrogen — live molecular showcase.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Hands-On Mixing (90 min)</strong> — Guests create <em>3–4 signature El Mago cocktails</em> — flavour profiling, garnish artistry, and presentation.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Tasting &amp; Q&amp;A (15 min)</strong> — Sampling each creation, discussing flavour profiles and ingredient sourcing.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Wrap-Up (10 min)</strong> — Home mixology tips, illustrated recipe handouts, group photograph with El Mago.</div></div>
+        </div>
+      </div>
+      <div class="fstep" data-r data-rt="left" data-d="80">
+        <div class="fline"></div><div class="tcol"><div class="tbadge">7:00 pm<br>—<br>7:15 pm</div></div>
+        <div class="fdot"></div>
+        <div class="fbody">
+          <div class="spill"><span class="spn">02</span><span class="spt">Transition</span></div>
+          <div class="ftit">Refreshment Break &amp; Transfer</div>
+          <div class="fsub">Photography &amp; move to El Mago Wine Room</div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Golden-hour photography around the bar lounge, cocktails in hand.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Light palate cleansers or sparkling wine on arrival at El Mago Wine Room.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Sommelier introduction and preview of the evening's wine journey.</div></div>
+        </div>
+      </div>
+      <div class="fstep" data-r data-rt="left" data-d="160">
+        <div class="fline"></div><div class="tcol"><div class="tbadge">7:15 pm<br>—<br>10:00 pm</div></div>
+        <div class="fdot"></div>
+        <div class="fbody">
+          <div class="spill" style="background:rgba(12,82,82,.1);border-color:rgba(12,82,82,.24)"><span class="spn" style="color:var(--tl)">03</span><span class="spt">Premium Experience</span></div>
+          <div class="ftit">5-Course Wine Dinner &amp; Pairings</div>
+          <div class="fsub">El Mago Wine Room — refined Mexican-Peruvian table</div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>~30 min per course</strong> including wine service and sommelier commentary on each pairing.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Sommelier presents terroir, vintage, and the flavour logic behind each pairing.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Curated background music, candlelight and elegant table settings throughout.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Optional <em>cocktail-themed amuse-bouche</em> between courses bridging the mixology experience.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Post-dinner: digestif, testimonials, invitation to pre-book next session at loyalty rate.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 06 UPSELL ═══ -->
+<div class="gap"></div>
+<div class="sec" id="S6" data-section="Upsell">
+  <div class="sdiv" data-r data-rt="up"><span>06 — Upsell &amp; Revenue Strategy</span><div class="snum">06</div></div>
+  <div class="gap-sm"></div>
+  <div class="card p c-t" data-r data-rt="up">
+    <div class="ey lt">Revenue Optimisation</div>
+    <div class="disp" style="color:#fff">Maximising <em style="color:rgba(255,255,255,.28)">Returns</em></div>
+    <div class="aln" style="background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)"></div>
+    <div class="row g2">
+      <div>
+        <div class="urow"><div class="udia"></div><p class="ut">Share professional <strong>videos and photography</strong> on website and Instagram — building anticipation and enabling pre-bookings.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut">Monitor strict <strong>pour costs and ingredient expenses</strong> to preserve healthy profit margins throughout the season.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut">Branded <strong>merchandise and premium cocktail kits</strong> shipped to guests post-class, extending the El Mago brand.</p></div>
+      </div>
+      <div>
+        <div class="urow"><div class="udia"></div><p class="ut">Back-to-back <strong>Mixology Class + 5-Course Wine Dinner</strong> at El Mago Wine Room at <em>USD $850++ per person</em>.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut">Reassess pricing <strong>dynamically</strong> if ingredient costs or demand shift significantly during the season.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut"><strong>Loyalty pricing</strong> for repeat guests — incentivise second and third visits through referral and return discount structure.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HIGHLIGHT BAND -->
+<div class="gap-sm"></div>
+<div class="fb"><div class="fbi">
+  <div class="hl-band card" data-r data-rt="scale">
+    <div>
+      <div class="hlv" data-cnt="850" data-pre="$" data-suf="++">$0++</div>
+      <div class="hll">Per Person — Mixology Class + 5-Course Wine Dinner</div>
+      <div class="hln">The premium back-to-back experience at El Mago Wine Room</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.8vw,19px);color:rgba(255,255,255,.6);line-height:1.56;max-width:290px">A complete evening of craft, culture &amp; culinary mastery in one seamless experience.</p>
+      <a href="index.html" class="btn-ghost">← Back to Portfolio</a>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ 07 GALLERY ═══ -->
+<div class="gap"></div>
+<div class="sec" id="S7" data-section="Gallery">
+  <div class="sdiv" data-r data-rt="up"><span>07 — The Craft in Images</span><div class="snum">07</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g2" style="margin-bottom:var(--gap)">
+    <div class="card itile" style="min-height:380px" data-r data-rt="left"><img src="https://i.ibb.co/vCKRHDvY/IMG-20260331-WA0530-1.jpg" alt="El Mago Lab" loading="lazy" style="min-height:380px"/></div>
+    <div class="row" style="grid-template-rows:1fr 1fr;gap:var(--gap)">
+      <div class="card itile" style="min-height:182px" data-r data-rt="right"><img src="images/FB_IMG_1773395215420.jpg" alt="" loading="lazy" style="min-height:182px"/></div>
+      <div class="card itile" style="min-height:182px" data-r data-rt="right" data-d="82"><img src="images/FB_IMG_1773395142757.jpg" alt="" loading="lazy" style="min-height:182px"/></div>
+    </div>
+  </div>
+  <div class="row g3">
+    <div class="card itile" style="min-height:225px" data-r data-rt="up" data-d="0"><img src="images/20260318_163111.jpg" alt="" loading="lazy" style="min-height:225px"/></div>
+    <div class="card itile" style="min-height:225px" data-r data-rt="up" data-d="80"><img src="images/FB_IMG_1773382737405.jpg" alt="" loading="lazy" style="min-height:225px"/></div>
+    <div class="card itile" style="min-height:225px" data-r data-rt="up" data-d="160"><img src="images/20260318_162926.jpg" alt="" loading="lazy" style="min-height:225px"/></div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="gap"></div>
+<div class="fb"><div class="fbi">
+  <div class="bq" data-r data-rt="up" id="S8" data-section="Summary">
+    <div class="bq-glow"></div>
+    <span class="bq-mark">&ldquo;</span>
+    <p class="bq-text">The El Mago Mixology Lab is not simply a class — it is a narrative. Every technique, every ingredient, every sip tells the story of 19 years spent perfecting the art of liquid theatre.</p>
+    <p class="bq-by">Subhash Sankar — El Mago, Lead Molecular Mixologist</p>
+  </div>
+</div></div>
+
+<!-- MARQUEE 2 -->
+<div class="gap-sm"></div>
+<div class="mq-wrap">
+  <div class="mq-track mq-rev">
+    <span class="mqi lit">SPHERIFICATION</span><span class="mqi"><em>✦</em></span><span class="mqi lit">LIQUID NITROGEN</span><span class="mqi"><em>✦</em></span><span class="mqi lit">SMOKE &amp; FLAME</span><span class="mqi"><em>✦</em></span><span class="mqi lit">FLAVOUR PROFILING</span><span class="mqi"><em>✦</em></span><span class="mqi lit">GARNISH ARTISTRY</span><span class="mqi"><em>✦</em></span><span class="mqi lit">WINE PAIRING</span><span class="mqi"><em>✦</em></span><span class="mqi lit">200+ RECIPES</span><span class="mqi"><em>✦</em></span><span class="mqi lit">UPROXX FEATURED</span><span class="mqi"><em>✦</em></span>
+    <span class="mqi lit">SPHERIFICATION</span><span class="mqi"><em>✦</em></span><span class="mqi lit">LIQUID NITROGEN</span><span class="mqi"><em>✦</em></span><span class="mqi lit">SMOKE &amp; FLAME</span><span class="mqi"><em>✦</em></span><span class="mqi lit">FLAVOUR PROFILING</span><span class="mqi"><em>✦</em></span><span class="mqi lit">GARNISH ARTISTRY</span><span class="mqi"><em>✦</em></span><span class="mqi lit">WINE PAIRING</span><span class="mqi"><em>✦</em></span><span class="mqi lit">200+ RECIPES</span><span class="mqi"><em>✦</em></span><span class="mqi lit">UPROXX FEATURED</span><span class="mqi"><em>✦</em></span>
+  </div>
+</div>
+
+<!-- ═══ 08 SUMMARY ═══ -->
+<div class="gap"></div>
+<div class="sec">
+  <div class="sdiv" data-r data-rt="up"><span>08 — Executive Summary</span></div>
+  <div class="gap-sm"></div>
+  <div class="card p c-o" data-r data-rt="up" style="border:1px solid rgba(200,88,26,.1);overflow:hidden;position:relative">
+    <div style="position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--e),var(--g),transparent)"></div>
+    <div class="ey">At a Glance</div>
+    <div class="disp">Business <em>Summary</em></div>
+    <div class="aln"></div>
+    <div class="row g4">
+      <div class="excol"><div class="exlab">Program</div><p class="bdy">El Mago Mixology Lab Class — gastronomy-led immersive cocktail experience hosted by internationally acclaimed mixologist Subhash Sankar.</p></div>
+      <div class="excol"><div class="exlab">Schedule</div><p class="bdy">3 sessions per week, 5:00–7:00 pm, 7 high-season months (~30.3 weeks). 18 participants per week; 545 total.</p></div>
+      <div class="excol"><div class="exlab">Revenue</div><p class="bdy">Base gross: <strong style="color:var(--g)">USD $158,218</strong>. Premium Wine Dinner upsell: <strong style="color:var(--g)">USD $850++</strong> per person.</p></div>
+      <div class="excol"><div class="exlab">Investment</div><p class="bdy">Lab setup approximately <strong style="color:var(--g)">USD $35,000</strong> — fully recovered within the first 3 months at base pricing.</p></div>
+    </div>
+  </div>
+</div>
+<div class="gap"></div>
+</main>
+
+<footer>
+  <div>
+    <div class="f-brand">El Mago — Mixology Lab</div>
+    <div class="f-sub">Business Case &amp; ROI Plan · Subhash Sankar</div>
+    <div style="font-family:'DM Mono',monospace;font-size:6.5px;color:var(--sm);margin-top:4px">✉ subhashsankar@elmago.com &nbsp;·&nbsp; ☎ +91 799 403 1394</div>
+    <div class="f-copy">© 2026 Subhash Sankar / El Mago. All rights reserved.</div>
+  </div>
+  <div class="f-nav">
+    <a href="index.html">Portfolio</a>
+    <a href="index.html">Cocktail Menu</a>
+    <a href="index.html">Food Pairings</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="videos.html">Videos</a>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   ALL JS — performance-first
+   · Single rAF cursor loop
+   · Single throttled scroll rAF
+   · IntersectionObserver for all reveals
+   · Zero canvas, zero box-shadow animation
+   · will-change only on cursor + progress bar (2 elements)
+═══════════════════════════════════════════ */
+(function(){
+'use strict';
+
+/* ── CURSOR: one rAF loop total ── */
+var CUR=document.getElementById('CUR'),RNG=document.getElementById('CRG');
+var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY},{passive:true});
+(function curRaf(){
+  rx+=(mx-rx)*.11; ry+=(my-ry)*.11;
+  CUR.style.transform='translate('+mx+'px,'+my+'px)';
+  RNG.style.transform='translate('+(rx-mx)+'px,'+(ry-my)+'px) translate(-50%,-50%)';
+  requestAnimationFrame(curRaf);
+})();
+document.querySelectorAll('a,button,.card,.itile,.snd,.spotlight-wrap').forEach(function(el){
+  el.addEventListener('mouseenter',function(){document.body.classList.add('hov')},{passive:true});
+  el.addEventListener('mouseleave',function(){document.body.classList.remove('hov')},{passive:true});
+});
+
+/* ── PRELOADER ── */
+var PLF=document.getElementById('PLF'),PLP=document.getElementById('PLP'),PLE=document.getElementById('PL');
+var IMGS=['images/FB_IMG_1773395215420.jpg','images/FB_IMG_1773382390551.jpg',
+  'images/FB_IMG_1773395142757.jpg','images/20260318_162926.jpg',
+  'https://i.ibb.co/vCKRHDvY/IMG-20260331-WA0530-1.jpg'];
+var loaded=0,DONE=false;
+setTimeout(launch,5500);
+function tick(){
+  loaded++;
+  var p=Math.round(loaded/IMGS.length*100);
+  PLF.style.width=p+'%';
+  if(PLP)PLP.textContent=p+'%';
+  if(loaded>=IMGS.length)setTimeout(launch,250);
+}
+function launch(){
+  if(DONE)return;DONE=true;
+  PLE.classList.add('gone');
+  initReveal();
+  heroCounters();
+}
+IMGS.forEach(function(s){var i=new Image();i.onload=i.onerror=tick;i.src=s});
+
+/* ── SCROLL: single rAF throttle ── */
+var PB=document.getElementById('PBAR'),RFG=document.getElementById('RFG'),RN=document.getElementById('RNUM');
+var CIRC=100.5; /* 2πr for r=16 */
+var scrollPending=false, lastY=0;
+
+function processScroll(){
+  scrollPending=false;
+  var sy=window.scrollY,
+      tot=document.body.scrollHeight-innerHeight,
+      p=tot>0?sy/tot:0;
+  lastY=sy;
+
+  PB.style.transform='scaleX('+p+')';
+  RFG.style.strokeDashoffset=(CIRC-p*CIRC);
+  if(RN)RN.textContent=Math.round(p*100)+'%';
+
+  /* Hero bg parallax — transform only */
+  var hbg=document.getElementById('HBGIMG');
+  if(hbg&&sy<innerHeight)hbg.style.transform='translateY('+(sy*.2)+'px)';
+
+  /* Strip parallax */
+  var hsi=document.getElementById('HSI'),hsw=document.getElementById('HSW');
+  if(hsi&&hsw){
+    var r=hsw.getBoundingClientRect();
+    if(r.top<innerHeight&&r.bottom>0){
+      var pr=(innerHeight-r.top)/(innerHeight+r.height);
+      var mx2=-(hsi.scrollWidth-innerWidth)*.75;
+      hsi.style.transform='translateX('+(pr*mx2*.4)+'px)';
+    }
+  }
+
+  /* Timeline fill line */
+  var tl=document.getElementById('TL'),tll=document.getElementById('TLL');
+  if(tl&&tll){
+    var tr=tl.getBoundingClientRect();
+    if(tr.top<innerHeight&&tr.bottom>0){
+      var tp=Math.max(0,Math.min(1,(innerHeight-tr.top)/(tr.height+innerHeight*.36)));
+      tll.style.transform='scaleY('+tp+')';
+    }
+  }
+  navUpdate();
+}
+window.addEventListener('scroll',function(){
+  if(!scrollPending){scrollPending=true;requestAnimationFrame(processScroll)}
+},{passive:true});
+
+/* ── NAV DOTS ── */
+var secs=[],SNAV=document.getElementById('SNAV');
+document.querySelectorAll('[data-section]').forEach(function(el){
+  secs.push(el);
+  var d=document.createElement('div');d.className='snd';
+  d.setAttribute('data-l',el.getAttribute('data-section'));
+  d.addEventListener('click',function(){el.scrollIntoView({behavior:'smooth',block:'start'})});
+  SNAV.appendChild(d);
+});
+function navUpdate(){
+  var mid=window.scrollY+innerHeight*.42,dots=SNAV.querySelectorAll('.snd'),act=-1;
+  secs.forEach(function(s,i){if(s.offsetTop<=mid)act=i});
+  dots.forEach(function(d,i){d.classList.toggle('on',i===act)});
+}
+
+/* ── SCROLL REVEAL via IntersectionObserver ── */
+function initReveal(){
+  var els=document.querySelectorAll('[data-r]');
+  els.forEach(function(el){
+    var t=el.getAttribute('data-rt')||'up';
+    var d=parseInt(el.getAttribute('data-d')||0);
+    var tf= t==='left' ?'translateX(-32px)':
+            t==='right'?'translateX(32px)':
+            t==='scale'?'scale(.94) translateY(16px)':
+                        'translateY(22px)';
+    el.style.opacity='0';
+    el.style.transform=tf;
+    el.style.transition='opacity .78s cubic-bezier(.16,1,.3,1) '+d+'ms,transform .78s cubic-bezier(.16,1,.3,1) '+d+'ms';
+  });
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.style.opacity='1';
+      e.target.style.transform='none';
+      /* trigger counters inside */
+      e.target.querySelectorAll('[data-cnt]').forEach(animCount);
+      if(e.target.hasAttribute('data-cnt'))animCount(e.target);
+      /* trigger cost bars inside */
+      e.target.querySelectorAll('.cost-fill').forEach(function(b){
+        setTimeout(function(){b.classList.add('go')},220);
+      });
+      io.unobserve(e.target);
+    });
+  },{threshold:.055,rootMargin:'0px 0px -28px 0px'});
+  els.forEach(function(el){io.observe(el)});
+
+  /* standalone cost wrap observer */
+  var io2=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.querySelectorAll('.cost-fill').forEach(function(b){
+        b.style.transform='scaleX(var(--tw,0))'; /* set final via CSS var */
+        setTimeout(function(){b.classList.add('go')},160);
+      });
+      io2.unobserve(e.target);
+    });
+  },{threshold:.12});
+  var cw=document.getElementById('CW');
+  if(cw)io2.observe(cw);
+
+  /* snum ghost number fade-in */
+  document.querySelectorAll('.snum').forEach(function(el){
+    var io3=new IntersectionObserver(function(ents){
+      if(ents[0].isIntersecting){
+        el.animate([{opacity:0,transform:'translateX(16px)'},{opacity:1,transform:'none'}],
+          {duration:580,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'});
+        io3.disconnect();
+      }
+    },{threshold:.5});
+    io3.observe(el);
+  });
+}
+
+/* ── ANIMATED COUNTERS ── */
+function easeOut(t){return 1-Math.pow(1-t,3)}
+var counted=new Set();
+function animCount(el){
+  if(counted.has(el))return;counted.add(el);
+  var tgt=parseInt(el.getAttribute('data-cnt'));
+  var pre=el.getAttribute('data-pre')||'';
+  var suf=el.getAttribute('data-suf')||'';
+  var fmt=el.getAttribute('data-fmt')||'';
+  var dur=1500,st=null;
+  requestAnimationFrame(function frame(ts){
+    if(!st)st=ts;
+    var p=Math.min((ts-st)/dur,1),v=Math.floor(easeOut(p)*tgt);
+    el.textContent=pre+(fmt==='comma'?v.toLocaleString():v)+suf;
+    if(p<1)requestAnimationFrame(frame);
+    else el.textContent=pre+(fmt==='comma'?tgt.toLocaleString():tgt)+suf;
+  });
+}
+function heroCounters(){
+  document.querySelectorAll('.hmv[data-cnt]').forEach(function(el,i){
+    setTimeout(function(){animCount(el)},250+i*95);
+  });
+}
+
+/* ── CARD TILT — pointer events, transform only ── */
+document.querySelectorAll('.card,.spotlight-wrap').forEach(function(c){
+  c.addEventListener('pointermove',function(e){
+    var r=c.getBoundingClientRect(),
+        x=(e.clientX-r.left)/r.width-.5,
+        y=(e.clientY-r.top)/r.height-.5;
+    c.style.transition='none';
+    c.style.transform='translateY(-3px) perspective(820px) rotateY('+(x*5)+'deg) rotateX('+(-y*3.5)+'deg)';
+  });
+  c.addEventListener('pointerleave',function(){
+    c.style.transition='transform .4s cubic-bezier(.16,1,.3,1)';
+    c.style.transform='';
+  });
+});
+
+/* ── MAGNETIC LINKS ── */
+document.querySelectorAll('a,button').forEach(function(el){
+  el.addEventListener('mousemove',function(e){
+    var r=el.getBoundingClientRect();
+    el.style.transform='translate('+((e.clientX-r.left-r.width/2)*.08)+'px,'+((e.clientY-r.top-r.height/2)*.08)+'px)';
+  });
+  el.addEventListener('mouseleave',function(){
+    el.style.transition='transform .36s cubic-bezier(.16,1,.3,1)';
+    el.style.transform='';
+    setTimeout(function(){el.style.transition=''},360);
+  });
+});
+
+/* ═══════════════════════════════════════════
+   TOPIC ANIMATIONS — spawn CSS-animated nodes once
+   All keyframes use ONLY transform + opacity
+═══════════════════════════════════════════ */
+
+/* LIQUID DROPS in hero */
+(function(){
+  var w=document.getElementById('LF');if(!w)return;
+  var cols=['rgba(200,88,26,','rgba(212,168,67,','rgba(232,114,42,'];
+  for(var i=0;i<18;i++){
+    var d=document.createElement('div');
+    d.className='liq-drop';
+    var sz=(Math.random()*10+3).toFixed(1);
+    var op=(Math.random()*.18+.03).toFixed(2);
+    var col=cols[i%3];
+    d.style.cssText=[
+      'width:'+sz+'px','height:'+sz+'px',
+      'left:'+(Math.random()*100)+'%',
+      'background:radial-gradient(circle at 34% 34%,'+col+(parseFloat(op)*1.8).toFixed(2)+'),'+col+op+' 68%)',
+      'border:1px solid '+col+'0.1)',
+      'animation-duration:'+(Math.random()*11+7)+'s',
+      'animation-delay:'+(-Math.random()*11)+'s'
+    ].join(';');
+    w.appendChild(d);
+  }
+})();
+
+/* STEAM WISPS */
+(function(){
+  var w=document.getElementById('SF');if(!w)return;
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');s.className='steam';
+    s.style.cssText=[
+      'left:'+(6+i*9.5)+'%',
+      'height:'+(52+Math.random()*72)+'px',
+      'animation-duration:'+(Math.random()*2.4+2.6)+'s',
+      'animation-delay:'+(-Math.random()*2.5)+'s'
+    ].join(';');
+    w.appendChild(s);
+  }
+})();
+
+/* CONDENSATION BEADS in spotlight */
+(function(){
+  var w=document.getElementById('BF');if(!w)return;
+  for(var i=0;i<14;i++){
+    var b=document.createElement('div');b.className='bead';
+    var sz=(Math.random()*6+2.5).toFixed(1);
+    b.style.cssText=[
+      'width:'+sz+'px','height:'+sz+'px',
+      'left:'+(10+Math.random()*80)+'%',
+      'top:'+(Math.random()*60)+'%',
+      '--bx:'+((Math.random()-.5)*12).toFixed(1)+'px',
+      'animation-duration:'+(Math.random()*3+3)+'s',
+      'animation-delay:'+(-Math.random()*3)+'s'
+    ].join(';');
+    w.appendChild(b);
+  }
+})();
+
+/* EMBER SPARKS on metric card hover */
+document.querySelectorAll('.mc').forEach(function(mc){
+  mc.addEventListener('mouseenter',function(){
+    for(var i=0;i<5;i++){
+      var s=document.createElement('div');s.className='spark';
+      s.style.cssText=[
+        'left:'+(Math.random()*90+5)+'%',
+        'bottom:'+(Math.random()*12+3)+'%',
+        'animation-duration:'+(Math.random()*.45+.3)+'s',
+        'animation-delay:'+(Math.random()*.14)+'s',
+        'position:absolute'
+      ].join(';');
+      mc.style.position='relative';
+      mc.appendChild(s);
+      setTimeout(function(x){x&&x.remove()},600,s);
+    }
+  });
+});
+
+/* SPOTLIGHT PARALLAX — single scroll sub-listener */
+(function(){
+  var sp=document.querySelector('.spotlight-wrap');
+  if(!sp)return;
+  var img=sp.querySelector('img');if(!img)return;
+  window.addEventListener('scroll',function(){
+    var r=sp.getBoundingClientRect();
+    if(r.top<innerHeight&&r.bottom>0){
+      var pv=(innerHeight-r.top)/(innerHeight+r.height);
+      img.style.transform='translateY('+((pv-.5)*13)+'px)';
+    }
+  },{passive:true});
+})();
+
+setTimeout(navUpdate,80);
+})();
+</script>
+</body>
+</html>
