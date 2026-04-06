@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>El Mago — Back Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:  #07091A;
+  --navy2: #0C0F28;
+  --navy3: #131730;
+  --gold:  #C9A84C;
+  --gold2: #E8C96A;
+  --gold3: #F5E4A8;
+  --teal:  #00C9B8;
+  --ice:   #E8F0F8;
+  --smoke: rgba(232,240,248,.38);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { height:100%; scroll-behavior:smooth; }
+
+body {
+  min-height:100%;
+  background: var(--navy);
+  color: var(--ice);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── CURSOR ── */
+#cur { position:fixed; top:0; left:0; z-index:9999; pointer-events:none; }
+#cur-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--gold); position:absolute;
+  transform:translate(-50%,-50%); mix-blend-mode:screen;
+}
+#cur-ring {
+  width:30px; height:30px; border-radius:50%;
+  border:1px solid rgba(201,168,76,.5);
+  position:absolute; transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,border-color .2s;
+}
+body.hov #cur-ring { width:48px; height:48px; border-color:var(--gold); }
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.03; mix-blend-mode:overlay;
+}
+
+/* ── GOLD GRID ── */
+body::after {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(201,168,76,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+}
+
+/* ── CANVAS (particle field) ── */
+#canvas {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+}
+
+/* ── WRAPPER ── */
+.wrap {
+  position:relative; z-index:2;
+  width:100%; max-width:900px;
+  padding: clamp(40px,6vw,80px) clamp(24px,5vw,60px);
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; gap:0;
+}
+
+/* ── DECO CORNERS (card) ── */
+.frame {
+  position:relative;
+  padding: clamp(48px,6vw,80px) clamp(32px,5vw,72px);
+  border:1px solid rgba(201,168,76,.12);
+  border-radius:2px;
+  background: linear-gradient(135deg, rgba(12,15,40,.95), rgba(7,9,26,.98));
+  backdrop-filter:blur(18px);
+  width:100%;
+}
+.corner {
+  position:absolute; width:36px; height:36px; pointer-events:none;
+}
+.corner.tl { top:14px; left:14px; border-top:1.5px solid var(--gold); border-left:1.5px solid var(--gold); }
+.corner.tr { top:14px; right:14px; border-top:1.5px solid var(--gold); border-right:1.5px solid var(--gold); }
+.corner.bl { bottom:14px; left:14px; border-bottom:1.5px solid var(--gold); border-left:1.5px solid var(--gold); }
+.corner.br { bottom:14px; right:14px; border-bottom:1.5px solid var(--gold); border-right:1.5px solid var(--gold); }
+
+/* ── TOP EYEBROW ── */
+.eyebrow {
+  font-family:'Rajdhani', sans-serif;
+  font-size: clamp(9px,1.4vw,12px);
+  letter-spacing:.42em; text-transform:uppercase;
+  color:var(--teal); font-weight:500;
+  opacity:0; animation: fadeUp .7s ease .2s both;
+  margin-bottom:28px;
+}
+
+/* ── LOGO / BRAND ── */
+.brand {
+  font-family:'Cinzel', serif;
+  font-size: clamp(52px,10vw,104px);
+  letter-spacing:.18em;
+  background: linear-gradient(135deg, var(--gold), var(--gold2), var(--gold3), var(--gold2));
+  background-size:200%;
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+  animation: fadeUp .8s ease .35s both, shimmer 4s linear 1.2s infinite;
+  line-height:1; margin-bottom:6px;
+}
+@keyframes shimmer {
+  0%   { background-position:0% 50%; }
+  50%  { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
+}
+
+.hat {
+  display:inline-block;
+  font-size: clamp(28px,5vw,48px);
+  animation: hatBob 3s ease-in-out infinite, fadeUp .7s ease .5s both;
+  filter:drop-shadow(0 0 14px rgba(201,168,76,.6));
+  margin-bottom:8px;
+}
+@keyframes hatBob {
+  0%,100% { transform:translateY(0) rotate(-4deg); }
+  50%      { transform:translateY(-10px) rotate(4deg); }
+}
+
+/* ── WAND LINE ── */
+.wand {
+  width: clamp(200px,50%,480px);
+  height:1.5px;
+  background:linear-gradient(90deg, transparent, var(--gold), var(--gold2), transparent);
+  position:relative; overflow:hidden;
+  margin:22px auto 28px;
+  clip-path:inset(0 100% 0 0);
+  animation: wandReveal .9s cubic-bezier(.16,1,.3,1) .7s both;
+}
+@keyframes wandReveal { to { clip-path:inset(0 0% 0 0); } }
+.wand-beam {
+  position:absolute; top:-5px; left:-15%;
+  width:14%; height:11px;
+  background:radial-gradient(ellipse, rgba(232,201,106,.9), transparent 70%);
+  border-radius:50%;
+  animation: beamGo 2.2s ease-in-out infinite 1.8s;
+}
+@keyframes beamGo {
+  0%   { transform:translateX(0); opacity:0; }
+  10%  { opacity:1; }
+  88%  { opacity:1; }
+  100% { transform:translateX(640px); opacity:0; }
+}
+
+/* ── HEADLINE ── */
+.headline {
+  font-family:'Cinzel', serif;
+  font-size: clamp(22px,4vw,42px);
+  letter-spacing:.06em; color:var(--ice);
+  opacity:0; animation:fadeUp .8s ease .85s both;
+  margin-bottom:14px;
+}
+.headline em { color:var(--gold); font-style:normal; }
+
+.subline {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(14px,1.9vw,19px);
+  line-height:1.78; color:var(--smoke);
+  max-width:520px; margin:0 auto;
+  opacity:0; animation:fadeUp .8s ease 1s both;
+  margin-bottom:44px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  width:100%; max-width:440px; margin:0 auto 40px;
+  opacity:0; animation:fadeUp .7s ease 1.2s both;
+}
+.progress-label {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:8px;
+}
+.progress-label span {
+  font-family:'Rajdhani', sans-serif;
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(201,168,76,.45); font-weight:500;
+}
+.progress-label .pct {
+  color:var(--teal); font-weight:600;
+}
+.progress-track {
+  width:100%; height:2px;
+  background:rgba(201,168,76,.1); border-radius:2px; overflow:hidden;
+  position:relative;
+}
+.progress-fill {
+  height:100%;
+  background:linear-gradient(90deg, var(--teal), var(--gold), var(--gold2));
+  border-radius:2px;
+  width:0%;
+  transition:width .4s ease;
+  position:relative;
+}
+.progress-fill::after {
+  content:'';
+  position:absolute; right:-1px; top:-3px;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--gold2);
+  box-shadow:0 0 8px var(--gold);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display:flex; align-items:center; gap:18px;
+  width:100%; margin-bottom:36px;
+  opacity:0; animation:fadeUp .7s ease 1.35s both;
+}
+.divider::before,.divider::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(201,168,76,.12), transparent);
+}
+.divider span {
+  font-size:14px; color:rgba(201,168,76,.2);
+  letter-spacing:.1em;
+}
+
+/* ── STATUS CHIPS ── */
+.chips {
+  display:flex; flex-wrap:wrap; gap:10px;
+  justify-content:center; margin-bottom:44px;
+  opacity:0; animation:fadeUp .7s ease 1.5s both;
+}
+.chip {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 16px;
+  background:rgba(201,168,76,.04);
+  border:1px solid rgba(201,168,76,.12);
+  border-radius:2px;
+  font-family:'Rajdhani', sans-serif;
+  font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; font-weight:500;
+  color:rgba(232,240,248,.4);
+  transition:border-color .2s, color .2s, background .2s;
+}
+.chip:hover { border-color:rgba(201,168,76,.3); color:var(--gold); background:rgba(201,168,76,.06); }
+.chip.active { border-color:rgba(0,201,184,.3); color:var(--teal); background:rgba(0,201,184,.05); }
+.chip-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:currentColor; flex-shrink:0;
+}
+.chip.active .chip-dot {
+  animation:pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { transform:scale(1); opacity:1; }
+  50%      { transform:scale(1.8); opacity:.4; }
+}
+
+/* ── NOTIFY FORM ── */
+.notify-wrap {
+  width:100%; max-width:420px; margin:0 auto;
+  opacity:0; animation:fadeUp .7s ease 1.65s both;
+}
+.notify-label {
+  font-family:'Rajdhani', sans-serif;
+  font-size:10px; letter-spacing:.3em; text-transform:uppercase;
+  color:rgba(201,168,76,.45); font-weight:500;
+  margin-bottom:12px; display:block;
+}
+.notify-row {
+  display:flex; gap:0; width:100%;
+  border:1px solid rgba(201,168,76,.2); border-radius:2px;
+  overflow:hidden; transition:border-color .25s;
+}
+.notify-row:focus-within { border-color:rgba(201,168,76,.55); }
+.notify-input {
+  flex:1; padding:13px 18px;
+  background:rgba(7,9,26,.6);
+  border:none; outline:none;
+  color:var(--ice); font-family:'Rajdhani', sans-serif;
+  font-size:14px; letter-spacing:.04em;
+}
+.notify-input::placeholder { color:var(--smoke); }
+.notify-btn {
+  padding:13px 22px;
+  background:rgba(201,168,76,.1);
+  border:none; border-left:1px solid rgba(201,168,76,.2);
+  color:var(--gold); font-family:'Rajdhani', sans-serif;
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+  font-weight:600; cursor:pointer;
+  transition:background .2s, color .2s;
+  white-space:nowrap;
+}
+.notify-btn:hover { background:rgba(201,168,76,.2); }
+.notify-success {
+  display:none; margin-top:12px; text-align:center;
+  font-family:'Playfair Display', serif; font-style:italic;
+  font-size:14px; color:var(--teal); opacity:0;
+  animation:fadeUp .5s ease both;
+}
+
+/* ── BOTTOM INFO ── */
+.bottom {
+  margin-top:44px; padding-top:28px;
+  border-top:1px solid rgba(201,168,76,.07);
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:16px;
+  opacity:0; animation:fadeUp .7s ease 1.9s both;
+  width:100%;
+}
+.bottom-brand {
+  font-family:'Cinzel', serif;
+  font-size:clamp(13px,1.8vw,17px); letter-spacing:.1em; color:var(--gold);
+}
+.bottom-copy {
+  font-family:'Rajdhani', sans-serif;
+  font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(232,240,248,.12);
+}
+.bottom-contact {
+  font-family:'Rajdhani', sans-serif;
+  font-size:11px; letter-spacing:.12em;
+  color:rgba(232,240,248,.25);
+  text-decoration:none;
+  transition:color .18s;
+}
+.bottom-contact:hover { color:var(--gold); }
+
+/* ── SCAN RING (top hero deco) ── */
+.scan-rings {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none; z-index:0;
+}
+.scan-ring {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(0,201,184,.15);
+  transform:translate(-50%,-50%) scale(.2);
+  opacity:0;
+  animation:scanPulse 4s ease-out infinite;
+}
+.scan-ring:nth-child(1) { width:500px; height:500px; animation-delay:0s; }
+.scan-ring:nth-child(2) { width:700px; height:700px; animation-delay:1.3s; }
+.scan-ring:nth-child(3) { width:900px; height:900px; animation-delay:2.6s; }
+@keyframes scanPulse {
+  0%   { transform:translate(-50%,-50%) scale(.15); opacity:.7; }
+  100% { transform:translate(-50%,-50%) scale(1);   opacity:0; }
+}
+
+
+/* ── UTILS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:none; }
+}
+
+@media(max-width:560px) {
+  .bottom { flex-direction:column; text-align:center; }
+  .notify-row { flex-direction:column; }
+  .notify-btn { border-left:none; border-top:1px solid rgba(201,168,76,.2); }
+  .chips { gap:8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cur"><div id="cur-dot"></div><div id="cur-ring"></div></div>
+
+<!-- Particle canvas -->
+<canvas id="canvas"></canvas>
+
+<!-- Scan rings background -->
+<div class="scan-rings">
+  <div class="scan-ring"></div>
+  <div class="scan-ring"></div>
+  <div class="scan-ring"></div>
+</div>
+
+<div class="wrap">
+  <div class="frame">
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <!-- Eyebrow -->
+    <div class="eyebrow">Scheduled Maintenance — Back Soon</div>
+
+    <!-- Brand -->
+    <div class="hat">🎩</div>
+    <div class="brand">EL MAGO</div>
+
+    <!-- Wand line -->
+    <div class="wand"><div class="wand-beam"></div></div>
+
+    <!-- Headline -->
+    <h1 class="headline">We're <em>Crafting Something</em> Extraordinary</h1>
+
+    <!-- Subline -->
+    <p class="subline">
+      Our website is currently undergoing scheduled maintenance.
+      We're mixing up something special — back before you know it.
+    </p>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Maintenance Progress</span>
+        <span class="pct" id="pct-label">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"><span>⬡</span></div>
+
+    <!-- Status chips -->
+    <div class="chips">
+      <div class="chip active">
+        <div class="chip-dot"></div>
+        System Update
+      </div>
+      <div class="chip">
+        <div class="chip-dot"></div>
+        Database Migration
+      </div>
+      <div class="chip">
+        <div class="chip-dot"></div>
+        Security Patch
+      </div>
+      <div class="chip">
+        <div class="chip-dot"></div>
+        Performance Upgrade
+      </div>
+    </div>
+
+    <!-- Notify form -->
+    <div class="notify-wrap">
+      <span class="notify-label">Notify me when we're back</span>
+      <div class="notify-row">
+        <input class="notify-input" id="notify-input"
+               type="email" placeholder="your@email.com"
+               autocomplete="email"/>
+        <button class="notify-btn" id="notify-btn">Notify Me</button>
+      </div>
+      <div class="notify-success" id="notify-success">
+        ✦ You'll be the first to know — thank you.
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="bottom">
+      <div class="bottom-brand">El Mago</div>
+      <a class="bottom-contact" href="/cdn-cgi/l/email-protection#5b282e39333a2833283a35303a296c1b3c363a323775383436"><span class="__cf_email__" data-cfemail="ff8c8a9d979e8c978c9e91949e8dc8bf98929e9693d19c9092">[email&#160;protected]</span></a>
+      <div class="bottom-copy">© 2026 Subhash Sankar</div>
+    </div>
+
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+
+/* ── CURSOR ── */
+var cur = document.getElementById('cur');
+var dot = document.getElementById('cur-dot');
+var ring = document.getElementById('cur-ring');
+var mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', function(e){
+  mx=e.clientX; my=e.clientY;
+  cur.style.transform = 'translate('+mx+'px,'+my+'px)';
+});
+(function animRing(){
+  rx += (mx-rx)*.1; ry += (my-ry)*.1;
+  ring.style.transform = 'translate(calc('+rx+'px - 50%), calc('+ry+'px - 50%))';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,input,.chip').forEach(function(el){
+  el.addEventListener('mouseenter', function(){ document.body.classList.add('hov'); });
+  el.addEventListener('mouseleave', function(){ document.body.classList.remove('hov'); });
+});
+
+/* ── CANVAS PARTICLES ── */
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var W, H, particles = [];
+
+function resize(){
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+var GOLD = [201,168,76], TEAL=[0,201,184], ICE=[232,240,248];
+var COLS = [GOLD, TEAL, ICE];
+
+for(var i=0;i<70;i++){
+  var col = COLS[Math.floor(Math.random()*COLS.length)];
+  particles.push({
+    x: Math.random()*2000, y: Math.random()*2000+200,
+    vx: (Math.random()-.5)*.22,
+    vy: -(Math.random()*.55+.18),
+    r: Math.random()*1.6+.4,
+    alpha: Math.random()*.6+.1,
+    col: col,
+    life: Math.random()
+  });
+}
+
+function drawParticles(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(function(p){
+    p.x += p.vx; p.y += p.vy; p.life += .003;
+    if(p.y < -20){ p.y = H+20; p.x = Math.random()*W; p.life=0; }
+    var fade = Math.sin(p.life*Math.PI) * p.alpha;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba('+p.col[0]+','+p.col[1]+','+p.col[2]+','+Math.max(0,fade)+')';
+    ctx.fill();
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ── PROGRESS BAR ── */
+var fill = document.getElementById('progress-fill');
+var pctLabel = document.getElementById('pct-label');
+var targetPct = 73; // ← edit this number to reflect actual progress
+var curPct = 0;
+setTimeout(function(){
+  var interval = setInterval(function(){
+    curPct += .6;
+    if(curPct >= targetPct){ curPct = targetPct; clearInterval(interval); }
+    fill.style.width = curPct+'%';
+    pctLabel.textContent = Math.round(curPct)+'%';
+  }, 18);
+}, 1400);
+
+
+/* ── CHIP CYCLING ── */
+var notifyBtn   = document.getElementById('notify-btn');
+var notifyInput = document.getElementById('notify-input');
+var notifyOk    = document.getElementById('notify-success');
+
+notifyBtn.addEventListener('click', function(){
+  var email = notifyInput.value.trim();
+  if(!email || !email.includes('@')) {
+    notifyInput.style.borderBottom = '1px solid rgba(200,80,80,.5)';
+    setTimeout(function(){ notifyInput.style.borderBottom=''; }, 1200);
+    return;
+  }
+  notifyBtn.textContent = '✦';
+  notifyBtn.disabled = true;
+  notifyInput.disabled = true;
+  setTimeout(function(){
+    notifyOk.style.display = 'block';
+    notifyOk.style.animation = 'fadeUp .5s ease both';
+  }, 300);
+});
+notifyInput.addEventListener('keydown', function(e){
+  if(e.key==='Enter') notifyBtn.click();
+});
+
+/* ── CHIP CYCLING ── */
+var chips = docu
