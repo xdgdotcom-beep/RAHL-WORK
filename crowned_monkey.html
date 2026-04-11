@@ -40,7 +40,6 @@ body.hov #CRG{width:46px;height:46px;border-color:var(--gold)}
   background:rgba(7,9,26,.9);
   pointer-events:none;will-change:transform;
   overflow:visible;
-  contain:strict;
 }
 #PBAR-FILL{
   height:100%;
@@ -49,7 +48,6 @@ body.hov #CRG{width:46px;height:46px;border-color:var(--gold)}
   transform-origin:left;
   will-change:transform;
   position:relative;
-  contain:layout style;
 }
 /* Animated cocktail glass icon that rides the bar */
 #PBAR-GLASS{
@@ -61,19 +59,54 @@ body.hov #CRG{width:46px;height:46px;border-color:var(--gold)}
   pointer-events:none;
 }
 #PBAR-GLASS svg{width:100%;height:100%}
-/* Shimmer — GPU transform only, no background-position repaint */
+/* Drip drops that fall from the glass */
+#PBAR-DROPS{
+  position:fixed;top:0;left:0;right:0;z-index:599;
+  pointer-events:none;
+  height:60px;
+  overflow:visible;
+}
+.pbar-drop{
+  position:absolute;
+  top:3px;
+  width:2px;
+  border-radius:0 0 2px 2px;
+  background:linear-gradient(180deg,var(--gold2),var(--teal));
+  animation:dropFall .9s cubic-bezier(.25,.46,.45,.94) forwards;
+  opacity:0;
+}
+@keyframes dropFall{
+  0%{opacity:0;height:0;transform:translateY(0)}
+  15%{opacity:.9;height:0}
+  60%{opacity:.7;height:22px}
+  100%{opacity:0;height:18px;transform:translateY(28px)}
+}
+/* Shimmer on bar fill */
 #PBAR-FILL::after{
   content:'';
   position:absolute;
-  top:0;left:0;bottom:0;
-  width:60px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);
-  animation:barShimmer 1.9s ease-in-out infinite;
-  will-change:transform;
+  inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.35) 50%,transparent 100%);
+  background-size:200px 100%;
+  animation:barShimmer 1.8s ease-in-out infinite;
 }
 @keyframes barShimmer{
-  from{transform:translateX(-60px)}
-  to{transform:translateX(100vw)}
+  0%{background-position:-200px 0}
+  100%{background-position:400px 0}
+}
+/* Bubble particles on bar */
+.bar-bubble{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:50%;
+  background:rgba(255,255,255,.6);
+  animation:bubbleRise .7s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes bubbleRise{
+  0%{opacity:.8;transform:translateY(-50%) scale(1)}
+  100%{opacity:0;transform:translateY(-250%) scale(.3)}
 }
 
 #BTT{position:fixed;bottom:68px;right:20px;z-index:500;width:36px;height:36px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s,background .2s;font-size:14px;color:var(--gold);}
@@ -510,7 +543,8 @@ footer::before{content:'';position:absolute;top:0;left:var(--px);width:62px;heig
     </div>
   </div>
 </div>
-
+<!-- Drop container -->
+<div id="PBAR-DROPS"></div>
 
 <div id="SNAV" aria-hidden="true"></div>
 <div id="PRING" aria-hidden="true">
@@ -1233,7 +1267,7 @@ footer::before{content:'';position:absolute;top:0;left:var(--px);width:62px;heig
   <div>
     <div class="f-brand">Crowned Monkey — Sci-Fi Mixology Lab 👑</div>
     <div class="f-sub">Business Case &amp; ROI Plan · Subhash Sankar · Alchemy Theater 2026</div>
-    <div style="font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(201,168,76,.28);margin-top:4px;letter-spacing:.12em;font-weight:500">✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="364543545e57455e76554459415853525b59585d534f1855595b">[email&#160;protected]</a> &nbsp;·&nbsp; ☎ +91 799 403 1394</div>
+    <div style="font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(201,168,76,.28);margin-top:4px;letter-spacing:.12em;font-weight:500">✉ subhash@crownedmonkey.com &nbsp;·&nbsp; ☎ +91 799 403 1394</div>
     <div class="f-copy">© 2026 Subhash Sankar / Crowned Monkey. All rights reserved.</div>
   </div>
   <div class="f-nav">
@@ -1245,7 +1279,7 @@ footer::before{content:'';position:absolute;top:0;left:var(--px);width:62px;heig
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 (function(){
 'use strict';
 
@@ -1270,43 +1304,38 @@ for(var i=0;i<5;i++){(function(){var img=new Image();img.onload=img.onerror=onti
 /* ══ COCKTAIL SCROLL BAR ══ */
 var PBFILL=document.getElementById('PBAR-FILL');
 var PBGLASS=document.getElementById('PBAR-GLASS');
+var PBDROPS=document.getElementById('PBAR-DROPS');
 var RFG=document.getElementById('RFG'),RNUM=document.getElementById('RNUM');
 var BTT=document.getElementById('BTT');
 var CIRC=100.5,scrollTick=false;
-var lastScrollPct=0,lastDropTime=0;
-
-/* Fix 1: Canvas-based drop pool — zero DOM mutations on scroll */
-var dropCanvas=document.createElement('canvas');
-dropCanvas.style.cssText='position:fixed;top:0;left:0;pointer-events:none;z-index:599;';
-document.body.appendChild(dropCanvas);
-var dCtx=dropCanvas.getContext('2d');
-var drops=[];
-var dropW=window.innerWidth,dropH=60;
-dropCanvas.width=dropW;dropCanvas.height=dropH;
-
-/* Fix 5: Resize only on actual resize, not every frame */
-window.addEventListener('resize',function(){
-  dropW=window.innerWidth;
-  dropCanvas.width=dropW;dropCanvas.height=dropH;
-},{passive:true});
+var lastScrollPct=0,dropTimer=null;
+var barBubbles=[];
 
 function spawnDrop(xPct){
-  if(drops.length>16)return; /* hard cap — never more than 16 active */
-  drops.push({x:xPct*dropW,y:3,h:8+Math.random()*14,alpha:.82,speed:1.5+Math.random()*.8});
+  var drop=document.createElement('div');
+  drop.className='pbar-drop';
+  var x=Math.round(xPct*window.innerWidth);
+  var h=Math.round(Math.random()*14+8);
+  drop.style.left=x+'px';
+  drop.style.height=h+'px';
+  drop.style.width=(Math.random()>.5?2:1.5)+'px';
+  drop.style.animationDuration=(Math.random()*.3+.7)+'s';
+  PBDROPS.appendChild(drop);
+  setTimeout(function(){if(drop.parentNode)drop.remove();},1100);
 }
 
-function tickDrops(){
-  dCtx.clearRect(0,0,dropW,dropH);
-  for(var i=drops.length-1;i>=0;i--){
-    var d=drops[i];
-    d.y+=d.speed;d.alpha-=0.038;
-    if(d.alpha<=0){drops.splice(i,1);continue;}
-    dCtx.fillStyle='rgba(201,168,76,'+d.alpha.toFixed(2)+')';
-    dCtx.fillRect(d.x,d.y,1.5,d.h);
-  }
-  requestAnimationFrame(tickDrops);
+function spawnBubble(xPct){
+  var bub=document.createElement('div');
+  bub.className='bar-bubble';
+  var x=Math.round(xPct*window.innerWidth*Math.random());
+  var sz=Math.round(Math.random()*2+1);
+  bub.style.left=x+'px';
+  bub.style.width=sz+'px';
+  bub.style.height=sz+'px';
+  bub.style.animationDuration=(Math.random()*.4+.4)+'s';
+  PBFILL.appendChild(bub);
+  setTimeout(function(){if(bub.parentNode)bub.remove();},650);
 }
-tickDrops();
 
 function doScroll(){
   scrollTick=false;
@@ -1318,12 +1347,12 @@ function doScroll(){
   RFG.style.strokeDashoffset=CIRC-p*CIRC;
   if(RNUM)RNUM.textContent=Math.round(p*100)+'%';
 
-  /* Fix 2: Rate-limit drops — min 80ms apart, min 0.02 scroll delta */
-  var now=performance.now();
   var diff=p-lastScrollPct;
-  if(Math.abs(diff)>0.02&&now-lastDropTime>80){
-    spawnDrop(Math.max(0,p-Math.random()*.04));
-    lastScrollPct=p;lastDropTime=now;
+  if(Math.abs(diff)>0.004){
+    var dropX=p-(Math.random()*.04);
+    spawnDrop(Math.max(0,dropX));
+    if(Math.random()>0.5)spawnBubble(p);
+    lastScrollPct=p;
   }
 
   var hb=document.getElementById('HBGIMG');
