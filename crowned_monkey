@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Crowned Monkey — Sci-Fi Mixology Lab · Business Case 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Rajdhani:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#07091A;--navy2:#0C0F28;--navy3:#131730;
+  --gold:#C9A84C;--gold2:#E8C96A;--gold3:#F5E4A8;
+  --ice:#E8F0F8;--ice2:rgba(232,240,248,.65);
+  --teal:#00C9B8;--teal2:rgba(0,201,184,.2);
+  --rose:#C84C6A;--smoke:rgba(232,240,248,.38);
+  --px:clamp(18px,5vw,72px);--gap:clamp(10px,1.5vw,18px);--r:2px;
+  --gold-line:linear-gradient(90deg,transparent,var(--gold),var(--gold2),transparent);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--ice);font-family:'Rajdhani',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");opacity:.028;mix-blend-mode:overlay;}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(201,168,76,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.028) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);}
+.deco-corner{position:absolute;width:28px;height:28px;pointer-events:none;z-index:10}
+.deco-corner.tl{top:14px;left:14px;border-top:1.5px solid var(--gold);border-left:1.5px solid var(--gold)}
+.deco-corner.tr{top:14px;right:14px;border-top:1.5px solid var(--gold);border-right:1.5px solid var(--gold)}
+.deco-corner.bl{bottom:14px;left:14px;border-bottom:1.5px solid var(--gold);border-left:1.5px solid var(--gold)}
+.deco-corner.br{bottom:14px;right:14px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold)}
+#CUR{position:fixed;top:0;left:0;z-index:99999;pointer-events:none;will-change:transform}
+#CDT{width:8px;height:8px;border-radius:50%;background:var(--gold);position:absolute;transform:translate(-50%,-50%);mix-blend-mode:screen}
+#CRG{width:28px;height:28px;border:1px solid rgba(201,168,76,.5);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+body.hov #CRG{width:46px;height:46px;border-color:var(--gold)}
+
+/* ══ COCKTAIL SCROLL BAR ══ */
+#PBAR{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:600;
+  background:rgba(7,9,26,.9);
+  pointer-events:none;will-change:transform;
+  overflow:visible;
+  contain:strict;
+}
+#PBAR-FILL{
+  height:100%;
+  background:linear-gradient(90deg,var(--teal),var(--gold),var(--gold2));
+  transform:scaleX(0);
+  transform-origin:left;
+  will-change:transform;
+  position:relative;
+  contain:layout style;
+}
+/* Animated cocktail glass icon that rides the bar */
+#PBAR-GLASS{
+  position:absolute;
+  right:-14px;
+  top:-10px;
+  width:28px;
+  height:28px;
+  pointer-events:none;
+}
+#PBAR-GLASS svg{width:100%;height:100%}
+/* Shimmer — GPU transform only, no background-position repaint */
+#PBAR-FILL::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;bottom:0;
+  width:60px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);
+  animation:barShimmer 1.9s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes barShimmer{
+  from{transform:translateX(-60px)}
+  to{transform:translateX(100vw)}
+}
+
+#BTT{position:fixed;bottom:68px;right:20px;z-index:500;width:36px;height:36px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s,background .2s;font-size:14px;color:var(--gold);}
+#BTT.vis{opacity:1;transform:none}
+#BTT:hover{background:rgba(201,168,76,.18)}
+
+/* 3D LAB BUTTON */
+#LAB3D-BTN{
+  position:fixed;bottom:110px;right:20px;z-index:500;
+  width:auto;padding:8px 14px;
+  background:rgba(0,201,184,.08);border:1px solid rgba(0,201,184,.35);
+  border-radius:2px;display:flex;align-items:center;gap:7px;
+  cursor:pointer;
+  transition:background .2s,border-color .2s,transform .2s;
+  font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--teal);font-weight:600;
+}
+#LAB3D-BTN:hover{background:rgba(0,201,184,.15);border-color:var(--teal);transform:translateY(-2px)}
+#LAB3D-BTN .btn-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:tdPulse 1.5s ease-in-out infinite}
+@keyframes tdPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+
+/* 3D LAB MODAL */
+#LAB3D-MODAL{
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(7,9,26,.95);backdrop-filter:blur(18px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s cubic-bezier(.16,1,.3,1);
+}
+#LAB3D-MODAL.open{opacity:1;pointer-events:all}
+.modal-inner{
+  position:relative;width:min(92vw,960px);height:min(88vh,640px);
+  background:var(--navy2);border:1px solid rgba(201,168,76,.2);
+  border-radius:4px;overflow:hidden;
+  transform:scale(.92) translateY(20px);
+  transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+#LAB3D-MODAL.open .modal-inner{transform:scale(1) translateY(0)}
+.modal-header{
+  position:absolute;top:0;left:0;right:0;z-index:10;
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(7,9,26,.9),transparent);
+  pointer-events:none;
+}
+.modal-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.12em;color:var(--gold)}
+.modal-sub{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0,201,184,.6);margin-top:1px;font-weight:500}
+.modal-close{
+  position:absolute;top:12px;right:14px;z-index:20;
+  width:32px;height:32px;border:1px solid rgba(201,168,76,.25);
+  background:rgba(7,9,26,.8);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--gold);font-size:14px;
+  transition:background .2s;pointer-events:all;
+}
+.modal-close:hover{background:rgba(201,168,76,.12)}
+.modal-controls{
+  position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;
+  display:flex;gap:8px;pointer-events:all;
+}
+.ctrl-btn{
+  font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.18em;
+  text-transform:uppercase;padding:5px 12px;border:1px solid rgba(201,168,76,.2);
+  border-radius:2px;color:rgba(201,168,76,.5);cursor:pointer;background:rgba(7,9,26,.7);
+  transition:all .18s;font-weight:500;backdrop-filter:blur(8px);
+}
+.ctrl-btn:hover,.ctrl-btn.active{background:rgba(201,168,76,.1);border-color:var(--gold);color:var(--gold)}
+#LAB3D-CANVAS{width:100%;height:100%;display:block}
+.modal-hint{
+  position:absolute;bottom:52px;left:50%;transform:translateX(-50%);
+  font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(232,240,248,.2);white-space:nowrap;
+  pointer-events:none;
+}
+
+#KTOAST{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);z-index:600;background:rgba(7,9,26,.92);border:1px solid rgba(201,168,76,.2);backdrop-filter:blur(12px);border-radius:4px;padding:10px 18px;display:flex;align-items:center;gap:10px;transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s;opacity:0;}
+#KTOAST.show{transform:translateX(-50%) translateY(0);opacity:1}
+#KTOAST span{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.2em;color:rgba(232,240,248,.5);font-weight:500}
+.ktag{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.1em;padding:2px 7px;border:1px solid rgba(201,168,76,.3);color:var(--gold);border-radius:2px}
+#PL{position:fixed;inset:0;z-index:9998;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
+#PL.gone{opacity:0;visibility:hidden;pointer-events:none}
+.pl-ring{width:80px;height:80px;border-radius:50%;border:1px solid rgba(201,168,76,.2);border-top-color:var(--gold);animation:plSpin 1s linear infinite;position:relative;margin-bottom:28px}
+.pl-ring::after{content:'👑';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;animation:plSpin 3s linear infinite reverse}
+@keyframes plSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.pl-logo{font-family:'Cinzel',serif;font-size:clamp(24px,5.5vw,56px);letter-spacing:.18em;color:var(--gold);opacity:0;animation:plIn .7s ease .2s both;text-align:center}
+@keyframes plIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pl-sub{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--smoke);margin-top:6px;opacity:0;animation:plIn .6s ease .4s both}
+.pl-bar{width:160px;height:1px;background:rgba(201,168,76,.15);margin-top:22px;position:relative;overflow:hidden}
+.pl-fill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width .16s}
+.pl-pct{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:.3em;color:var(--gold);margin-top:5px;opacity:0;animation:plIn .5s ease .55s both}
+#SNAV{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;gap:10px}
+.snd{width:4px;height:4px;border-radius:1px;background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.15);transition:background .25s,transform .25s,width .25s;position:relative;cursor:pointer;transform:rotate(45deg)}
+.snd.on{background:var(--gold);transform:rotate(45deg) scale(1.6)}
+.snd::after{content:attr(data-l);position:absolute;right:12px;top:50%;transform:translateY(-50%) rotate(-45deg);font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--smoke);white-space:nowrap;opacity:0;transition:opacity .18s;pointer-events:none}
+.snd:hover::after{opacity:1}
+@media(max-width:768px){#SNAV{display:none}}
+#PRING{position:fixed;bottom:20px;right:20px;z-index:500;width:36px;height:36px;pointer-events:none}
+#PRING svg{transform:rotate(-90deg)}
+.rbg{fill:none;stroke:rgba(201,168,76,.08);stroke-width:1.5}
+.rfg{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;will-change:stroke-dashoffset}
+#RNUM{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(201,168,76,.6);letter-spacing:.1em}
+.hex-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.hex{position:absolute;width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-bottom:28px solid rgba(201,168,76,.04);animation:hexFloat ease-in-out infinite}
+.hex::after{content:'';position:absolute;top:28px;left:-16px;width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:28px solid rgba(201,168,76,.04)}
+@keyframes hexFloat{0%,100%{transform:translateY(0) rotate(0deg);opacity:.4}33%{transform:translateY(-22px) rotate(5deg);opacity:.7}66%{transform:translateY(-8px) rotate(-3deg);opacity:.5}}
+.scan-ring{position:absolute;border-radius:50%;border:1px solid var(--teal);opacity:0;animation:scanPulse ease-out infinite;pointer-events:none}
+@keyframes scanPulse{0%{transform:scale(.2);opacity:.6}100%{transform:scale(2.5);opacity:0}}
+.drip{position:absolute;top:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold),var(--gold2),transparent);animation:dripFall linear infinite;pointer-events:none}
+@keyframes dripFall{0%{transform:translateY(-100%);opacity:0}10%{opacity:1}90%{opacity:.4}100%{transform:translateY(100vh);opacity:0}}
+.wand{height:1px;max-width:480px;background:var(--gold-line);position:relative;overflow:hidden;margin:10px 0 22px;clip-path:inset(0 100% 0 0);animation:wandReveal .9s cubic-bezier(.16,1,.3,1) .95s both}
+@keyframes wandReveal{to{clip-path:inset(0 0% 0 0)}}
+.wand-beam{position:absolute;top:-4px;left:-14%;width:12%;height:9px;background:radial-gradient(ellipse,rgba(232,201,106,.9),transparent 70%);border-radius:50%;animation:beamGo 2s ease-in-out infinite}
+@keyframes beamGo{0%{transform:translateX(0);opacity:0}12%{opacity:1}86%{opacity:1}100%{transform:translateX(560px);opacity:0}}
+.hat{font-size:clamp(24px,3.8vw,48px);display:inline-block;animation:hatBob 3s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(201,168,76,.7))}
+@keyframes hatBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes nameReveal{from{opacity:0;transform:translateY(30px) skewX(-4deg)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hstar{position:absolute;opacity:0;font-size:10px;pointer-events:none;animation:starPop ease-in-out infinite}
+@keyframes starPop{0%{opacity:0;transform:translate(0,0) scale(.1)}30%{opacity:1}100%{opacity:0;transform:translate(var(--sx,0),var(--sy,0)) scale(.05)}}
+.hstar:nth-child(2){--sx:-8px;--sy:-50px;top:-15px;left:14%;animation-duration:2.4s}
+.hstar:nth-child(3){--sx:7px;--sy:-56px;top:-21px;left:45%;animation-duration:2.8s;animation-delay:.4s}
+.hstar:nth-child(4){--sx:-5px;--sy:-42px;top:-12px;left:67%;animation-duration:2.5s;animation-delay:.8s}
+.hstar:nth-child(5){--sx:10px;--sy:-60px;top:-27px;left:32%;animation-duration:2.9s;animation-delay:1.1s}
+.scroll-rod{width:1px;height:38px;position:relative;overflow:hidden;background:rgba(201,168,76,.1)}
+.scroll-rod::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:linear-gradient(180deg,transparent,var(--gold),transparent);animation:rodSlide 1.8s ease-in-out infinite}
+@keyframes rodSlide{0%{transform:translateY(0)}100%{transform:translateY(300%)}}
+.cost-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.16,1,.3,1);will-change:transform}
+.cost-fill.go{transform:scaleX(1)}
+.spark{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--gold2);pointer-events:none;animation:sparkUp ease-out forwards}
+@keyframes sparkUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-60px) scale(0);opacity:0}}
+.mol-spin{animation:molSpin 12s linear infinite;transform-origin:center}
+@keyframes molSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.mol-spin-rev{animation:molSpin 9s linear infinite reverse;transform-origin:center}
+.n2d{animation:n2Fall ease-in infinite}
+.n2d:nth-child(2){animation-delay:.55s}
+.n2d:nth-child(3){animation-delay:1.1s}
+@keyframes n2Fall{0%{opacity:0;transform:translateY(-8px)}28%{opacity:.9}100%{opacity:0;transform:translateY(26px)}}
+.smp{transform-origin:50% 100%;animation:smokeW 2.9s ease-in-out infinite}
+.smp:nth-child(2){animation-delay:.45s}
+.smp:nth-child(3){animation-delay:.9s}
+@keyframes smokeW{0%,100%{transform:scaleX(1);opacity:.3}50%{transform:scaleX(1.35);opacity:.72}}
+.mq-wrap{overflow:hidden;padding:12px 0;border-top:1px solid rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1);z-index:2;position:relative}
+.mq-track{display:flex;width:max-content}
+.mq-fwd{animation:mqF 28s linear infinite}
+.mq-rev{animation:mqR 34s linear infinite}
+@keyframes mqF{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mqR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.mq-wrap:hover .mq-track{animation-play-state:paused}
+.mqi{font-family:'Rajdhani',sans-serif;font-size:clamp(9px,1.3vw,13px);letter-spacing:.32em;color:rgba(201,168,76,.14);white-space:nowrap;padding:0 22px;font-weight:500}
+.mqi em{color:rgba(0,201,184,.22);font-style:normal}
+.mqi.lit{color:rgba(0,201,184,.14)}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+#HBGIMG{position:absolute;inset:-6%;background:url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1600&q=80&fit=crop') center/cover;filter:brightness(.28) saturate(.4) hue-rotate(200deg);will-change:transform}
+.hero-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(155deg,rgba(7,9,26,.98) 20%,rgba(7,9,26,.1) 55%,rgba(7,9,26,.92) 100%)}
+.hero-content{position:relative;z-index:3;padding:clamp(72px,9vw,116px) var(--px) clamp(50px,6vw,80px);max-width:1400px;width:100%}
+.h-kick{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:14px;margin-bottom:18px;clip-path:inset(0 100% 0 0);animation:wandReveal .75s cubic-bezier(.16,1,.3,1) .28s both}
+.h-kick::before{content:'';width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--teal))}
+.n-wrap{display:flex;align-items:baseline;gap:clamp(4px,1vw,12px);flex-wrap:wrap;margin-bottom:8px}
+.h-el{font-family:'Cinzel',serif;font-size:clamp(48px,10vw,148px);color:var(--ice);line-height:.84;letter-spacing:.04em;opacity:0;animation:nameReveal .95s cubic-bezier(.16,1,.3,1) .42s both}
+.h-mago{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(44px,9.5vw,136px);background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 50%,var(--gold3) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:.84;opacity:0;animation:nameReveal .95s cubic-bezier(.16,1,.3,1) .58s both}
+.hat-wrap{position:relative;display:inline-flex;align-items:center;opacity:0;animation:fadeUp .65s ease .78s both}
+.h-tag{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(13px,1.6vw,18px);color:var(--smoke);max-width:480px;line-height:1.72;margin-bottom:26px;opacity:0;animation:fadeUp .65s ease .96s both}
+.h-metrics{display:flex;gap:clamp(16px,3vw,48px);flex-wrap:wrap;opacity:0;animation:fadeUp .65s ease 1.1s both}
+.hmi{display:flex;flex-direction:column;gap:2px;position:relative}
+.hmi::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:linear-gradient(90deg,var(--teal),transparent);transition:width .35s}
+.hmi:hover::after{width:100%}
+.hmv{font-family:'Cinzel',serif;font-size:clamp(24px,3.5vw,44px);letter-spacing:.04em;color:var(--gold);line-height:1}
+.hml{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,201,184,.6);font-weight:500}
+.scroll-ind{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:5px;opacity:0;animation:fadeUp .65s ease 1.5s both}
+.scroll-ind span{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(201,168,76,.45)}
+main{position:relative;z-index:2}
+.sec{padding:0 var(--px);max-width:1400px;margin:0 auto}
+.fb{padding:0 var(--px);position:relative;z-index:2}
+.fbi{max-width:1400px;margin:0 auto}
+.gap{height:clamp(28px,4.8vw,72px)}
+.gap-sm{height:16px}
+.sdiv{display:flex;align-items:center;gap:14px;padding:5px 0;position:relative}
+.sdiv span{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.4em;text-transform:uppercase;color:rgba(201,168,76,.45);white-space:nowrap;font-weight:500}
+.sdiv::before,.sdiv::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.15),transparent)}
+.sdiv .snum{font-family:'Cinzel',serif;font-size:58px;color:rgba(201,168,76,.03);line-height:1;position:absolute;right:0;top:-12px;pointer-events:none;user-select:none;letter-spacing:.08em}
+.row{display:grid;gap:var(--gap)}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g64{grid-template-columns:6fr 4fr}
+.card{background:var(--navy2);border:1px solid rgba(201,168,76,.1);border-radius:var(--r);overflow:hidden;position:relative}
+.card::before,.card::after{content:'';position:absolute;width:16px;height:16px;pointer-events:none;z-index:10;opacity:.5;transition:opacity .3s}
+.card::before{top:6px;left:6px;border-top:1px solid var(--gold);border-left:1px solid var(--gold)}
+.card::after{bottom:6px;right:6px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold)}
+.card:hover::before,.card:hover::after{opacity:1}
+.card>*{position:relative;z-index:1}
+.c-gold{background:linear-gradient(135deg,#1A1508,#0e0c04);border-color:rgba(201,168,76,.2)}
+.c-teal{background:linear-gradient(135deg,#041412,#020c0b);border-color:rgba(0,201,184,.15)}
+.c-navy{background:var(--navy3)}
+.p{padding:clamp(20px,3vw,42px)}
+.ey{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.4em;text-transform:uppercase;color:var(--teal);margin-bottom:9px;display:flex;align-items:center;gap:10px;font-weight:500}
+.ey::after{content:'⬡';font-size:8px;color:rgba(0,201,184,.3)}
+.ey.gd{color:var(--gold)}.ey.gd::after{color:rgba(201,168,76,.3)}
+.ey.lt{color:rgba(232,240,248,.3)}.ey.lt::after{color:rgba(232,240,248,.15)}
+.disp{font-family:'Cinzel',serif;font-size:clamp(22px,3.3vw,46px);letter-spacing:.04em;color:var(--ice);line-height:1.05;margin-bottom:13px}
+.disp em{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent;font-style:normal}
+.dsm{font-size:clamp(17px,2.4vw,30px)}
+.bdy{font-family:'Playfair Display',serif;font-size:clamp(13.5px,1.45vw,16px);line-height:1.84;color:var(--ice2);font-weight:400}
+.aln{width:100%;height:1px;background:var(--gold-line);opacity:.25;margin:3px 0 16px}
+.g-rule{height:1px;background:var(--gold-line);opacity:.3;margin:0 var(--px)}
+.g-rule::after{content:'⬡';position:absolute;left:50%;transform:translateX(-50%) translateY(-50%);font-size:10px;color:var(--gold);background:var(--navy);padding:0 8px}
+.g-rule{position:relative}
+.mc{padding:clamp(18px,2.8vw,36px);position:relative;overflow:hidden}
+.mc-bar{position:absolute;bottom:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--teal),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .38s;will-change:transform}
+.card:hover .mc-bar{transform:scaleX(1)}
+.mv{font-family:'Cinzel',serif;font-size:clamp(33px,4.8vw,60px);letter-spacing:.04em;line-height:1;color:var(--gold);margin-bottom:4px}
+.ml{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,201,184,.55);margin-bottom:2px;font-weight:500}
+.mn{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:rgba(232,240,248,.3)}
+.mhi .mv{color:var(--ice)}.mhi .ml{color:rgba(232,240,248,.4)}.mhi .mn{color:rgba(232,240,248,.25)}
+.rtab{width:100%;border-collapse:collapse}
+.rtab th{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,76,.4);padding:8px 11px;text-align:left;border-bottom:1px solid rgba(201,168,76,.1);font-weight:500}
+.rtab td{font-family:'Playfair Display',serif;font-size:clamp(11.5px,1.25vw,13.5px);color:var(--ice2);padding:9px 11px;border-bottom:1px solid rgba(201,168,76,.05);transition:background .14s}
+.rtab tr:hover td{background:rgba(201,168,76,.03)}
+.rtab tr:last-child td{border-bottom:none}
+.rtab td.amb{color:var(--teal);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600}
+.rtab td.gld{color:var(--gold);font-family:'Rajdhani',sans-serif;font-weight:600}
+.rtab tr.tot td{border-top:1px solid rgba(201,168,76,.18);padding-top:12px;color:var(--ice)}
+.rtab tr.tot td.big{font-family:'Cinzel',serif;font-size:clamp(16px,2.2vw,24px);color:var(--gold)}
+.arow{display:flex;justify-content:space-between;align-items:center;padding:clamp(7px,1vw,11px) 0;border-bottom:1px solid rgba(201,168,76,.06);gap:12px;transition:padding-left .18s}
+.arow:hover{padding-left:6px}.arow:last-child{border-bottom:none}
+.ak{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,168,76,.4);font-weight:500}
+.av{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:.08em;color:var(--ice);font-weight:600}
+.av.amb{color:var(--teal)}.av.gld{color:var(--gold)}
+.tl{display:flex;flex-direction:column;position:relative}
+.tl-line{position:absolute;left:0;top:0;width:1px;height:100%;background:linear-gradient(180deg,var(--teal),var(--gold));transform:scaleY(0);transform-origin:top;will-change:transform;pointer-events:none;z-index:5}
+.fstep{display:flex;gap:clamp(16px,2.7vw,36px);padding:clamp(18px,2.4vw,28px) 0;border-bottom:1px solid rgba(201,168,76,.06);position:relative}
+.fstep:last-child{border-bottom:none}
+.fline{position:absolute;left:clamp(64px,9vw,90px);top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(201,168,76,.1),transparent);pointer-events:none}
+.tcol{flex-shrink:0;width:clamp(60px,9vw,88px)}
+.tbadge{font-family:'Rajdhani',sans-serif;font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);line-height:1.7;font-weight:500}
+.fdot{width:7px;height:7px;border-radius:1px;background:var(--gold);border:1px solid rgba(201,168,76,.3);flex-shrink:0;margin-top:4px;transform:rotate(45deg)}
+.fbody{flex:1}
+.spill{display:inline-flex;align-items:center;gap:7px;padding:3px 11px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:2px;margin-bottom:9px}
+.spn{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);line-height:1}
+.spt{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,76,.45);font-weight:500}
+.ftit{font-family:'Cinzel',serif;font-size:clamp(13px,1.8vw,21px);letter-spacing:.04em;color:var(--ice);margin-bottom:2px}
+.fsub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(11px,1.25vw,13.5px);color:rgba(201,168,76,.45);margin-bottom:10px}
+.fd{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
+.fdd{width:4px;height:1px;background:var(--teal);flex-shrink:0;margin-top:11px}
+.fdt{font-family:'Playfair Display',serif;font-size:clamp(11px,1.2vw,13px);color:rgba(232,240,248,.48);line-height:1.68}
+.fdt strong{color:var(--ice2)}.fdt em{color:var(--gold);font-style:normal}
+.urow{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(201,168,76,.06);transition:padding-left .18s}
+.urow:hover{padding-left:4px}.urow:last-child{border-bottom:none}
+.udia{width:4px;height:4px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;margin-top:8px;opacity:.5}
+.ut{font-family:'Playfair Display',serif;font-size:clamp(12px,1.4vw,15px);color:var(--ice2);line-height:1.68}
+.ut strong{color:var(--ice)}.ut em{color:var(--gold);font-style:normal}
+.itile{overflow:hidden;border-radius:var(--r);position:relative}
+.itile img{width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.16,1,.3,1),filter .36s;filter:brightness(.6) saturate(.65) hue-rotate(190deg)}
+.itile:hover img{transform:scale(1.055);filter:brightness(.85) saturate(.9) hue-rotate(180deg)}
+.hs-wrap{overflow:hidden;position:relative}
+.hs-inner{display:flex;gap:var(--gap);padding:0 var(--px);will-change:transform}
+.hs-inner .itile{flex-shrink:0;width:clamp(215px,28vw,360px);height:clamp(235px,30vw,400px)}
+.hs-fl{position:absolute;left:0;top:0;bottom:0;width:62px;background:linear-gradient(90deg,var(--navy),transparent);pointer-events:none;z-index:2}
+.hs-fr{position:absolute;right:0;top:0;bottom:0;width:62px;background:linear-gradient(270deg,var(--navy),transparent);pointer-events:none;z-index:2}
+.hl-band{position:relative;overflow:hidden;border-radius:var(--r);padding:clamp(28px,4.5vw,58px) clamp(20px,3.5vw,50px);background:linear-gradient(135deg,#0e0a02,#1a1206,#0e0a02);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.hl-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 25% 50%,rgba(201,168,76,.06),transparent);pointer-events:none}
+.hlv{font-family:'Cinzel',serif;font-size:clamp(44px,7.5vw,88px);background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.04em;line-height:1}
+.hll{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,76,.45);margin-top:4px;font-weight:500}
+.hln{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(11px,1.4vw,15.5px);color:rgba(232,240,248,.38);margin-top:2px}
+.btn-gold{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:9px 20px;border-radius:2px;display:inline-block;transition:background .2s,border-color .2s;font-weight:600}
+.btn-gold:hover{background:rgba(201,168,76,.08);border-color:var(--gold)}
+.bq{position:relative;overflow:hidden;border-radius:var(--r);padding:clamp(40px,5.5vw,72px) clamp(22px,4.8vw,62px);text-align:center;background:var(--navy2);border:1px solid rgba(201,168,76,.08)}
+.bq-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:480px;height:260px;background:radial-gradient(ellipse,rgba(201,168,76,.07),transparent 70%);pointer-events:none}
+.bq-mark{font-family:'Cinzel',serif;font-size:clamp(68px,11vw,140px);color:rgba(201,168,76,.08);line-height:.5;display:block;margin-bottom:16px}
+.bq-text{position:relative;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(15px,2.4vw,25px);color:var(--ice);line-height:1.72;max-width:560px;margin:0 auto}
+.bq-by{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.36em;text-transform:uppercase;color:rgba(201,168,76,.4);margin-top:20px;font-weight:500}
+.pcard{display:flex;gap:14px;align-items:center}
+.pimg{width:60px;height:60px;border-radius:50%;object-fit:cover;object-position:top;border:1.5px solid var(--gold);flex-shrink:0;filter:brightness(.9) saturate(.8) hue-rotate(190deg)}
+.pname{font-family:'Cinzel',serif;font-size:18px;letter-spacing:.06em;color:var(--ice);line-height:1}
+.prole{font-family:'Playfair Display',serif;font-style:italic;font-size:11.5px;color:rgba(201,168,76,.55);margin-top:1px}
+.pstat{font-family:'Rajdhani',sans-serif;font-size:6px;color:rgba(232,240,248,.2);margin-top:2px;letter-spacing:.1em;font-weight:500}
+.spot-wrap{position:relative;overflow:hidden;border-radius:var(--r);border:1px solid rgba(201,168,76,.1)}
+.spot-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .9s cubic-bezier(.16,1,.3,1);filter:brightness(.55) saturate(.5) hue-rotate(195deg)}
+.spot-wrap:hover img{transform:scale(1.034)}
+.spot-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 28%,rgba(7,9,26,.88) 100%);pointer-events:none;z-index:1}
+.spot-badge{position:absolute;bottom:0;left:0;right:0;padding:clamp(13px,2vw,23px);z-index:2}
+.spot-tag{position:absolute;top:12px;right:12px;z-index:4;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);backdrop-filter:blur(6px);padding:4px 11px;border-radius:2px}
+.spot-tag span{font-family:'Rajdhani',sans-serif;font-size:6.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.eq-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.eq-pill{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.1em;text-transform:uppercase;padding:3.5px 9px;border-radius:2px;border:1px solid rgba(201,168,76,.1);color:rgba(201,168,76,.35);transition:all .2s;font-weight:500}
+.eq-pill:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.04)}
+.eq-pill.mol{border-color:rgba(0,201,184,.18);color:rgba(0,201,184,.5)}
+.eq-pill.mol:hover{background:rgba(0,201,184,.06);color:var(--teal)}
+.cost-wrap{margin-top:17px}
+.cost-row{margin-bottom:10px}
+.cost-head{display:flex;justify-content:space-between;margin-bottom:3px}
+.cost-label{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,168,76,.38);font-weight:500}
+.cost-val{font-family:'Rajdhani',sans-serif;font-size:9px;color:var(--teal);font-weight:600}
+.cost-track{width:100%;height:1px;background:rgba(201,168,76,.08);border-radius:1px;overflow:hidden}
+.tech-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ttag{display:flex;align-items:center;gap:5px;padding:4px 11px;background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.1);border-radius:2px;transition:all .2s}
+.ttag:hover{border-color:rgba(0,201,184,.3);background:rgba(0,201,184,.04)}
+.ttag-dot{width:3px;height:3px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:tdPulse 2s ease-in-out infinite}
+.ttag-txt{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,240,248,.32);font-weight:500}
+.tech-show{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+.tech-card{background:var(--navy2);border:1px solid rgba(201,168,76,.08);border-radius:var(--r);padding:clamp(17px,2.6vw,32px);text-align:center;transition:border-color .28s;position:relative;overflow:hidden}
+.tech-card:hover{border-color:rgba(201,168,76,.22)}
+.tech-card::before,.tech-card::after{content:'';position:absolute;width:14px;height:14px;pointer-events:none;opacity:.4;transition:opacity .3s}
+.tech-card::before{top:6px;left:6px;border-top:1px solid var(--gold);border-left:1px solid var(--gold)}
+.tech-card::after{bottom:6px;right:6px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold)}
+.tech-card:hover::before,.tech-card:hover::after{opacity:.9}
+.tech-icon{width:50px;height:50px;margin:0 auto 12px;position:relative;z-index:1}
+.tech-title{font-family:'Cinzel',serif;font-size:clamp(13px,1.7vw,19px);letter-spacing:.04em;color:var(--ice);margin-bottom:5px;position:relative;z-index:1}
+.tech-desc{font-family:'Playfair Display',serif;font-size:clamp(11px,1.2vw,13px);line-height:1.65;color:rgba(232,240,248,.4);position:relative;z-index:1}
+.excol{display:flex;flex-direction:column;gap:6px}
+.exlab{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:2px;font-weight:500}
+#BUILDER{background:var(--navy2);border:1px solid rgba(201,168,76,.18);border-radius:var(--r);overflow:hidden;position:relative}
+#BUILDER::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(0,201,184,.04),transparent);pointer-events:none}
+.builder-header{padding:clamp(20px,3vw,36px);border-bottom:1px solid rgba(201,168,76,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:linear-gradient(90deg,rgba(201,168,76,.04),transparent);position:relative}
+.builder-title{font-family:'Cinzel',serif;font-size:clamp(16px,2.2vw,24px);letter-spacing:.08em;color:var(--gold)}
+.builder-sub{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,201,184,.5);margin-top:2px;font-weight:500}
+.ai-badge{display:flex;align-items:center;gap:7px;padding:5px 13px;background:rgba(0,201,184,.06);border:1px solid rgba(0,201,184,.2);border-radius:2px}
+.ai-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:tdPulse 1.5s ease-in-out infinite}
+.ai-badge span{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.builder-body{padding:clamp(18px,2.8vw,34px);display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+@media(max-width:700px){.builder-body{grid-template-columns:1fr}}
+.builder-section-label{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.35em;text-transform:uppercase;color:rgba(201,168,76,.4);margin-bottom:10px;font-weight:500;display:flex;align-items:center;gap:8px}
+.builder-section-label::before{content:'';flex:0 0 20px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.chip-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.chip{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:2px;border:1px solid rgba(201,168,76,.12);color:rgba(232,240,248,.32);cursor:pointer;transition:all .18s;user-select:none;font-weight:500}
+.chip:hover{border-color:rgba(201,168,76,.3);color:var(--gold)}
+.chip.active{background:rgba(201,168,76,.08);border-color:var(--gold);color:var(--gold)}
+.chip.active-teal{background:rgba(0,201,184,.06);border-color:var(--teal);color:var(--teal)}
+.glass-viz{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(16px,2.5vw,28px);min-height:220px;position:relative}
+.glass-container{width:90px;height:140px;position:relative;margin-bottom:12px}
+.glass-shape{width:100%;height:100%;position:relative;background:linear-gradient(180deg,rgba(232,240,248,.04),rgba(232,240,248,.02));clip-path:polygon(10% 0%,90% 0%,78% 100%,22% 100%);border-left:1px solid rgba(201,168,76,.15);border-right:1px solid rgba(201,168,76,.15);border-bottom:1px solid rgba(201,168,76,.2);overflow:hidden}
+.glass-liquid{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,rgba(201,168,76,.5) 20%,rgba(201,168,76,.3));height:0%;transition:height .8s cubic-bezier(.16,1,.3,1),background .6s}
+.glass-steam{position:absolute;top:-32px;left:50%;transform:translateX(-50%);display:flex;gap:5px;pointer-events:none}
+.gs-wisp{width:1px;border-radius:2px;background:linear-gradient(180deg,transparent,rgba(0,201,184,.4),transparent);animation:gsWisp ease-in-out infinite}
+@keyframes gsWisp{0%{transform:scaleX(1) translateY(0);opacity:0}20%{opacity:.6}70%{transform:scaleX(2) translateY(-20px);opacity:.3}100%{transform:scaleX(3) translateY(-36px);opacity:0}}
+.glass-garnish{position:absolute;top:-8px;right:-8px;font-size:18px;opacity:0;transition:opacity .5s,transform .5s;transform:rotate(-20deg) scale(.5)}
+.glass-garnish.show{opacity:1;transform:rotate(0deg) scale(1)}
+.glass-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.15em;color:rgba(201,168,76,.5);text-align:center}
+.builder-radar{margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.builder-radar-title{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,201,184,.45);font-weight:500}
+.gen-btn{width:100%;margin-top:14px;padding:12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--navy);background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:var(--r);cursor:pointer;transition:transform .2s,opacity .2s;position:relative;overflow:hidden}
+.gen-btn:hover{transform:translateY(-1px);opacity:.92}
+.gen-btn:active{transform:translateY(0)}
+.gen-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .4s}
+.gen-btn:hover::after{transform:translateX(100%)}
+.gen-btn:disabled{opacity:.45;cursor:wait;transform:none}
+.recipe-out{grid-column:1/-1;border-top:1px solid rgba(201,168,76,.1);padding:clamp(16px,2.5vw,28px);min-height:0;overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.16,1,.3,1),padding .3s}
+.recipe-out.open{max-height:700px;padding:clamp(16px,2.5vw,28px)}
+.recipe-name{font-family:'Cinzel',serif;font-size:clamp(16px,2.5vw,26px);letter-spacing:.06em;color:var(--gold);margin-bottom:8px}
+.recipe-desc{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(12.5px,1.4vw,15px);color:var(--ice2);line-height:1.78;margin-bottom:14px}
+.recipe-steps{list-style:none}
+.recipe-step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(201,168,76,.05);font-family:'Playfair Display',serif;font-size:clamp(11.5px,1.25vw,13.5px);color:rgba(232,240,248,.48);line-height:1.65;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+.recipe-step.show{opacity:1;transform:none}
+.step-num{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.1em;color:var(--teal);flex-shrink:0;margin-top:3px;font-weight:600}
+.recipe-step strong{color:var(--ice2)}
+.typing-cursor{display:inline-block;width:1.5px;height:1em;background:var(--gold);animation:blink .7s step-end infinite;vertical-align:text-bottom;margin-left:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.recipe-loading{display:flex;align-items:center;gap:8px;padding:12px 0}
+.load-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:loadBounce .9s ease-in-out infinite}
+.load-dot:nth-child(2){animation-delay:.18s}
+.load-dot:nth-child(3){animation-delay:.36s}
+@keyframes loadBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+.load-txt{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,201,184,.5);font-weight:500}
+.share-row{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(201,168,76,.08)}
+.share-btn{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.18em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(201,168,76,.2);border-radius:2px;color:rgba(201,168,76,.5);cursor:pointer;background:none;transition:all .2s;font-weight:500}
+.share-btn:hover{background:rgba(201,168,76,.06);border-color:var(--gold);color:var(--gold)}
+.share-btn.copied{border-color:var(--teal);color:var(--teal)}
+[data-r]{opacity:0}
+footer{padding:clamp(28px,4vw,50px) var(--px);border-top:1px solid rgba(201,168,76,.08);max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:18px;position:relative;z-index:2}
+footer::before{content:'';position:absolute;top:0;left:var(--px);width:62px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.f-brand{font-family:'Cinzel',serif;font-size:clamp(14px,2.4vw,23px);letter-spacing:.08em;color:var(--gold)}
+.f-sub{font-family:'Rajdhani',sans-serif;font-size:6.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.35);margin-top:2px;font-weight:500}
+.f-copy{font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(232,240,248,.08);margin-top:7px;letter-spacing:.1em}
+.f-nav{display:flex;gap:3px 15px;flex-wrap:wrap}
+.f-nav a{font-family:'Rajdhani',sans-serif;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,76,.3);transition:color .15s;position:relative;font-weight:500}
+.f-nav a::after{content:'';position:absolute;bottom:-1px;left:0;right:100%;height:1px;background:var(--teal);transition:right .24s}
+.f-nav a:hover{color:var(--ice)}.f-nav a:hover::after{right:0}
+@media(max-width:900px){.g4{grid-template-columns:1fr 1fr}.g64{grid-template-columns:1fr}.hl-band{flex-direction:column;align-items:flex-start}.tech-show{grid-template-columns:1fr}}
+@media(max-width:640px){.g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr}.fstep{flex-direction:column;gap:6px}.fline{display:none}.tcol{width:100%}}
+
+/* Sci-Fi badge */
+.scifi-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:5px 16px 5px 10px;
+  background:rgba(0,201,184,.06);
+  border:1px solid rgba(0,201,184,.3);
+  border-radius:2px;
+  position:relative;overflow:hidden;
+  margin-bottom:16px;
+}
+.scifi-badge::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,201,184,.05),transparent);
+  animation:scifiBg 2.5s ease-in-out infinite alternate;
+}
+@keyframes scifiBg{from{opacity:0}to{opacity:1}}
+.scifi-badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--teal);
+  animation:tdPulse 1.2s ease-in-out infinite;
+  flex-shrink:0;
+}
+.scifi-badge-txt{
+  font-family:'Rajdhani',sans-serif;
+  font-size:7.5px;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--teal);font-weight:600;
+}
+</style>
+</head>
+<body>
+
+<div id="CUR"><div id="CDT"></div><div id="CRG"></div></div>
+
+<!-- COCKTAIL ANIMATED PROGRESS BAR -->
+<div id="PBAR">
+  <div id="PBAR-FILL">
+    <!-- Cocktail glass SVG icon riding the fill -->
+    <div id="PBAR-GLASS">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Glass body -->
+        <path d="M4 4 L24 4 L17 16 L17 22 L19 22 L19 24 L9 24 L9 22 L11 22 L11 16 Z" fill="rgba(201,168,76,.12)" stroke="rgba(201,168,76,.8)" stroke-width="1" stroke-linejoin="round"/>
+        <!-- Liquid inside -->
+        <path d="M7.5 9 L20.5 9 L17 16 L11 16 Z" fill="rgba(201,168,76,.35)"/>
+        <!-- Straw -->
+        <line x1="18" y1="5" x2="14" y2="17" stroke="rgba(0,201,184,.9)" stroke-width="1.2" stroke-linecap="round"/>
+        <!-- Bubble 1 -->
+        <circle cx="10" cy="12" r="1" fill="rgba(232,240,248,.5)" class="n2d" style="animation-duration:1.1s"/>
+        <!-- Bubble 2 -->
+        <circle cx="15" cy="10" r=".7" fill="rgba(232,240,248,.4)" class="n2d" style="animation-duration:1.4s;animation-delay:.35s"/>
+        <!-- Garnish / slice -->
+        <circle cx="21" cy="5" r="3" fill="rgba(201,168,76,.2)" stroke="rgba(201,168,76,.6)" stroke-width=".8"/>
+        <line x1="21" y1="2" x2="21" y2="8" stroke="rgba(201,168,76,.5)" stroke-width=".6"/>
+        <line x1="18" y1="5" x2="24" y2="5" stroke="rgba(201,168,76,.5)" stroke-width=".6"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+
+<div id="SNAV" aria-hidden="true"></div>
+<div id="PRING" aria-hidden="true">
+  <svg width="36" height="36" viewBox="0 0 36 36">
+    <circle class="rbg" cx="18" cy="18" r="16"/>
+    <circle class="rfg" id="RFG" cx="18" cy="18" r="16"/>
+  </svg>
+  <div id="RNUM">0%</div>
+</div>
+<button id="BTT" aria-label="Back to top">↑</button>
+
+<!-- 3D LAB BUTTON -->
+<button id="LAB3D-BTN" aria-label="View 3D Lab">
+  <div class="btn-dot"></div>
+  <span>View 3D Lab</span>
+</button>
+
+<!-- 3D LAB MODAL -->
+<div id="LAB3D-MODAL" role="dialog" aria-modal="true" aria-label="3D Mixology Lab">
+  <div class="modal-inner">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Crowned Monkey Sci-Fi Lab — 3D Model</div>
+        <div class="modal-sub">Drag to rotate · Scroll to zoom · Click objects to inspect</div>
+      </div>
+    </div>
+    <button class="modal-close" id="MODAL-CLOSE" aria-label="Close">✕</button>
+    <canvas id="LAB3D-CANVAS"></canvas>
+    <div class="modal-hint">Drag · Scroll · Inspect</div>
+    <div class="modal-controls">
+      <button class="ctrl-btn active" id="VIEW-FULL">Full Lab</button>
+      <button class="ctrl-btn" id="VIEW-BAR">Bar Station</button>
+      <button class="ctrl-btn" id="VIEW-EQUIP">Equipment</button>
+      <button class="ctrl-btn" id="VIEW-TOP">Top View</button>
+    </div>
+  </div>
+</div>
+
+<div id="KTOAST">
+  <span class="ktag">J / K</span><span>Navigate sections</span>
+  <span class="ktag">B</span><span>Toggle Builder</span>
+</div>
+<div id="PL">
+  <div class="pl-ring"></div>
+  <div class="pl-logo">CROWNED MONKEY</div>
+  <div class="pl-sub">Sci-Fi Mixology Lab · Business Case 2026</div>
+  <div class="pl-bar"><div class="pl-fill" id="PLF"></div></div>
+  <div class="pl-pct" id="PLP">0%</div>
+</div>
+
+<!-- HERO -->
+<section class="hero" data-section="Overview" id="S0">
+  <div id="HBGIMG"></div>
+  <div class="hero-ov"></div>
+  <div class="hex-field" id="HXF"></div>
+  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0" id="DRP"></div>
+  <div class="hero-content">
+    <div class="h-kick">Crowned Monkey Sci-Fi Mixology Lab — ROI Plan &amp; Class Flow 2026</div>
+    <!-- Sci-Fi badge -->
+    <div class="scifi-badge">
+      <div class="scifi-badge-dot"></div>
+      <span class="scifi-badge-txt">Sci-Fi Mixology · Alchemy Theater · Est. 2026</span>
+    </div>
+    <div class="n-wrap">
+      <span class="h-el">CROWNED</span>
+      <span class="h-mago">Monkey</span>
+      <div class="hat-wrap">
+        <span class="hat">👑</span>
+        <span class="hstar">✨</span><span class="hstar">⭐</span><span class="hstar">✨</span><span class="hstar">🌟</span>
+      </div>
+    </div>
+    <div class="wand"><div class="wand-beam"></div></div>
+    <p class="h-tag">A world-class sci-fi mixology &amp; alchemy theater experience — ROI projections, class structure &amp; premium event flow by Subhash Sankar</p>
+    <div class="h-metrics">
+      <div class="hmi"><div class="hmv" data-cnt="290" data-pre="$" data-suf="++">$0++</div><div class="hml">Per Person</div></div>
+      <div class="hmi"><div class="hmv" data-cnt="158" data-pre="$" data-suf="K">$0K</div><div class="hml">Projected Revenue</div></div>
+      <div class="hmi"><div class="hmv" data-cnt="3" data-pre="" data-suf="×">0×</div><div class="hml">Classes / Week</div></div>
+      <div class="hmi"><div class="hmv" data-cnt="19" data-pre="" data-suf="+">0+</div><div class="hml">Years of Craft</div></div>
+    </div>
+  </div>
+  <div class="scroll-ind"><span>Scroll</span><div class="scroll-rod"></div></div>
+</section>
+
+<div class="mq-wrap">
+  <div class="mq-track mq-fwd">
+    <span class="mqi">SCI-FI MIXOLOGY</span><span class="mqi"><em>⬡</em></span><span class="mqi">CROWNED MONKEY LAB CLASS</span><span class="mqi"><em>⬡</em></span><span class="mqi">USD 290 PER PERSON</span><span class="mqi"><em>⬡</em></span><span class="mqi">3 CLASSES PER WEEK</span><span class="mqi"><em>⬡</em></span><span class="mqi">5-COURSE WINE DINNER</span><span class="mqi"><em>⬡</em></span><span class="mqi">USD 850 PREMIUM</span><span class="mqi"><em>⬡</em></span><span class="mqi">ALCHEMY THEATER</span><span class="mqi"><em>⬡</em></span><span class="mqi">CROWNED MONKEY WINE ROOM</span><span class="mqi"><em>⬡</em></span>
+    <span class="mqi">SCI-FI MIXOLOGY</span><span class="mqi"><em>⬡</em></span><span class="mqi">CROWNED MONKEY LAB CLASS</span><span class="mqi"><em>⬡</em></span><span class="mqi">USD 290 PER PERSON</span><span class="mqi"><em>⬡</em></span><span class="mqi">3 CLASSES PER WEEK</span><span class="mqi"><em>⬡</em></span><span class="mqi">5-COURSE WINE DINNER</span><span class="mqi"><em>⬡</em></span><span class="mqi">USD 850 PREMIUM</span><span class="mqi"><em>⬡</em></span><span class="mqi">ALCHEMY THEATER</span><span class="mqi"><em>⬡</em></span><span class="mqi">CROWNED MONKEY WINE ROOM</span><span class="mqi"><em>⬡</em></span>
+  </div>
+</div>
+
+<main>
+<div class="gap"></div>
+<div class="sec" id="S1" data-section="Program">
+  <div class="sdiv" data-r data-rt="up"><span>01 — Program Overview</span><div class="snum">01</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g64">
+    <div class="spot-wrap" style="min-height:490px" data-r data-rt="left">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&fit=crop" alt="Crowned Monkey Lab Live" style="min-height:490px"/>
+      <div class="spot-ov"></div>
+      <div class="spot-tag"><span>Crowned Monkey Lab — Live 2026</span></div>
+      <div class="spot-badge">
+        <div class="ey lt">The Experience</div>
+        <div class="disp" style="color:var(--ice);margin-bottom:0">Alchemy <em>Theater</em></div>
+      </div>
+      <div class="deco-corner tl"></div><div class="deco-corner tr"></div>
+      <div class="deco-corner bl"></div><div class="deco-corner br"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:var(--gap)">
+      <div class="card p" data-r data-rt="right">
+        <div class="ey">The Vision</div>
+        <div class="disp">The <em>Business Case</em></div>
+        <div class="scifi-badge" style="margin-bottom:12px">
+          <div class="scifi-badge-dot"></div>
+          <span class="scifi-badge-txt">Sci-Fi Mixology · Future of Craft</span>
+        </div>
+        <p class="bdy">This document outlines the complete financial forecast and operational flow for the Crowned Monkey Sci-Fi Mixology Lab Class — a premium, immersive alchemy theater experience designed to generate significant seasonal revenue while elevating the property's cultural identity.</p>
+        <p class="bdy" style="margin-top:9px">3 classes per week, 5:00–7:00 pm, USD 290++ per person with 18 guests per session over 7 high-season months — projecting gross revenue of <strong style="color:var(--gold)">USD $158,218</strong>.</p>
+        <p class="bdy" style="margin-top:9px">Optional premium package: Sci-Fi Mixology Class + 5-Course Wine Dinner at Crowned Monkey Wine Room at <strong style="color:var(--gold)">USD $850++</strong> per person.</p>
+        <div class="tech-tags">
+          <div class="ttag"><div class="ttag-dot"></div><div class="ttag-txt">Spherification</div></div>
+          <div class="ttag"><div class="ttag-dot"></div><div class="ttag-txt">Liquid Nitrogen</div></div>
+          <div class="ttag"><div class="ttag-dot"></div><div class="ttag-txt">Smoke &amp; Flame</div></div>
+          <div class="ttag"><div class="ttag-dot"></div><div class="ttag-txt">Molecular Gastronomy</div></div>
+          <div class="ttag"><div class="ttag-dot"></div><div class="ttag-txt">Flavour Profiling</div></div>
+          <div class="ttag"><div class="ttag-dot"></div><div class="ttag-txt">Wine Pairing</div></div>
+        </div>
+      </div>
+      <div class="card p c-gold" data-r data-rt="right" data-d="90">
+        <div class="ey gd">By the Alchemist</div>
+        <div class="pcard">
+          <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=200&q=80&fit=crop&crop=face" class="pimg" alt="Subhash Sankar"/>
+          <div><div class="pname">Subhash Sankar</div><div class="prole">Lead Sci-Fi Mixologist · The Crowned Monkey</div><div class="pstat">19 YRS · UAE · BAHRAIN · QATAR · BELIZE · TURKS &amp; CAICOS</div></div>
+        </div>
+        <p style="font-family:'Playfair Display',serif;font-size:12.5px;line-height:1.74;color:rgba(232,240,248,.52);margin-top:11px">Internationally acclaimed — featured in UPROXX, recognized for one of the world's best margaritas. 200+ original recipes. 10+ years molecular &amp; sci-fi mixology.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gap-sm"></div>
+<div class="sec">
+  <div class="row g4">
+    <div class="card" data-r data-rt="scale" data-d="0"><div class="mc"><div class="mc-bar"></div><div class="ml">Price Per Person</div><div class="mv" data-cnt="290" data-pre="$" data-suf="++">$0++</div><div class="mn">Excl. taxes &amp; fees</div></div></div>
+    <div class="card" data-r data-rt="scale" data-d="68"><div class="mc"><div class="mc-bar"></div><div class="ml">Classes Per Week</div><div class="mv" style="color:var(--ice)" data-cnt="3" data-pre="" data-suf=" sessions">0</div><div class="mn">5:00 pm – 7:00 pm</div></div></div>
+    <div class="card" data-r data-rt="scale" data-d="136"><div class="mc"><div class="mc-bar"></div><div class="ml">Total Participants</div><div class="mv" style="color:var(--ice)" data-cnt="545" data-pre="" data-suf=" guests">0</div><div class="mn">18 pp × 30.3 weeks</div></div></div>
+    <div class="card c-gold" data-r data-rt="scale" data-d="204"><div class="mc mhi"><div class="mc-bar"></div><div class="ml">Projected Gross Revenue</div><div class="mv" data-cnt="158218" data-pre="$" data-fmt="comma">$0</div><div class="mn">18 × 30.3 wks × $290</div></div></div>
+  </div>
+</div>
+
+<div class="gap"></div>
+<div class="hs-wrap" id="HSW">
+  <div class="hs-fl"></div>
+  <div class="hs-inner" id="HSI">
+    <div class="itile"><img src="https://images.unsplash.com/photo-1560512823-829485b8bf24?w=600&q=80&fit=crop" alt="Smoke cocktail" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&fit=crop" alt="Molecular cocktail" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&q=80&fit=crop" alt="Bar tools" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?w=600&q=80&fit=crop" alt="Cocktail lineup" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80&fit=crop" alt="Garnish artistry" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80&fit=crop" alt="Wine dinner" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80&fit=crop" alt="Cocktail pour" loading="lazy" style="min-height:330px"/></div>
+    <div class="itile"><img src="https://images.unsplash.com/photo-1587129832975-fd4d408bfe16?w=600&q=80&fit=crop" alt="Ice crystal" loading="lazy" style="min-height:330px"/></div>
+  </div>
+  <div class="hs-fr"></div>
+</div>
+
+<!-- 02 TECHNIQUES -->
+<div class="gap"></div>
+<div class="sec" id="S2" data-section="Techniques">
+  <div class="sdiv" data-r data-rt="up"><span>02 — The Crowned Monkey Sci-Fi Techniques Program</span><div class="snum">02</div></div>
+  <div class="gap-sm"></div>
+  <div class="card p c-navy" data-r data-rt="up" style="border-color:rgba(0,201,184,.15);margin-bottom:var(--gap);position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--teal),var(--gold),transparent)"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);align-items:center">
+      <div>
+        <div class="ey">Sci-Fi Curriculum Overview</div>
+        <div class="disp">10 Advanced <em>Techniques</em></div>
+        <p class="bdy">The Crowned Monkey Sci-Fi Mixology Lab curriculum is built on two pillars — the art of <strong style="color:var(--gold)">Infusion</strong> across five distinct scientific methods, and a suite of five <strong style="color:var(--teal)">specialisation techniques</strong> spanning spherification, clarification, fat washing, barrel aging, and Isomalt sugar art — all staged as <em style="color:var(--gold)">Alchemy Theater</em>.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(201,168,76,.4);width:100%;margin-bottom:4px;font-weight:500">Program Pillars</div>
+        <div style="padding:6px 14px;border:1px solid rgba(201,168,76,.2);border-radius:2px;background:rgba(201,168,76,.04)"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold)">I · Infusion</span><span style="font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(201,168,76,.4);margin-left:8px;font-weight:500">5 METHODS</span></div>
+        <div style="padding:6px 14px;border:1px solid rgba(0,201,184,.2);border-radius:2px;background:rgba(0,201,184,.04)"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--teal)">II · Specialisation</span><span style="font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(0,201,184,.4);margin-left:8px;font-weight:500">5 METHODS</span></div>
+        <div style="padding:6px 14px;border:1px solid rgba(201,168,76,.1);border-radius:2px"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--ice)">2 Hours</span><span style="font-family:'Rajdhani',sans-serif;font-size:7px;color:var(--smoke);margin-left:8px;font-weight:500">PER SESSION</span></div>
+        <div style="padding:6px 14px;border:1px solid rgba(201,168,76,.1);border-radius:2px"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--ice)">18 Guests</span><span style="font-family:'Rajdhani',sans-serif;font-size:7px;color:var(--smoke);margin-left:8px;font-weight:500">MAX CAPACITY</span></div>
+        <div style="padding:6px 14px;border:1px solid rgba(201,168,76,.1);border-radius:2px"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--ice)">3 × Weekly</span><span style="font-family:'Rajdhani',sans-serif;font-size:7px;color:var(--smoke);margin-left:8px;font-weight:500">HIGH SEASON</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div data-r data-rt="up" data-d="0">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:var(--gap)">
+      <div style="font-family:'Cinzel',serif;font-size:clamp(18px,2.5vw,28px);letter-spacing:.1em;color:var(--gold)">I</div>
+      <div style="flex:1;height:1px;background:linear-gradient(90deg,var(--gold),rgba(201,168,76,.1))"></div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(201,168,76,.5);font-weight:500">Infusion · 5 Methods</div>
+      <div style="flex:1;height:1px;background:linear-gradient(270deg,var(--gold),rgba(201,168,76,.1))"></div>
+    </div>
+    <div class="row g3" style="margin-bottom:var(--gap)">
+      <div class="tech-card" data-r data-rt="up" data-d="0" style="border-color:rgba(201,168,76,.12)">
+        <div class="scan-ring" style="border-color:rgba(201,168,76,.25)"></div>
+        <div class="tech-icon">
+          <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+            <ellipse cx="25" cy="25" rx="5" ry="5" fill="var(--gold)" opacity=".8"/>
+            <ellipse cx="25" cy="25" rx="10" ry="10" stroke="rgba(201,168,76,.5)" stroke-width="1" fill="none" class="mol-spin" style="animation-duration:4s"/>
+            <ellipse cx="25" cy="25" rx="16" ry="16" stroke="rgba(201,168,76,.3)" stroke-width="1" stroke-dasharray="3 3" fill="none" class="mol-spin" style="animation-duration:6s"/>
+            <ellipse cx="25" cy="25" rx="22" ry="22" stroke="rgba(201,168,76,.15)" stroke-width="1" stroke-dasharray="2 4" fill="none" class="mol-spin-rev" style="animation-duration:8s"/>
+          </svg>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;font-weight:500">Method 01</div>
+        <div class="tech-title">Ultrasonic Infusion</div>
+        <div class="tech-desc">High-frequency sound waves (20–40 kHz) rupture cell walls, forcing flavour compounds into liquid in minutes rather than days. Extraordinary depth with zero heat damage.</div>
+      </div>
+      <div class="tech-card" data-r data-rt="up" data-d="60" style="border-color:rgba(201,168,76,.12)">
+        <div class="scan-ring" style="border-color:rgba(201,168,76,.25)"></div>
+        <div class="tech-icon">
+          <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+            <rect x="18" y="5" width="14" height="20" rx="2" stroke="rgba(201,168,76,.4)" stroke-width="1" fill="rgba(201,168,76,.04)"/>
+            <ellipse class="n2d" cx="25" cy="30" rx="3" ry="4" fill="rgba(201,168,76,.5)" style="animation-duration:1.2s"/>
+            <ellipse class="n2d" cx="25" cy="38" rx="2" ry="3" fill="rgba(201,168,76,.35)" style="animation-duration:1.2s;animation-delay:.4s"/>
+            <ellipse cx="25" cy="44" rx="4" ry="2.5" fill="rgba(201,168,76,.2)"/>
+            <line x1="25" y1="25" x2="25" y2="30" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;font-weight:500">Method 02</div>
+        <div class="tech-title">Gravity Infusion</div>
+        <div class="tech-desc">Ingredients layered vertically — denser liquids descend through aromatics, absorbing flavour by gravitational percolation. Layered, time-released flavour profiles impossible by stirring alone.</div>
+      </div>
+      <div class="tech-card" data-r data-rt="up" data-d="120" style="border-color:rgba(201,168,76,.12)">
+        <div class="scan-ring" style="border-color:rgba(201,168,76,.25)"></div>
+        <div class="tech-icon">
+          <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+            <ellipse cx="25" cy="38" rx="12" ry="7" stroke="rgba(201,168,76,.4)" stroke-width="1" fill="rgba(201,168,76,.04)"/>
+            <rect x="22" y="8" width="6" height="22" rx="3" stroke="rgba(201,168,76,.35)" stroke-width="1" fill="none"/>
+            <circle cx="25" cy="7" r="3" stroke="rgba(0,201,184,.4)" stroke-width="1" fill="rgba(0,201,184,.08)"/>
+            <ellipse class="n2d" cx="24" cy="32" rx="1.5" ry="2" fill="rgba(0,201,184,.4)" style="animation-duration:1.4s"/>
+            <ellipse class="n2d" cx="26" cy="28" rx="1" ry="1.5" fill="rgba(0,201,184,.3)" style="animation-duration:1.4s;animation-delay:.6s"/>
+          </svg>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;font-weight:500">Method 03</div>
+        <div class="tech-title">Siphon Infusion</div>
+        <div class="tech-desc">A vacuum siphon draws liquid through a botanical chamber using pressure differentials. As the vessel cools, negative pressure pulls every volatile aromatic compound into solution.</div>
+      </div>
+    </div>
+    <div class="row g2" style="margin-bottom:var(--gap)">
+      <div class="tech-card" data-r data-rt="up" data-d="0" style="border-color:rgba(201,168,76,.12)">
+        <div style="display:flex;gap:clamp(16px,2.5vw,28px);align-items:center;text-align:left">
+          <div class="tech-icon" style="flex-shrink:0">
+            <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+              <rect x="6" y="24" width="38" height="20" rx="2" stroke="rgba(201,168,76,.35)" stroke-width="1" fill="rgba(201,168,76,.04)"/>
+              <rect x="14" y="8" width="22" height="26" rx="3" stroke="rgba(0,201,184,.4)" stroke-width="1" fill="rgba(0,201,184,.05)"/>
+              <path d="M8 30 Q14 28 20 30 Q26 32 32 30 Q38 28 44 30" stroke="rgba(201,168,76,.4)" stroke-width="1" fill="none" class="smp"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;font-weight:500">Method 04</div>
+            <div class="tech-title">Sous Vide &amp; Sous Pression</div>
+            <div class="tech-desc">Vacuum-sealed botanicals in a precision water bath at 40°C. Forces infusion at the molecular level, extracting compounds that heat or time alone cannot release.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card" data-r data-rt="up" data-d="80" style="border-color:rgba(201,168,76,.12)">
+        <div style="display:flex;gap:clamp(16px,2.5vw,28px);align-items:center;text-align:left">
+          <div class="tech-icon" style="flex-shrink:0">
+            <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+              <circle cx="25" cy="25" r="18" stroke="rgba(201,168,76,.35)" stroke-width="1" fill="rgba(201,168,76,.04)"/>
+              <circle cx="25" cy="25" r="12" stroke="rgba(201,168,76,.2)" stroke-width=".5" fill="none"/>
+              <line x1="25" y1="13" x2="25" y2="37" stroke="rgba(201,168,76,.2)" stroke-width=".5"/>
+              <line x1="13" y1="25" x2="37" y2="25" stroke="rgba(201,168,76,.2)" stroke-width=".5"/>
+              <ellipse class="n2d" cx="30" cy="18" rx="1.5" ry="2" fill="rgba(232,201,106,.6)" style="animation-duration:2s"/>
+              <ellipse class="n2d" cx="20" cy="22" rx="1" ry="1.5" fill="rgba(232,201,106,.5)" style="animation-duration:2s;animation-delay:.8s"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;font-weight:500">Method 05</div>
+            <div class="tech-title">Oleo Saccharum</div>
+            <div class="tech-desc">Latin for "oil sugar" — citrus peels packed in sugar draw out essential oils through osmosis over 30–60 minutes, creating extraordinary concentrated citrus-oil syrup.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-r data-rt="up" data-d="0">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:var(--gap)">
+      <div style="font-family:'Cinzel',serif;font-size:clamp(18px,2.5vw,28px);letter-spacing:.1em;color:var(--teal)">II</div>
+      <div style="flex:1;height:1px;background:linear-gradient(90deg,var(--teal),rgba(0,201,184,.1))"></div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(0,201,184,.5);font-weight:500">Specialisation · 5 Methods</div>
+      <div style="flex:1;height:1px;background:linear-gradient(270deg,var(--teal),rgba(0,201,184,.1))"></div>
+    </div>
+    <div class="row g3" style="margin-bottom:var(--gap)">
+      <div class="tech-card" data-r data-rt="up" data-d="0" style="border-color:rgba(0,201,184,.14)">
+        <div class="scan-ring" style="border-color:rgba(0,201,184,.35)"></div>
+        <div class="tech-icon">
+          <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+            <g class="mol-spin"><circle cx="25" cy="25" r="18" stroke="rgba(0,201,184,.3)" stroke-width="1"/><ellipse cx="25" cy="25" rx="7" ry="18" stroke="rgba(0,201,184,.18)" stroke-width="1"/></g>
+            <circle cx="25" cy="25" r="3" fill="var(--teal)" opacity=".9"/>
+            <circle cx="17" cy="19" r="1.6" fill="rgba(0,201,184,.7)"/>
+            <circle cx="32" cy="31" r="1.2" fill="rgba(0,201,184,.5)"/>
+          </svg>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0,201,184,.6);margin-bottom:5px;font-weight:500">Spec 01</div>
+        <div class="tech-title">Reverse Spherification</div>
+        <div class="tech-desc">Calcium-lactate mixed into the liquid base; alginate forms the outer bath. The result: a durable sphere with a liquid centre — serving complex cocktails as caviar pearls that shatter on the tongue.</div>
+      </div>
+      <div class="tech-card" data-r data-rt="up" data-d="72" style="border-color:rgba(0,201,184,.14)">
+        <div class="scan-ring" style="border-color:rgba(0,201,184,.35)"></div>
+        <div class="tech-icon">
+          <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+            <path d="M8 8 L42 8 L30 24 L30 40 L20 40 L20 24 Z" stroke="rgba(0,201,184,.4)" stroke-width="1" fill="rgba(0,201,184,.04)"/>
+            <circle cx="15" cy="13" r="2" fill="rgba(201,168,76,.5)" class="n2d" style="animation-duration:2s"/>
+            <ellipse cx="25" cy="45" rx="3" ry="4" fill="rgba(232,240,248,.5)"/>
+          </svg>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0,201,184,.6);margin-bottom:5px;font-weight:500">Spec 02</div>
+        <div class="tech-title">Clarification</div>
+        <div class="tech-desc">Using gelatin fining, centrifugation, or agar clarification, turbid juices are rendered crystal-clear while retaining all flavour. Visual drama meets uncompromised taste.</div>
+      </div>
+      <div class="tech-card" data-r data-rt="up" data-d="144" style="border-color:rgba(0,201,184,.14)">
+        <div class="scan-ring" style="border-color:rgba(0,201,184,.35)"></div>
+        <div class="tech-icon">
+          <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+            <rect x="10" y="6" width="30" height="38" rx="3" stroke="rgba(0,201,184,.35)" stroke-width="1" fill="none"/>
+            <rect x="10" y="6" width="30" height="14" rx="3" fill="rgba(201,168,76,.1)" stroke="none"/>
+            <line x1="10" y1="20" x2="40" y2="20" stroke="rgba(201,168,76,.3)" stroke-width=".8" stroke-dasharray="3 2"/>
+            <text x="25" y="16" text-anchor="middle" font-size="5" fill="rgba(201,168,76,.5)" font-family="Rajdhani">FAT</text>
+            <text x="25" y="34" text-anchor="middle" font-size="5" fill="rgba(0,201,184,.5)" font-family="Rajdhani">SPIRIT</text>
+          </svg>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0,201,184,.6);margin-bottom:5px;font-weight:500">Spec 03</div>
+        <div class="tech-title">Fat Washing</div>
+        <div class="tech-desc">A liquid fat blended into a spirit, then frozen solid. The fat lifts away leaving fat-soluble flavour compounds permanently trapped in the alcohol — rich, savoury, silky cocktails.</div>
+      </div>
+    </div>
+    <div class="row g2">
+      <div class="tech-card" data-r data-rt="up" data-d="0" style="border-color:rgba(0,201,184,.14)">
+        <div style="display:flex;gap:clamp(16px,2.5vw,28px);align-items:center;text-align:left">
+          <div class="tech-icon" style="flex-shrink:0">
+            <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+              <ellipse cx="25" cy="8" rx="14" ry="4" stroke="rgba(201,168,76,.45)" stroke-width="1" fill="rgba(201,168,76,.05)"/>
+              <ellipse cx="25" cy="42" rx="14" ry="4" stroke="rgba(201,168,76,.45)" stroke-width="1" fill="rgba(201,168,76,.05)"/>
+              <line x1="11" y1="8" x2="9" y2="42" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+              <line x1="39" y1="8" x2="41" y2="42" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+              <ellipse cx="25" cy="25" rx="8" ry="5" fill="rgba(201,168,76,.1)"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0,201,184,.6);margin-bottom:5px;font-weight:500">Spec 04</div>
+            <div class="tech-title">Barrel Aging</div>
+            <div class="tech-desc">Bespoke cocktail blends rested in small-format charred oak barrels for days to weeks. Wood tannins, vanillin and lactone compounds integrate, creating depth unavailable in freshly mixed drinks.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card" data-r data-rt="up" data-d="80" style="border-color:rgba(0,201,184,.14)">
+        <div style="display:flex;gap:clamp(16px,2.5vw,28px);align-items:center;text-align:left">
+          <div class="tech-icon" style="flex-shrink:0">
+            <svg viewBox="0 0 50 50" fill="none" width="50" height="50">
+              <polygon points="25,4 32,18 25,14 18,18" fill="rgba(232,240,248,.12)" stroke="rgba(232,240,248,.5)" stroke-width=".8"/>
+              <polygon points="25,46 32,32 25,36 18,32" fill="rgba(232,240,248,.12)" stroke="rgba(232,240,248,.4)" stroke-width=".8"/>
+              <polygon points="25,14 36,25 25,36 14,25" fill="rgba(0,201,184,.08)" stroke="rgba(0,201,184,.5)" stroke-width="1"/>
+              <circle cx="25" cy="25" r="2" fill="rgba(232,240,248,.8)" class="n2d" style="animation-duration:1.8s"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0,201,184,.6);margin-bottom:5px;font-weight:500">Spec 05</div>
+            <div class="tech-title">Isomalt Sugar Art</div>
+            <div class="tech-desc">Isomalt cast, blown, pulled and sculpted into edible crystal structures: translucent shards, hollow spheres, lattice cages. The garnish is a structural component that dissolves on contact.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 AI BUILDER -->
+<div class="gap"></div>
+<div class="sec" id="S3" data-section="Lab Builder">
+  <div class="sdiv" data-r data-rt="up"><span>03 — Crowned Monkey Sci-Fi Lab · AI Recipe Builder</span><div class="snum">03</div></div>
+  <div class="gap-sm"></div>
+  <div id="BUILDER" data-r data-rt="up">
+    <div class="builder-header">
+      <div>
+        <div class="builder-title">Sci-Fi Molecular Cocktail Forge</div>
+        <div class="builder-sub">Select ingredients → Generate your Crowned Monkey alchemy recipe</div>
+      </div>
+      <div class="ai-badge"><div class="ai-dot"></div><span>XD Powered · BETA V1</span></div>
+    </div>
+    <div class="builder-body">
+      <div>
+        <div class="builder-section-label">Base Spirit</div>
+        <div class="chip-group" id="SPIRIT">
+          <span class="chip" data-v="mezcal">Mezcal</span>
+          <span class="chip" data-v="tequila">Tequila Blanco</span>
+          <span class="chip" data-v="rum">Aged Rum</span>
+          <span class="chip" data-v="whisky">Japanese Whisky</span>
+          <span class="chip" data-v="gin">Navy Gin</span>
+          <span class="chip" data-v="pisco">Pisco</span>
+        </div>
+        <div class="builder-section-label">Technique</div>
+        <div class="chip-group" id="TECH">
+          <span class="chip" data-v="Ultrasonic Infusion">Ultrasonic</span>
+          <span class="chip" data-v="Gravity Infusion">Gravity</span>
+          <span class="chip" data-v="Siphon Infusion">Siphon</span>
+          <span class="chip" data-v="Sous Vide Infusion">Sous Vide</span>
+          <span class="chip" data-v="Oleo Saccharum">Oleo Saccharum</span>
+          <span class="chip" data-v="Reverse Spherification">Spherification</span>
+          <span class="chip" data-v="Clarification">Clarification</span>
+          <span class="chip" data-v="Fat Washing">Fat Washing</span>
+          <span class="chip" data-v="Barrel Aging">Barrel Aging</span>
+          <span class="chip" data-v="Isomalt Sugar Art">Isomalt Art</span>
+        </div>
+        <div class="builder-section-label">Flavour Profile</div>
+        <div class="chip-group" id="FLAVOUR">
+          <span class="chip" data-v="tropical">Tropical</span>
+          <span class="chip" data-v="citrus">Sharp Citrus</span>
+          <span class="chip" data-v="floral">Floral</span>
+          <span class="chip" data-v="spiced">Spiced</span>
+          <span class="chip" data-v="umami">Umami</span>
+          <span class="chip" data-v="earthy">Earthy</span>
+        </div>
+        <div class="builder-section-label">Garnish</div>
+        <div class="chip-group" id="GARNISH">
+          <span class="chip" data-v="🌸 Orchid">🌸 Orchid</span>
+          <span class="chip" data-v="🌿 Herbs">🌿 Herbs</span>
+          <span class="chip" data-v="🍊 Citrus">🍊 Citrus</span>
+          <span class="chip" data-v="🫧 Caviar">🫧 Caviar</span>
+          <span class="chip" data-v="🔥 Flame">🔥 Flame</span>
+          <span class="chip" data-v="⬡ Gold Leaf">⬡ Gold Leaf</span>
+        </div>
+        <button class="gen-btn" id="GENBTN">⬡ &nbsp; Forge My Crowned Monkey Recipe &nbsp; ⬡</button>
+      </div>
+      <div>
+        <div class="builder-section-label">Live Glass Preview</div>
+        <div class="glass-viz">
+          <div class="glass-container">
+            <div class="glass-shape"><div class="glass-liquid" id="GLIQ"></div></div>
+            <div class="glass-steam" id="GSTEAM">
+              <div class="gs-wisp" style="height:28px;animation-duration:2s;animation-delay:0s"></div>
+              <div class="gs-wisp" style="height:22px;animation-duration:2.4s;animation-delay:.4s"></div>
+              <div class="gs-wisp" style="height:32px;animation-duration:1.8s;animation-delay:.8s"></div>
+            </div>
+            <span class="glass-garnish" id="GGARN">🌸</span>
+          </div>
+          <div class="glass-label" id="GLBL">Select ingredients above</div>
+        </div>
+        <div class="builder-radar">
+          <div class="builder-radar-title">Flavour Radar</div>
+          <canvas id="RADAR" width="180" height="180"></canvas>
+        </div>
+      </div>
+      <div class="recipe-out" id="ROUT">
+        <div class="recipe-loading" id="RLOAD" style="display:none">
+          <div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div>
+          <span class="load-txt">Forging your alchemy recipe...</span>
+        </div>
+        <div id="RCONTENT" style="display:none">
+          <div class="recipe-name" id="RNAME"></div>
+          <div class="recipe-desc" id="RDESC"></div>
+          <ul class="recipe-steps" id="RSTEPS"></ul>
+          <div class="share-row">
+            <button class="share-btn" id="COPYBTN">⬡ Copy Recipe</button>
+            <button class="share-btn" id="PRINTBTN">⬡ Print</button>
+            <button class="share-btn" id="RESETBTN">⬡ Reset Forge</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 FINANCIALS -->
+<div class="gap"></div>
+<div class="g-rule"></div>
+<div class="gap"></div>
+<div class="sec" id="S4" data-section="Financials">
+  <div class="sdiv" data-r data-rt="up"><span>04 — Key Assumptions &amp; Revenue Model</span><div class="snum">04</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g2">
+    <div class="card p c-navy" data-r data-rt="left">
+      <div class="ey">Program Parameters</div>
+      <div class="disp dsm">Key <em>Assumptions</em></div>
+      <div class="aln"></div>
+      <div class="arow"><div class="ak">Class Frequency</div><div class="av">3 classes / week</div></div>
+      <div class="arow"><div class="ak">Time Slot</div><div class="av">5:00 pm – 7:00 pm</div></div>
+      <div class="arow"><div class="ak">Duration Per Class</div><div class="av">2 hours</div></div>
+      <div class="arow"><div class="ak">Participants / Week</div><div class="av">18 persons</div></div>
+      <div class="arow"><div class="ak">High Season</div><div class="av">7 months ≈ 30.3 wks</div></div>
+      <div class="arow"><div class="ak">Total Participants</div><div class="av">545 persons</div></div>
+      <div class="arow"><div class="ak">Base Price</div><div class="av amb">USD $290 (+ taxes)</div></div>
+      <div class="arow"><div class="ak">Gross Revenue</div><div class="av gld">USD $158,218</div></div>
+      <div class="arow"><div class="ak">Premium Package</div><div class="av gld">USD $850++ per person</div></div>
+      <div class="arow"><div class="ak">Lab Setup Investment</div><div class="av gld">~USD $35,000</div></div>
+    </div>
+    <div class="card p" data-r data-rt="right" data-d="100">
+      <div class="ey">Revenue Breakdown</div>
+      <div class="disp dsm">Revenue <em>Model</em></div>
+      <div class="aln"></div>
+      <table class="rtab">
+        <thead><tr><th>Component</th><th>Detail</th><th>Revenue</th></tr></thead>
+        <tbody>
+          <tr><td>Sci-Fi Mixology Class (base)</td><td>18 guests × 30.3 wks</td><td class="amb">$158,218</td></tr>
+          <tr><td>Premium Wine Package</td><td>Class + 5-Course Dinner</td><td class="amb">$850<sup style="font-size:.7em">++</sup> pp</td></tr>
+          <tr><td>Merchandise &amp; Kits</td><td>Take-home cocktail sets</td><td class="amb">+ Additional</td></tr>
+          <tr><td>Photography / Social</td><td>Branded content value</td><td class="amb">Earned Media</td></tr>
+          <tr><td>Repeat Guest Loyalty</td><td>Return booking incentive</td><td class="amb">+RevPAR</td></tr>
+          <tr class="tot"><td><strong>Gross (base season)</strong></td><td>Conservative estimate</td><td class="big">$158K+</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:rgba(232,240,248,.28);margin-top:12px;line-height:1.65">Pre-tax projection. Wine Dinner upsell at $850++ significantly increases yield per guest. Lab setup (~$35K) recovered within the first 3 months.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 05 LAB SPEC -->
+<div class="gap"></div>
+<div class="sec" id="S5" data-section="Lab Spec">
+  <div class="sdiv" data-r data-rt="up"><span>05 — Laboratory Design &amp; Equipment</span><div class="snum">05</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g2">
+    <div class="card p c-navy" data-r data-rt="left" style="border-color:rgba(0,201,184,.12)">
+      <div class="ey">Advanced Arsenal</div>
+      <div class="disp dsm">Sci-Fi <em>Equipment</em></div>
+      <div class="aln"></div>
+      <p class="bdy" style="margin-bottom:12px">Crowned Monkey Lab operates a fully equipped sci-fi mixology laboratory — blending scientific precision with hospitality craft. Stainless-steel central island with 360° guest access.</p>
+      <div class="eq-grid">
+        <span class="eq-pill mol">Immersion Blenders</span><span class="eq-pill mol">ISI Whippers</span>
+        <span class="eq-pill mol">Smoking Guns</span><span class="eq-pill mol">Liquid Nitrogen Dewars</span>
+        <span class="eq-pill mol">Digital Scales (0.1g)</span><span class="eq-pill mol">pH Meters</span>
+        <span class="eq-pill mol">Ultrasonic Baths</span><span class="eq-pill mol">Rotary Evaporators</span>
+        <span class="eq-pill mol">Centrifuge</span><span class="eq-pill">Boston Shakers</span>
+        <span class="eq-pill">Hawthorne Strainers</span><span class="eq-pill">Precision Jiggers</span>
+        <span class="eq-pill">Commercial Ice Machine</span><span class="eq-pill">High-Speed Blenders</span>
+        <span class="eq-pill">Lecithin / Alginate / Agar</span>
+      </div>
+    </div>
+    <div class="card p" data-r data-rt="right" data-d="100">
+      <div class="ey">Lab Infrastructure</div>
+      <div class="disp dsm">Setup <em>Investment</em></div>
+      <div class="aln"></div>
+      <div class="cost-wrap" id="CW">
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Traditional Bartending Toolkit</span><span class="cost-val">~$300</span></div><div class="cost-track"><div class="cost-fill" style="--s:.01"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Molecular Equipment Set</span><span class="cost-val">~$7,500</span></div><div class="cost-track"><div class="cost-fill" style="--s:.21"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Large Appliances</span><span class="cost-val">~$9,000+</span></div><div class="cost-track"><div class="cost-fill" style="--s:.26"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Comprehensive Glassware</span><span class="cost-val">~$2,000</span></div><div class="cost-track"><div class="cost-fill" style="--s:.06"></div></div></div>
+        <div class="cost-row"><div class="cost-head"><span class="cost-label">Ergonomic Lab Seating</span><span class="cost-val">~$300/stool</span></div><div class="cost-track"><div class="cost-fill" style="--s:.02"></div></div></div>
+      </div>
+      <div style="margin-top:20px;padding-top:14px;border-top:1px solid rgba(201,168,76,.1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px">
+        <div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,76,.35);margin-bottom:2px;font-weight:500">Total Setup Investment</div>
+          <div style="font-family:'Cinzel',serif;font-size:clamp(22px,3.2vw,40px);background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.04em;line-height:1">~$35,000</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Rajdhani',sans-serif;font-size:6.5px;color:rgba(201,168,76,.3);margin-bottom:1px;letter-spacing:.15em;font-weight:500">PAYBACK PERIOD</div>
+          <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--teal);letter-spacing:.06em">&lt; 3 Months</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 06 CLASS FLOW -->
+<div class="gap"></div>
+<div class="sec" id="S6" data-section="Class Flow">
+  <div class="sdiv" data-r data-rt="up"><span>06 — Event Flow</span><div class="snum">06</div></div>
+  <div class="gap-sm"></div>
+  <div class="card p" data-r data-rt="up">
+    <div class="ey">Full Evening Structure</div>
+    <div class="disp">Sci-Fi Mixology Class &amp; <em>Wine Dinner</em></div>
+    <p class="bdy" style="max-width:620px;margin-bottom:24px">A seamlessly integrated evening — a hands-on 2-hour Crowned Monkey Sci-Fi Mixology Lab Class followed by a sophisticated 5-course Wine Dinner at Crowned Monkey Wine Room. Every moment is pure <em style="color:var(--gold)">Alchemy Theater</em>.</p>
+    <div class="tl" id="TL">
+      <div class="tl-line" id="TLL"></div>
+      <div class="fstep" data-r data-rt="left" data-d="0">
+        <div class="fline"></div><div class="tcol"><div class="tbadge">5:00 pm<br>—<br>7:00 pm</div></div>
+        <div class="fdot"></div>
+        <div class="fbody">
+          <div class="spill"><span class="spn">01</span><span class="spt">Sci-Fi Mixology Lab Class</span></div>
+          <div class="ftit">Hands-On Alchemy Theater Experience</div>
+          <div class="fsub">Guided by Master Sci-Fi Mixologist Subhash Sankar — The Crowned Monkey</div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Welcome &amp; Introduction (5 min)</strong> — Guests greeted; overview of the evening and the Crowned Monkey alchemy story.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Sci-Fi Cocktail Demonstrations (20 min)</strong> — Spherification, smoke &amp; flame, liquid nitrogen — live molecular showcase.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Hands-On Mixing (90 min)</strong> — Guests create <em>3–4 signature Crowned Monkey cocktails</em> — flavour profiling, garnish artistry, presentation.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Tasting &amp; Q&amp;A (15 min)</strong> — Sampling each creation, discussing flavour profiles and ingredient sourcing.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>Wrap-Up (10 min)</strong> — Home mixology tips, illustrated recipe handouts, group photograph with The Crowned Monkey.</div></div>
+        </div>
+      </div>
+      <div class="fstep" data-r data-rt="left" data-d="80">
+        <div class="fline"></div><div class="tcol"><div class="tbadge">7:00 pm<br>—<br>7:15 pm</div></div>
+        <div class="fdot"></div>
+        <div class="fbody">
+          <div class="spill"><span class="spn">02</span><span class="spt">Transition</span></div>
+          <div class="ftit">Refreshment Break &amp; Transfer</div>
+          <div class="fsub">Photography &amp; move to Crowned Monkey Wine Room</div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Golden-hour photography around the bar lounge, cocktails in hand.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Light palate cleansers or sparkling wine on arrival at Crowned Monkey Wine Room.</div></div>
+        </div>
+      </div>
+      <div class="fstep" data-r data-rt="left" data-d="160">
+        <div class="fline"></div><div class="tcol"><div class="tbadge">7:15 pm<br>—<br>10:00 pm</div></div>
+        <div class="fdot"></div>
+        <div class="fbody">
+          <div class="spill" style="background:rgba(0,201,184,.06);border-color:rgba(0,201,184,.18)"><span class="spn" style="color:var(--teal)">03</span><span class="spt">Premium Experience</span></div>
+          <div class="ftit">5-Course Wine Dinner &amp; Pairings</div>
+          <div class="fsub">Crowned Monkey Wine Room — refined Mexican-Peruvian table</div>
+          <div class="fd"><div class="fdd"></div><div class="fdt"><strong>~30 min per course</strong> including wine service and sommelier commentary on each pairing.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Optional <em>cocktail-themed amuse-bouche</em> between courses bridging the alchemy theater experience.</div></div>
+          <div class="fd"><div class="fdd"></div><div class="fdt">Post-dinner: digestif, testimonials, invitation to pre-book at loyalty rate.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 UPSELL -->
+<div class="gap"></div>
+<div class="sec" id="S7" data-section="Upsell">
+  <div class="sdiv" data-r data-rt="up"><span>07 — Upsell &amp; Revenue Strategy</span><div class="snum">07</div></div>
+  <div class="gap-sm"></div>
+  <div class="card p c-teal" data-r data-rt="up">
+    <div class="ey lt">Revenue Optimisation</div>
+    <div class="disp" style="color:var(--ice)">Maximising <em>Returns</em></div>
+    <div class="aln"></div>
+    <div class="row g2">
+      <div>
+        <div class="urow"><div class="udia"></div><p class="ut">Share professional <strong>videos and photography</strong> on website and Instagram — building anticipation and pre-bookings.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut">Monitor strict <strong>pour costs and ingredient expenses</strong> to preserve healthy profit margins throughout the season.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut">Branded <strong>merchandise and premium cocktail kits</strong> shipped to guests post-class, extending the Crowned Monkey brand.</p></div>
+      </div>
+      <div>
+        <div class="urow"><div class="udia"></div><p class="ut">Back-to-back <strong>Sci-Fi Mixology Class + 5-Course Wine Dinner</strong> at Crowned Monkey Wine Room at <em>USD $850++ per person</em>.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut">Reassess pricing <strong>dynamically</strong> if ingredient costs or demand shift significantly during the season.</p></div>
+        <div class="urow"><div class="udia"></div><p class="ut"><strong>Loyalty pricing</strong> for repeat guests — incentivise second and third visits through referral and return discount.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gap-sm"></div>
+<div class="fb"><div class="fbi">
+  <div class="hl-band card" data-r data-rt="scale">
+    <div>
+      <div class="hlv" data-cnt="850" data-pre="$" data-suf="++">$0++</div>
+      <div class="hll">Per Person — Sci-Fi Mixology Class + 5-Course Wine Dinner</div>
+      <div class="hln">The premium back-to-back alchemy theater experience at Crowned Monkey Wine Room</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(13px,1.7vw,18px);color:rgba(232,240,248,.5);line-height:1.58;max-width:280px">A complete evening of craft, culture &amp; culinary mastery in one seamless alchemy theater performance.</p>
+      <a href="index.html" class="btn-gold">← Back to Portfolio</a>
+    </div>
+  </div>
+</div></div>
+
+<!-- 08 GALLERY -->
+<div class="gap"></div>
+<div class="sec" id="S8" data-section="Gallery">
+  <div class="sdiv" data-r data-rt="up"><span>08 — The Craft in Images</span><div class="snum">08</div></div>
+  <div class="gap-sm"></div>
+  <div class="row g2" style="margin-bottom:var(--gap)">
+    <div class="itile" style="min-height:370px;border-radius:var(--r)" data-r data-rt="left">
+      <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=900&q=80&fit=crop" alt="Cocktail craft" loading="lazy" style="min-height:370px"/>
+    </div>
+    <div class="row" style="grid-template-rows:1fr 1fr;gap:var(--gap)">
+      <div class="itile" style="min-height:178px;border-radius:var(--r)" data-r data-rt="right">
+        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=700&q=80&fit=crop" alt="Garnish detail" loading="lazy" style="min-height:178px"/>
+      </div>
+      <div class="itile" style="min-height:178px;border-radius:var(--r)" data-r data-rt="right" data-d="80">
+        <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=700&q=80&fit=crop" alt="Fine dining" loading="lazy" style="min-height:178px"/>
+      </div>
+    </div>
+  </div>
+  <div class="row g3">
+    <div class="itile" style="min-height:218px;border-radius:var(--r)" data-r data-rt="up" data-d="0">
+      <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80&fit=crop" alt="Bar laboratory" loading="lazy" style="min-height:218px"/>
+    </div>
+    <div class="itile" style="min-height:218px;border-radius:var(--r)" data-r data-rt="up" data-d="80">
+      <img src="https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=600&q=80&fit=crop" alt="Smoke cocktail" loading="lazy" style="min-height:218px"/>
+    </div>
+    <div class="itile" style="min-height:218px;border-radius:var(--r)" data-r data-rt="up" data-d="160">
+      <img src="https://images.unsplash.com/photo-1582106245687-cbb466a9f07f?w=600&q=80&fit=crop" alt="Molecular lab" loading="lazy" style="min-height:218px"/>
+    </div>
+  </div>
+</div>
+
+<div class="gap"></div>
+<div class="fb"><div class="fbi">
+  <div class="bq" data-r data-rt="up" id="S9" data-section="Summary">
+    <div class="bq-glow"></div>
+    <span class="bq-mark">&ldquo;</span>
+    <p class="bq-text">The Crowned Monkey Sci-Fi Mixology Lab is not simply a class — it is a performance. Every technique, every ingredient, every sip tells the story of 19 years perfecting the art of alchemy theater.</p>
+    <p class="bq-by">Subhash Sankar — The Crowned Monkey, Lead Sci-Fi Mixologist</p>
+  </div>
+</div></div>
+
+<div class="gap-sm"></div>
+<div class="mq-wrap">
+  <div class="mq-track mq-rev">
+    <span class="mqi lit">SPHERIFICATION</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">LIQUID NITROGEN</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">ALCHEMY THEATER</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">SCI-FI MIXOLOGY</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">GARNISH ARTISTRY</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">WINE PAIRING</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">200+ RECIPES</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">UPROXX FEATURED</span><span class="mqi"><em>⬡</em></span>
+    <span class="mqi lit">SPHERIFICATION</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">LIQUID NITROGEN</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">ALCHEMY THEATER</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">SCI-FI MIXOLOGY</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">GARNISH ARTISTRY</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">WINE PAIRING</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">200+ RECIPES</span><span class="mqi"><em>⬡</em></span><span class="mqi lit">UPROXX FEATURED</span><span class="mqi"><em>⬡</em></span>
+  </div>
+</div>
+
+<div class="gap"></div>
+<div class="sec">
+  <div class="sdiv" data-r data-rt="up"><span>09 — Executive Summary</span></div>
+  <div class="gap-sm"></div>
+  <div class="card p c-navy" data-r data-rt="up" style="border:1px solid rgba(201,168,76,.14);overflow:hidden;position:relative">
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--teal),var(--gold),transparent)"></div>
+    <div class="ey">At a Glance</div>
+    <div class="disp">Business <em>Summary</em></div>
+    <div class="aln"></div>
+    <div class="row g4">
+      <div class="excol"><div class="exlab">Program</div><p class="bdy">Crowned Monkey Sci-Fi Mixology Lab Class — gastronomy-led alchemy theater experience hosted by internationally acclaimed sci-fi mixologist Subhash Sankar.</p></div>
+      <div class="excol"><div class="exlab">Schedule</div><p class="bdy">3 sessions per week, 5:00–7:00 pm, 7 high-season months (~30.3 weeks). 18 participants per week; 545 total.</p></div>
+      <div class="excol"><div class="exlab">Revenue</div><p class="bdy">Base gross: <strong style="color:var(--gold)">USD $158,218</strong>. Premium Wine Dinner: <strong style="color:var(--gold)">USD $850++</strong> per person.</p></div>
+      <div class="excol"><div class="exlab">Investment</div><p class="bdy">Lab setup approximately <strong style="color:var(--gold)">USD $35,000</strong> — fully recovered within the first 3 months of operation.</p></div>
+    </div>
+  </div>
+</div>
+<div class="gap"></div>
+</main>
+
+<footer>
+  <div>
+    <div class="f-brand">Crowned Monkey — Sci-Fi Mixology Lab 👑</div>
+    <div class="f-sub">Business Case &amp; ROI Plan · Subhash Sankar · Alchemy Theater 2026</div>
+    <div style="font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(201,168,76,.28);margin-top:4px;letter-spacing:.12em;font-weight:500">✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="364543545e57455e76554459415853525b59585d534f1855595b">[email&#160;protected]</a> &nbsp;·&nbsp; ☎ +91 799 403 1394</div>
+    <div class="f-copy">© 2026 Subhash Sankar / Crowned Monkey. All rights reserved.</div>
+  </div>
+  <div class="f-nav">
+    <a href="index.html">Portfolio</a>
+    <a href="index.html">Cocktail Menu</a>
+    <a href="index.html">Food Pairings</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="videos.html">Videos</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+'use strict';
+
+/* ══ CURSOR ══ */
+var CUR=document.getElementById('CUR'),RNG=document.getElementById('CRG');
+var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY},{passive:true});
+(function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;CUR.style.transform='translate('+mx+'px,'+my+'px)';RNG.style.transform='translate('+(rx-mx)+'px,'+(ry-my)+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.card,.itile,.snd,.spot-wrap,.chip').forEach(function(el){
+  el.addEventListener('mouseenter',function(){document.body.classList.add('hov')},{passive:true});
+  el.addEventListener('mouseleave',function(){document.body.classList.remove('hov')},{passive:true});
+});
+
+/* ══ PRELOADER ══ */
+var PLF=document.getElementById('PLF'),PLP=document.getElementById('PLP'),PLE=document.getElementById('PL');
+var n=0,DONE=false;
+setTimeout(launch,3500);
+function ontick(){n++;var p=Math.round(n/5*100);PLF.style.width=p+'%';if(PLP)PLP.textContent=p+'%'}
+function launch(){if(DONE)return;DONE=true;PLE.classList.add('gone');initReveal();heroCounters()}
+for(var i=0;i<5;i++){(function(){var img=new Image();img.onload=img.onerror=ontick;img.src='https://images.unsplash.com/photo-1560512823-829485b8bf24?w=200&q=40'})()}
+
+/* ══ COCKTAIL SCROLL BAR ══ */
+var PBFILL=document.getElementById('PBAR-FILL');
+var PBGLASS=document.getElementById('PBAR-GLASS');
+var RFG=document.getElementById('RFG'),RNUM=document.getElementById('RNUM');
+var BTT=document.getElementById('BTT');
+var CIRC=100.5,scrollTick=false;
+var lastScrollPct=0,lastDropTime=0;
+
+/* Fix 1: Canvas-based drop pool — zero DOM mutations on scroll */
+var dropCanvas=document.createElement('canvas');
+dropCanvas.style.cssText='position:fixed;top:0;left:0;pointer-events:none;z-index:599;';
+document.body.appendChild(dropCanvas);
+var dCtx=dropCanvas.getContext('2d');
+var drops=[];
+var dropW=window.innerWidth,dropH=60;
+dropCanvas.width=dropW;dropCanvas.height=dropH;
+
+/* Fix 5: Resize only on actual resize, not every frame */
+window.addEventListener('resize',function(){
+  dropW=window.innerWidth;
+  dropCanvas.width=dropW;dropCanvas.height=dropH;
+},{passive:true});
+
+function spawnDrop(xPct){
+  if(drops.length>16)return; /* hard cap — never more than 16 active */
+  drops.push({x:xPct*dropW,y:3,h:8+Math.random()*14,alpha:.82,speed:1.5+Math.random()*.8});
+}
+
+function tickDrops(){
+  dCtx.clearRect(0,0,dropW,dropH);
+  for(var i=drops.length-1;i>=0;i--){
+    var d=drops[i];
+    d.y+=d.speed;d.alpha-=0.038;
+    if(d.alpha<=0){drops.splice(i,1);continue;}
+    dCtx.fillStyle='rgba(201,168,76,'+d.alpha.toFixed(2)+')';
+    dCtx.fillRect(d.x,d.y,1.5,d.h);
+  }
+  requestAnimationFrame(tickDrops);
+}
+tickDrops();
+
+function doScroll(){
+  scrollTick=false;
+  var sy=window.scrollY,tot=document.body.scrollHeight-innerHeight,p=tot>0?sy/tot:0;
+
+  PBFILL.style.transform='scaleX('+p+')';
+  if(PBGLASS)PBGLASS.style.opacity=p>0.01?'1':'0';
+
+  RFG.style.strokeDashoffset=CIRC-p*CIRC;
+  if(RNUM)RNUM.textContent=Math.round(p*100)+'%';
+
+  /* Fix 2: Rate-limit drops — min 80ms apart, min 0.02 scroll delta */
+  var now=performance.now();
+  var diff=p-lastScrollPct;
+  if(Math.abs(diff)>0.02&&now-lastDropTime>80){
+    spawnDrop(Math.max(0,p-Math.random()*.04));
+    lastScrollPct=p;lastDropTime=now;
+  }
+
+  var hb=document.getElementById('HBGIMG');
+  if(hb&&sy<innerHeight)hb.style.transform='translateY('+(sy*.18)+'px)';
+  var hsi=document.getElementById('HSI'),hsw=document.getElementById('HSW');
+  if(hsi&&hsw){var r=hsw.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0){var pr=(innerHeight-r.top)/(innerHeight+r.height),mx2=-(hsi.scrollWidth-innerWidth)*.75;hsi.style.transform='translateX('+(pr*mx2*.38)+'px)';}}
+  var tl=document.getElementById('TL'),tll=document.getElementById('TLL');
+  if(tl&&tll){var tr=tl.getBoundingClientRect();if(tr.top<innerHeight&&tr.bottom>0){var tp=Math.max(0,Math.min(1,(innerHeight-tr.top)/(tr.height+innerHeight*.35)));tll.style.transform='scaleY('+tp+')';}}
+  BTT.classList.toggle('vis',sy>innerHeight*.5);
+  navUpdate();
+}
+window.addEventListener('scroll',function(){if(!scrollTick){scrollTick=true;requestAnimationFrame(doScroll)}},{passive:true});
+BTT.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+/* ══ NAV DOTS ══ */
+var secs=[],SNAV=document.getElementById('SNAV');
+document.querySelectorAll('[data-section]').forEach(function(el){
+  secs.push(el);
+  var d=document.createElement('div');d.className='snd';d.setAttribute('data-l',el.getAttribute('data-section'));
+  d.addEventListener('click',function(){el.scrollIntoView({behavior:'smooth',block:'start'})});
+  SNAV.appendChild(d);
+});
+function navUpdate(){var mid=window.scrollY+innerHeight*.42,dots=SNAV.querySelectorAll('.snd'),a=-1;secs.forEach(function(s,i){if(s.offsetTop<=mid)a=i});dots.forEach(function(d,i){d.classList.toggle('on',i===a)});}
+
+/* ══ KEYBOARD ══ */
+var currentSec=0,kHinted=false,toastTimer;
+function showToast(){var t=document.getElementById('KTOAST');t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},2600)}
+document.addEventListener('keydown',function(e){
+  if(!kHinted){kHinted=true;showToast()}
+  var key=e.key.toLowerCase();
+  if(key==='j'||key==='arrowdown'){e.preventDefault();currentSec=Math.min(secs.length-1,currentSec+1);secs[currentSec].scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(key==='k'||key==='arrowup'){e.preventDefault();currentSec=Math.max(0,currentSec-1);secs[currentSec].scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(key==='b'){var b=document.getElementById('S3');if(b)b.scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(key==='t'){window.scrollTo({top:0,behavior:'smooth'});}
+  else if(key==='escape'){closeLab3D();}
+});
+
+/* ══ SCROLL REVEAL ══ */
+function initReveal(){
+  document.querySelectorAll('[data-r]').forEach(function(el){
+    var t=el.getAttribute('data-rt')||'up',d=parseInt(el.getAttribute('data-d')||0);
+    var tf=t==='left'?'translateX(-30px)':t==='right'?'translateX(30px)':t==='scale'?'scale(.94) translateY(14px)':'translateY(20px)';
+    el.style.opacity='0';el.style.transform=tf;
+    el.style.transition='opacity .75s cubic-bezier(.16,1,.3,1) '+d+'ms,transform .75s cubic-bezier(.16,1,.3,1) '+d+'ms';
+  });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.style.opacity='1';e.target.style.transform='none';
+      e.target.querySelectorAll('[data-cnt]').forEach(animCount);
+      if(e.target.hasAttribute('data-cnt'))animCount(e.target);
+      e.target.querySelectorAll('.cost-fill').forEach(function(b){var s=parseFloat(b.style.getPropertyValue('--s')||'1');setTimeout(function(){b.style.transform='scaleX('+s+')'},220);});
+      io.unobserve(e.target);
+    });
+  },{threshold:.05,rootMargin:'0px 0px -24px 0px'});
+  document.querySelectorAll('[data-r]').forEach(function(el){io.observe(el)});
+  var io2=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;e.target.querySelectorAll('.cost-fill').forEach(function(b){var s=parseFloat(b.style.getPropertyValue('--s')||'1');setTimeout(function(){b.style.transform='scaleX('+s+')'},160);});io2.unobserve(e.target);});},{threshold:.1});
+  var cw=document.getElementById('CW');if(cw)io2.observe(cw);
+  document.querySelectorAll('.snum').forEach(function(el){var io3=new IntersectionObserver(function(ents){if(ents[0].isIntersecting){el.animate([{opacity:0,transform:'translateX(14px)'},{opacity:1,transform:'none'}],{duration:560,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'});io3.disconnect();}},{threshold:.5});io3.observe(el);});
+}
+
+/* ══ COUNTERS ══ */
+function eOut(t){return 1-Math.pow(1-t,3)}
+var counted=new Set();
+function animCount(el){
+  if(counted.has(el))return;counted.add(el);
+  var tgt=parseInt(el.getAttribute('data-cnt')),pre=el.getAttribute('data-pre')||'',suf=el.getAttribute('data-suf')||'',fmt=el.getAttribute('data-fmt')||'';
+  var dur=1450,st=null;
+  requestAnimationFrame(function f(ts){if(!st)st=ts;var p=Math.min((ts-st)/dur,1),v=Math.floor(eOut(p)*tgt);el.textContent=pre+(fmt==='comma'?v.toLocaleString():v)+suf;if(p<1)requestAnimationFrame(f);else el.textContent=pre+(fmt==='comma'?tgt.toLocaleString():tgt)+suf;});
+}
+function heroCounters(){document.querySelectorAll('.hmv[data-cnt]').forEach(function(el,i){setTimeout(function(){animCount(el)},240+i*90)});}
+
+/* ══ CARD TILT ══ */
+document.querySelectorAll('.card,.spot-wrap').forEach(function(c){
+  c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transition='none';c.style.transform='translateY(-3px) perspective(800px) rotateY('+(x*4.5)+'deg) rotateX('+(-y*3)+'deg)';});
+  c.addEventListener('pointerleave',function(){c.style.transition='transform .38s cubic-bezier(.16,1,.3,1)';c.style.transform='';});
+});
+
+/* ══ MAGNETIC LINKS ══ */
+document.querySelectorAll('a,.gen-btn,.share-btn').forEach(function(el){
+  el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect();el.style.transform='translate('+((e.clientX-r.left-r.width/2)*.07)+'px,'+((e.clientY-r.top-r.height/2)*.07)+'px)';});
+  el.addEventListener('mouseleave',function(){el.style.transition='transform .34s cubic-bezier(.16,1,.3,1)';el.style.transform='';setTimeout(function(){el.style.transition=''},340);});
+});
+
+/* ══ HEX FIELD ══ */
+(function(){var w=document.getElementById('HXF');if(!w)return;for(var i=0;i<22;i++){var h=document.createElement('div');h.className='hex';h.style.cssText=['left:'+(Math.random()*100)+'%','top:'+(Math.random()*100)+'%','animation-duration:'+(Math.random()*6+4)+'s','animation-delay:'+(-Math.random()*6)+'s'].join(';');w.appendChild(h);}})();
+
+/* ══ DRIPS ══ */
+(function(){var w=document.getElementById('DRP');if(!w)return;for(var i=0;i<8;i++){var d=document.createElement('div');d.className='drip';var h=(Math.random()*60+40).toFixed(0);d.style.cssText=['left:'+(Math.random()*100)+'%','height:'+h+'px','opacity:'+((Math.random()*.4+.1)).toFixed(2),'animation-duration:'+(Math.random()*8+6)+'s','animation-delay:'+(-Math.random()*8)+'s'].join(';');w.appendChild(d);}})();
+
+/* ══ SPARK ON METRIC HOVER ══ */
+document.querySelectorAll('.mc').forEach(function(mc){mc.addEventListener('mouseenter',function(){for(var i=0;i<4;i++){var s=document.createElement('div');s.className='spark';s.style.cssText='left:'+(Math.random()*90+5)+'%;bottom:'+(Math.random()*10+2)+'%;animation-duration:'+(Math.random()*.45+.28)+'s;animation-delay:'+Math.random()*.12+'s;position:absolute';mc.style.position='relative';mc.appendChild(s);setTimeout(function(x){if(x&&x.parentNode)x.remove()},550,s);}});});
+
+/* ══ FLAVOUR RADAR ══ */
+var radarCanvas=document.getElementById('RADAR');
+var radarCtx=radarCanvas?radarCanvas.getContext('2d'):null;
+var RADAR_LABELS=['Sweet','Sour','Bitter','Smoky','Floral','Heat'];
+var RADAR_DEFAULTS=[0.2,0.2,0.2,0.2,0.2,0.2];
+var SPIRIT_RADAR={mezcal:[0.2,0.1,0.4,0.9,0.1,0.5],tequila:[0.3,0.5,0.3,0.3,0.3,0.4],rum:[0.8,0.2,0.2,0.4,0.2,0.2],whisky:[0.6,0.1,0.5,0.6,0.2,0.3],gin:[0.3,0.3,0.4,0.1,0.9,0.2],pisco:[0.5,0.5,0.2,0.1,0.6,0.2]};
+var FLAVOUR_RADAR={tropical:[0.8,0.6,0.1,0.1,0.5,0.1],citrus:[0.3,0.9,0.3,0.1,0.4,0.1],floral:[0.5,0.3,0.2,0.1,0.9,0.1],spiced:[0.4,0.2,0.5,0.5,0.2,0.9],umami:[0.3,0.3,0.6,0.4,0.2,0.3],earthy:[0.2,0.2,0.7,0.6,0.3,0.2]};
+var radarTarget=RADAR_DEFAULTS.slice(),radarCurrent=RADAR_DEFAULTS.slice(),radarRafId=null;
+function blendRadar(s,f){var b=SPIRIT_RADAR[s]||RADAR_DEFAULTS,fl=FLAVOUR_RADAR[f]||RADAR_DEFAULTS;return b.map(function(v,i){return Math.min(1,v*.6+fl[i]*.4)});}
+function drawRadar(vals){
+  if(!radarCtx)return;
+  var c=radarCtx,w=radarCanvas.width,h=radarCanvas.height,cx=w/2,cy=h/2,R=Math.min(cx,cy)-20,N=RADAR_LABELS.length;
+  c.clearRect(0,0,w,h);
+  for(var r=1;r<=4;r++){c.beginPath();for(var i=0;i<N;i++){var ang=-Math.PI/2+(2*Math.PI/N)*i,rr=R*(r/4),px=cx+Math.cos(ang)*rr,py=cy+Math.sin(ang)*rr;if(i===0)c.moveTo(px,py);else c.lineTo(px,py);}c.closePath();c.strokeStyle='rgba(201,168,76,0.08)';c.lineWidth=1;c.stroke();}
+  for(var i=0;i<N;i++){var ang=-Math.PI/2+(2*Math.PI/N)*i;c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+Math.cos(ang)*R,cy+Math.sin(ang)*R);c.strokeStyle='rgba(201,168,76,0.12)';c.lineWidth=1;c.stroke();var lx=cx+Math.cos(ang)*(R+14),ly=cy+Math.sin(ang)*(R+14);c.font='500 8px Rajdhani,sans-serif';c.fillStyle='rgba(201,168,76,0.45)';c.textAlign='center';c.textBaseline='middle';c.fillText(RADAR_LABELS[i].toUpperCase(),lx,ly);}
+  c.beginPath();
+  for(var i=0;i<N;i++){var ang=-Math.PI/2+(2*Math.PI/N)*i,rv=R*(vals[i]||0),px=cx+Math.cos(ang)*rv,py=cy+Math.sin(ang)*rv;if(i===0)c.moveTo(px,py);else c.lineTo(px,py);}
+  c.closePath();
+  var grd=c.createRadialGradient(cx,cy,0,cx,cy,R);grd.addColorStop(0,'rgba(0,201,184,0.35)');grd.addColorStop(1,'rgba(201,168,76,0.12)');c.fillStyle=grd;c.fill();c.strokeStyle='rgba(0,201,184,0.7)';c.lineWidth=1.5;c.stroke();
+  for(var i=0;i<N;i++){var ang=-Math.PI/2+(2*Math.PI/N)*i,rv=R*(vals[i]||0);c.beginPath();c.arc(cx+Math.cos(ang)*rv,cy+Math.sin(ang)*rv,2.5,0,Math.PI*2);c.fillStyle='#00C9B8';c.fill();}
+}
+function animateRadar(){var done=true;radarCurrent=radarCurrent.map(function(v,i){var d=radarTarget[i]-v;if(Math.abs(d)>0.005){done=false;return v+d*.12}return radarTarget[i];});drawRadar(radarCurrent);if(!done)radarRafId=requestAnimationFrame(animateRadar);else radarRafId=null;}
+function setRadarTarget(spirit,flavour){if(spirit&&flavour)radarTarget=blendRadar(spirit,flavour);else if(spirit)radarTarget=SPIRIT_RADAR[spirit]||RADAR_DEFAULTS.slice();else radarTarget=RADAR_DEFAULTS.slice();if(!radarRafId)radarRafId=requestAnimationFrame(animateRadar);}
+drawRadar(RADAR_DEFAULTS);
+
+/* ══ BUILDER ══ */
+var selections={spirit:null,technique:null,flavour:null,garnish:null};
+var liquidColors={mezcal:'linear-gradient(180deg,transparent,rgba(201,168,76,.55) 20%,rgba(201,140,40,.35))',tequila:'linear-gradient(180deg,transparent,rgba(232,224,180,.45) 20%,rgba(220,210,150,.25))',rum:'linear-gradient(180deg,transparent,rgba(160,80,20,.55) 20%,rgba(140,60,10,.35))',whisky:'linear-gradient(180deg,transparent,rgba(180,100,20,.5) 20%,rgba(160,80,10,.3))',gin:'linear-gradient(180deg,transparent,rgba(180,220,200,.35) 20%,rgba(150,200,180,.2))',pisco:'linear-gradient(180deg,transparent,rgba(220,210,180,.4) 20%,rgba(200,190,160,.22))'};
+['SPIRIT','TECH','FLAVOUR','GARNISH'].forEach(function(gid,gi){
+  var key=['spirit','technique','flavour','garnish'][gi];
+  document.getElementById(gid).querySelectorAll('.chip').forEach(function(chip){
+    chip.addEventListener('click',function(){document.getElementById(gid).querySelectorAll('.chip').forEach(function(c){c.classList.remove('active','active-teal')});chip.classList.add(gi<2?'active':'active-teal');selections[key]=chip.getAttribute('data-v');updateGlass();if(key==='spirit'||key==='flavour')setRadarTarget(selections.spirit,selections.flavour);});
+  });
+});
+function updateGlass(){
+  var liq=document.getElementById('GLIQ'),garn=document.getElementById('GGARN'),lbl=document.getElementById('GLBL'),steam=document.getElementById('GSTEAM'),s=selections;
+  var pct=0;if(s.spirit)pct+=28;if(s.technique)pct+=18;if(s.flavour)pct+=18;if(s.garnish)pct+=12;
+  liq.style.height=pct+'%';if(s.spirit&&liquidColors[s.spirit])liq.style.background=liquidColors[s.spirit];
+  if(s.garnish){garn.textContent=s.garnish.split(' ')[0];garn.classList.add('show');}else{garn.classList.remove('show');}
+  steam.style.opacity=(s.technique==='Ultrasonic Infusion'||s.technique==='Sous Vide Infusion'||s.technique==='Fat Washing'||s.technique==='Barrel Aging')?'1':'0';
+  var parts=[];if(s.spirit)parts.push(s.spirit);if(s.technique)parts.push(s.technique);if(s.flavour)parts.push(s.flavour);
+  lbl.textContent=parts.length?parts.join(' + '):'Select ingredients above';
+}
+var FALLBACKS={mezcal:{'Reverse Spherification':{name:'The Crowned Monkey Oracle',tagline:'Mezcal caviar pearls suspended in agave mist — a shattered alchemy prophecy on the tongue.',steps:['Measure 60ml artisanal mezcal; blend calcium lactate 0.5% for maximum sphere integrity.','Prepare sodium alginate bath 0.5% in still water; rest 30 minutes to eliminate bubbles.','Drop mezcal mixture through pipette into alginate bath; pearls form in 90 seconds.','Rinse pearls in distilled water, plate in smoked coupe with single orchid bloom.','Serve immediately — each pearl a burst of pure sci-fi alchemy theater on the palate.']},'default':{name:"The Crowned Monkey's Smoke",tagline:'Nineteen years of craft distilled into a single, transcendent alchemy theater sip.',steps:['Measure 60ml premium mezcal into a chilled mixing vessel with pristine clarity.','Apply the chosen molecular technique, unlocking layers invisible to conventional methods.','Profile the flavour notes through precise temperature control and micro-adjustment.','Strain ceremonially through gold-mesh strainer into crystal coupe at exact angle.','Crown with the chosen garnish — the final act of Crowned Monkey alchemy theater begins.']}}};
+function buildFallback(s){var spirit=s.spirit||'mezcal',tech=s.technique||'',garnish=s.garnish||'⬡ Gold Leaf';var pool=FALLBACKS[spirit]||FALLBACKS.mezcal;var r=pool[tech]||pool['default'];var steps=r.steps.map(function(st){return st.replace('{T}',tech).replace('{G}',garnish)});return{name:r.name,tagline:r.tagline,steps:steps};}
+var lastRecipe=null;
+document.getElementById('GENBTN').addEventListener('click',function(){
+  var s=selections;
+  if(!s.spirit||!s.technique||!s.flavour||!s.garnish){['SPIRIT','TECH','FLAVOUR','GARNISH'].forEach(function(gid,gi){var key=['spirit','technique','flavour','garnish'][gi];if(!s[key]){var g=document.getElementById(gid);g.style.outline='1px solid rgba(200,76,106,.4)';setTimeout(function(){g.style.outline=''},1800);}});return;}
+  var btn=document.getElementById('GENBTN'),rout=document.getElementById('ROUT'),rload=document.getElementById('RLOAD'),rcont=document.getElementById('RCONTENT');
+  btn.disabled=true;btn.textContent='⬡  Forging Alchemy...  ⬡';
+  rout.classList.add('open');rload.style.display='flex';rcont.style.display='none';
+  var prompt='You are The Crowned Monkey, world-renowned sci-fi molecular mixologist Subhash Sankar. Create a signature alchemy theater cocktail recipe:\n- Base Spirit: '+s.spirit+'\n- Molecular Technique: '+s.technique+'\n- Flavour Profile: '+s.flavour+'\n- Garnish: '+s.garnish+'\n\nRespond ONLY with a JSON object (no markdown, no backticks, no explanation) with exactly these fields:\n{"name":"<poetic sci-fi cocktail name 3-5 words>","tagline":"<one powerful sentence about the alchemy theater sensory experience>","steps":["<step 1 — technical, max 22 words>","<step 2>","<step 3>","<step 4>","<step 5 — final theatrical reveal>"]}\n\nEach step must reference the chosen technique and ingredients. Use sci-fi alchemy theater language.';
+  var timeout=setTimeout(function(){renderRecipe(buildFallback(s));rload.style.display='none';btn.disabled=false;btn.textContent='⬡  Forge Another Recipe  ⬡';},12000);
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})})
+  .then(function(r){return r.json()})
+  .then(function(data){clearTimeout(timeout);var raw=(data.content&&data.content[0]&&data.content[0].text)||'{}';var clean=raw.replace(/```json|```/g,'').trim();var recipe;try{recipe=JSON.parse(clean)}catch(e){recipe=buildFallback(s)}if(!recipe.steps||recipe.steps.length<3)recipe=buildFallback(s);renderRecipe(recipe);rload.style.display='none';btn.disabled=false;btn.textContent='⬡  Forge Another Recipe  ⬡';})
+  .catch(function(){clearTimeout(timeout);renderRecipe(buildFallback(s));rload.style.display='none';btn.disabled=false;btn.textContent='⬡  Forge Another Recipe  ⬡';});
+});
+function renderRecipe(recipe){
+  lastRecipe=recipe;
+  var rcont=document.getElementById('RCONTENT');
+  document.getElementById('RNAME').textContent=recipe.name||'Unnamed Elixir';
+  document.getElementById('RDESC').innerHTML=(recipe.tagline||'')+'<span class="typing-cursor"></span>';
+  var stepsList=document.getElementById('RSTEPS');stepsList.innerHTML='';
+  (recipe.steps||[]).forEach(function(step,i){var li=document.createElement('li');li.className='recipe-step';var num=document.createElement('span');num.className='step-num';num.textContent='0'+(i+1);var txt=document.createElement('span');txt.textContent=step;li.appendChild(num);li.appendChild(txt);stepsList.appendChild(li);setTimeout(function(){li.classList.add('show')},(i+1)*130);});
+  rcont.style.display='block';
+  setTimeout(function(){var cur=document.querySelector('.typing-cursor');if(cur)cur.style.display='none';},2400);
+}
+document.getElementById('COPYBTN').addEventListener('click',function(){if(!lastRecipe)return;var txt='CROWNED MONKEY — '+lastRecipe.name+'\n'+lastRecipe.tagline+'\n\n';lastRecipe.steps.forEach(function(s,i){txt+=(i+1)+'. '+s+'\n'});txt+='\nForged at Crowned Monkey Sci-Fi Mixology Lab · crownedmonkey.com';navigator.clipboard.writeText(txt).then(function(){var btn=document.getElementById('COPYBTN');btn.textContent='⬡ Copied!';btn.classList.add('copied');setTimeout(function(){btn.textContent='⬡ Copy Recipe';btn.classList.remove('copied')},2000);}).catch(function(){});});
+document.getElementById('PRINTBTN').addEventListener('click',function(){if(!lastRecipe)return;var win=window.open('','_blank','width=600,height=700');win.document.write('<html><head><title>Crowned Monkey — '+lastRecipe.name+'</title><style>body{font-family:Georgia,serif;background:#07091A;color:#E8F0F8;padding:40px;max-width:540px;margin:0 auto}h1{color:#C9A84C;font-size:28px;margin-bottom:6px}p.tag{font-style:italic;color:rgba(232,240,248,.6);margin-bottom:24px}ol{padding-left:20px}li{margin-bottom:12px;line-height:1.7;color:rgba(232,240,248,.7)}footer{margin-top:32px;font-size:11px;color:rgba(201,168,76,.35);border-top:1px solid rgba(201,168,76,.15);padding-top:12px}</style></head><body>');win.document.write('<h1>'+lastRecipe.name+'</h1><p class="tag">'+lastRecipe.tagline+'</p><ol>');lastRecipe.steps.forEach(function(s){win.document.write('<li>'+s+'</li>')});win.document.write('</ol><footer>Crowned Monkey Sci-Fi Mixology Lab · Alchemy Theater · Subhash Sankar · 2026</footer></body></html>');win.document.close();setTimeout(function(){win.print()},320);});
+document.getElementById('RESETBTN').addEventListener('click',function(){selections={spirit:null,technique:null,flavour:null,garnish:null};document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active','active-teal')});document.getElementById('GLIQ').style.height='0';document.getElementById('GGARN').classList.remove('show');document.getElementById('GLBL').textContent='Select ingredients above';document.getElementById('GSTEAM').style.opacity='0';document.getElementById('ROUT').classList.remove('open');document.getElementById('RCONTENT').style.display='none';document.getElementById('RLOAD').style.display='none';lastRecipe=null;radarTarget=RADAR_DEFAULTS.slice();if(!radarRafId)radarRafId=requestAnimationFrame(animateRadar);var btn=document.getElementById('GENBTN');btn.disabled=false;btn.textContent='⬡  Forge My Crowned Monkey Recipe  ⬡';});
+
+/* ══ 3D LAB ══ */
+var lab3dModal=document.getElementById('LAB3D-MODAL');
+var lab3dBtn=document.getElementById('LAB3D-BTN');
+var lab3dCanvas=document.getElementById('LAB3D-CANVAS');
+var lab3dCtx=lab3dCanvas?lab3dCanvas.getContext('2d'):null;
+var lab3dActive=false;
+var lab3dRaf=null;
+var cam={rotX:0.42,rotY:0.62,zoom:1.0,targetRotX:0.42,targetRotY:0.62,targetZoom:1.0};
+var mouse={down:false,lastX:0,lastY:0};
+var LAB_OBJECTS=[
+  {type:'box',x:0,y:0,z:0,w:8,h:0.1,d:6,color:'#0C0F28',edgeColor:'rgba(201,168,76,.18)',label:''},
+  {type:'box',x:0,y:1.5,z:-3,w:8,h:3,d:0.08,color:'#0A0C20',edgeColor:'rgba(201,168,76,.08)',label:''},
+  {type:'box',x:-4,y:1.5,z:0,w:0.08,h:3,d:6,color:'#090B1C',edgeColor:'rgba(201,168,76,.08)',label:''},
+  {type:'box',x:0,y:0.5,z:0,w:4.5,h:1,d:1.4,color:'#1A1508',edgeColor:'rgba(201,168,76,.4)',label:'Central Sci-Fi Island',labelColor:'#C9A84C'},
+  {type:'box',x:0,y:1.06,z:0,w:4.6,h:0.12,d:1.5,color:'#2A2010',edgeColor:'rgba(201,168,76,.6)',label:''},
+  {type:'stool',x:-1.8,y:0,z:1.4,color:'#0C0F28',edgeColor:'rgba(201,168,76,.3)',label:''},
+  {type:'stool',x:-0.6,y:0,z:1.4,color:'#0C0F28',edgeColor:'rgba(201,168,76,.3)',label:''},
+  {type:'stool',x:0.6,y:0,z:1.4,color:'#0C0F28',edgeColor:'rgba(201,168,76,.3)',label:''},
+  {type:'stool',x:1.8,y:0,z:1.4,color:'#0C0F28',edgeColor:'rgba(201,168,76,.3)',label:''},
+  {type:'box',x:0,y:1.0,z:-2.6,w:5,h:2,d:0.4,color:'#12100A',edgeColor:'rgba(201,168,76,.25)',label:'Bottle Display'},
+  {type:'box',x:0,y:0.45,z:-2.6,w:5,h:0.06,d:0.42,color:'#1E1810',edgeColor:'rgba(201,168,76,.2)',label:''},
+  {type:'box',x:0,y:1.1,z:-2.6,w:5,h:0.06,d:0.42,color:'#1E1810',edgeColor:'rgba(201,168,76,.2)',label:''},
+  {type:'box',x:0,y:1.75,z:-2.6,w:5,h:0.06,d:0.42,color:'#1E1810',edgeColor:'rgba(201,168,76,.2)',label:''},
+  {type:'bottle',x:-1.8,y:0.6,z:-2.55,color:'#8B4513',glassColor:'rgba(139,69,19,.7)',label:'Aged Rum'},
+  {type:'bottle',x:-1.1,y:0.6,z:-2.55,color:'#C0C0C0',glassColor:'rgba(200,220,255,.5)',label:'Gin'},
+  {type:'bottle',x:-0.4,y:0.6,z:-2.55,color:'#D4A017',glassColor:'rgba(212,160,23,.6)',label:'Mezcal'},
+  {type:'bottle',x:0.3,y:0.6,z:-2.55,color:'#B8860B',glassColor:'rgba(184,134,11,.65)',label:'Whisky'},
+  {type:'bottle',x:1.0,y:0.6,z:-2.55,color:'#E0E0E0',glassColor:'rgba(240,240,240,.45)',label:'Pisco'},
+  {type:'bottle',x:1.7,y:0.6,z:-2.55,color:'#4CAF50',glassColor:'rgba(76,175,80,.5)',label:'Tequila'},
+  {type:'equipment',x:-1.6,y:1.18,z:0.1,w:0.3,h:0.5,d:0.3,color:'#C0C0C0',edgeColor:'rgba(192,192,192,.8)',label:'Ultrasonic Bath'},
+  {type:'equipment',x:-0.8,y:1.18,z:0.1,w:0.25,h:0.6,d:0.2,color:'#E8E8E8',edgeColor:'rgba(232,232,232,.7)',label:'Siphon'},
+  {type:'equipment',x:0,y:1.18,z:0,w:0.22,h:0.7,d:0.22,color:'#A9A9A9',edgeColor:'rgba(169,169,169,.8)',label:'ISI Whipper'},
+  {type:'equipment',x:0.8,y:1.18,z:0.1,w:0.28,h:0.45,d:0.28,color:'#4A4A4A',edgeColor:'rgba(201,168,76,.6)',label:'Smoking Gun'},
+  {type:'equipment',x:1.6,y:1.18,z:0.1,w:0.35,h:0.35,d:0.35,color:'#2A2A2A',edgeColor:'rgba(0,201,184,.5)',label:'Scale'},
+  {type:'cylinder',x:-3,y:0,z:-1.5,r:0.35,h:1.5,color:'#C0C0C0',edgeColor:'rgba(0,201,184,.6)',label:'N₂ Dewar'},
+  {type:'box',x:2.8,y:0.8,z:-1.5,w:0.8,h:1.6,d:0.6,color:'#E8E8E8',edgeColor:'rgba(0,201,184,.4)',label:'Rotary Evaporator'},
+  {type:'glass',x:-0.4,y:1.18,z:-0.45,color:'rgba(200,230,255,.3)',edgeColor:'rgba(201,168,76,.5)',label:''},
+  {type:'glass',x:0.2,y:1.18,z:-0.45,color:'rgba(255,200,200,.3)',edgeColor:'rgba(201,168,76,.4)',label:''},
+  {type:'glass',x:0.8,y:1.18,z:-0.45,color:'rgba(200,255,220,.3)',edgeColor:'rgba(201,168,76,.45)',label:''},
+  {type:'light',x:-1.5,y:2.8,z:0,color:'rgba(201,168,76,.9)',label:''},
+  {type:'light',x:0,y:2.8,z:0,color:'rgba(201,168,76,.9)',label:''},
+  {type:'light',x:1.5,y:2.8,z:0,color:'rgba(201,168,76,.9)',label:''},
+];
+function project3D(x,y,z,canvas,cam){
+  var cx=canvas.width/2,cy=canvas.height/2;
+  var scale=Math.min(canvas.width,canvas.height)*0.085*cam.zoom;
+  var cosY=Math.cos(cam.rotY),sinY=Math.sin(cam.rotY);
+  var rx=x*cosY+z*sinY;
+  var rz=-x*sinY+z*cosY;
+  var cosX=Math.cos(cam.rotX),sinX=Math.sin(cam.rotX);
+  var ry2=y*cosX-rz*sinX;
+  var rz2=y*sinX+rz*cosX;
+  return{px:cx+rx*scale, py:cy-ry2*scale+scale*1.2, depth:rz2};
+}
+function shadeColor(hex,percent){
+  if(hex.startsWith('rgba')||hex.startsWith('rgb'))return hex;
+  var num=parseInt(hex.replace('#',''),16);
+  var r=Math.min(255,Math.max(0,(num>>16)+percent));
+  var g=Math.min(255,Math.max(0,((num>>8)&0xff)+percent));
+  var b=Math.min(255,Math.max(0,(num&0xff)+percent));
+  return'#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function drawBox(ctx,obj,canvas,cam,highlight){
+  var hw=obj.w/2,hh=obj.h/2,hd=obj.d/2;
+  var corners=[[-hw,obj.y-hh,-hd],[hw,obj.y-hh,-hd],[hw,obj.y+hh,-hd],[-hw,obj.y+hh,-hd],[-hw,obj.y-hh,hd],[hw,obj.y-hh,hd],[hw,obj.y+hh,hd],[-hw,obj.y+hh,hd]];
+  var pts=corners.map(function(c){return project3D(obj.x+c[0],c[1],obj.z+c[2],canvas,cam);});
+  var c=ctx;
+  c.beginPath();c.moveTo(pts[0].px,pts[0].py);c.lineTo(pts[1].px,pts[1].py);c.lineTo(pts[5].px,pts[5].py);c.lineTo(pts[4].px,pts[4].py);c.closePath();
+  c.fillStyle=shadeColor(obj.color,-20);c.fill();c.strokeStyle=highlight?'rgba(201,168,76,.8)':obj.edgeColor;c.lineWidth=highlight?1.5:.5;c.stroke();
+  c.beginPath();c.moveTo(pts[4].px,pts[4].py);c.lineTo(pts[5].px,pts[5].py);c.lineTo(pts[6].px,pts[6].py);c.lineTo(pts[7].px,pts[7].py);c.closePath();
+  c.fillStyle=shadeColor(obj.color,10);c.fill();c.strokeStyle=highlight?'rgba(201,168,76,.8)':obj.edgeColor;c.lineWidth=highlight?1.5:.5;c.stroke();
+  c.beginPath();c.moveTo(pts[3].px,pts[3].py);c.lineTo(pts[2].px,pts[2].py);c.lineTo(pts[6].px,pts[6].py);c.lineTo(pts[7].px,pts[7].py);c.closePath();
+  c.fillStyle=shadeColor(obj.color,25);c.fill();c.strokeStyle=highlight?'rgba(201,168,76,.8)':obj.edgeColor;c.lineWidth=highlight?1.5:.5;c.stroke();
+  c.beginPath();c.moveTo(pts[1].px,pts[1].py);c.lineTo(pts[2].px,pts[2].py);c.lineTo(pts[6].px,pts[6].py);c.lineTo(pts[5].px,pts[5].py);c.closePath();
+  c.fillStyle=shadeColor(obj.color,5);c.fill();c.strokeStyle=highlight?'rgba(201,168,76,.8)':obj.edgeColor;c.lineWidth=highlight?1.5:.5;c.stroke();
+  if(obj.label&&highlight){var p=project3D(obj.x,obj.y+hh+0.15,obj.z,canvas,cam);c.font='bold 9px Rajdhani,sans-serif';c.fillStyle=obj.labelColor||'rgba(0,201,184,.9)';c.textAlign='center';c.fillText(obj.label,p.px,p.py);}
+}
+function drawBottle(ctx,obj,canvas,cam,highlight){
+  var p0=project3D(obj.x,obj.y+0.4,obj.z,canvas,cam);
+  var p1=project3D(obj.x,obj.y,obj.z,canvas,cam);
+  var scale=Math.min(canvas.width,canvas.height)*0.085*cam.zoom;
+  var bw=scale*.12,bh=Math.abs(p0.py-p1.py)+scale*.15;
+  var bx=p1.px-bw/2,by=p1.py-bh;
+  ctx.fillStyle=obj.glassColor||'rgba(200,200,255,.4)';
+  ctx.strokeStyle=highlight?'rgba(201,168,76,.9)':obj.edgeColor||'rgba(201,168,76,.3)';
+  ctx.lineWidth=highlight?1.2:.4;
+  ctx.beginPath();ctx.roundRect(bx,by,bw,bh,2);ctx.fill();ctx.stroke();
+  var nw=bw*.45,nh=bh*.3;
+  ctx.fillStyle=obj.glassColor||'rgba(200,200,255,.3)';
+  ctx.beginPath();ctx.roundRect(bx+bw/2-nw/2,by-nh,nw,nh,1);ctx.fill();ctx.stroke();
+  if(obj.label&&highlight){ctx.font='bold 8px Rajdhani,sans-serif';ctx.fillStyle='rgba(0,201,184,.9)';ctx.textAlign='center';ctx.fillText(obj.label,p1.px,by-nh-4);}
+}
+function drawGlass(ctx,obj,canvas,cam){
+  var p=project3D(obj.x,obj.y+0.2,obj.z,canvas,cam);
+  var scale=Math.min(canvas.width,canvas.height)*0.085*cam.zoom;
+  var gw=scale*.18,gh=scale*.2;
+  ctx.fillStyle=obj.color||'rgba(200,230,255,.3)';
+  ctx.strokeStyle=obj.edgeColor||'rgba(201,168,76,.5)';
+  ctx.lineWidth=.5;
+  ctx.beginPath();ctx.moveTo(p.px-gw/2,p.py-gh);ctx.lineTo(p.px+gw/2,p.py-gh);ctx.lineTo(p.px+gw*.15,p.py);ctx.lineTo(p.px+gw*.15,p.py+gh*.3);ctx.lineTo(p.px-gw*.15,p.py+gh*.3);ctx.lineTo(p.px-gw*.15,p.py);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle=obj.color.replace('.3','0.5')||'rgba(200,230,255,.5)';
+  ctx.beginPath();ctx.moveTo(p.px-gw/2+2,p.py-gh+4);ctx.lineTo(p.px+gw/2-2,p.py-gh+4);ctx.lineTo(p.px+gw*.15,p.py);ctx.lineTo(p.px-gw*.15,p.py);ctx.closePath();ctx.fill();
+}
+function drawLight(ctx,obj,canvas,cam){
+  var p=project3D(obj.x,obj.y,obj.z,canvas,cam);
+  var p2=project3D(obj.x,obj.y-0.3,obj.z,canvas,cam);
+  ctx.strokeStyle='rgba(201,168,76,.3)';ctx.lineWidth=.5;
+  ctx.beginPath();ctx.moveTo(p.px,p.py);ctx.lineTo(p2.px,p2.py);ctx.stroke();
+  var rad=Math.min(canvas.width,canvas.height)*0.085*cam.zoom*.25;
+  var grd=ctx.createRadialGradient(p2.px,p2.py,0,p2.px,p2.py,rad*3);
+  grd.addColorStop(0,'rgba(201,168,76,.25)');grd.addColorStop(1,'rgba(201,168,76,0)');
+  ctx.fillStyle=grd;ctx.beginPath();ctx.arc(p2.px,p2.py,rad*3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(232,201,106,.9)';ctx.beginPath();ctx.arc(p2.px,p2.py,rad,0,Math.PI*2);ctx.fill();
+}
+function drawStool(ctx,obj,canvas,cam,highlight){
+  var scale=Math.min(canvas.width,canvas.height)*0.085*cam.zoom;
+  var seat={x:obj.x,y:0.72,z:obj.z,w:0.45,h:0.08,d:0.45,color:'#1a1008',edgeColor:highlight?'rgba(201,168,76,.8)':'rgba(201,168,76,.3)'};
+  drawBox(ctx,seat,canvas,cam,highlight);
+  var legOffsets=[[-0.18,0,-0.18],[0.18,0,-0.18],[-0.18,0,0.18],[0.18,0,0.18]];
+  legOffsets.forEach(function(off){drawBox(ctx,{x:obj.x+off[0],y:0.35,z:obj.z+off[2],w:0.04,h:0.7,d:0.04,color:'#C9A84C',edgeColor:'rgba(201,168,76,.4)'},canvas,cam,false);});
+}
+function drawCylinder(ctx,obj,canvas,cam,highlight){
+  var box={x:obj.x,y:obj.h/2,z:obj.z,w:obj.r*2,h:obj.h,d:obj.r*2,color:obj.color,edgeColor:obj.edgeColor,label:obj.label,labelColor:'rgba(0,201,184,.9)'};
+  drawBox(ctx,box,canvas,cam,highlight);
+  var pt=project3D(obj.x,obj.h,obj.z,canvas,cam);
+  var scale=Math.min(canvas.width,canvas.height)*0.085*cam.zoom;
+  ctx.fillStyle='rgba(220,220,220,.9)';ctx.strokeStyle=highlight?'rgba(201,168,76,.8)':obj.edgeColor;ctx.lineWidth=.5;
+  ctx.beginPath();ctx.ellipse(pt.px,pt.py,obj.r*scale*.8,obj.r*scale*.3,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+  if(obj.label&&highlight){ctx.font='bold 9px Rajdhani,sans-serif';ctx.fillStyle='rgba(0,201,184,.9)';ctx.textAlign='center';ctx.fillText(obj.label,pt.px,pt.py-obj.r*scale*.4-4);}
+}
+var hoveredObj=null,labAnimTime=0;
+function renderLab3D(){
+  if(!lab3dCtx||!lab3dActive)return;
+  labAnimTime+=0.012;
+  cam.rotX+=(cam.targetRotX-cam.rotX)*.08;cam.rotY+=(cam.targetRotY-cam.rotY)*.08;cam.zoom+=(cam.targetZoom-cam.zoom)*.08;
+  var c=lab3dCtx,w=lab3dCanvas.width,h=lab3dCanvas.height;
+  c.clearRect(0,0,w,h);
+  var bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#07091A');bg.addColorStop(1,'#0C0F28');c.fillStyle=bg;c.fillRect(0,0,w,h);
+  var glow=c.createRadialGradient(w/2,h*.6,0,w/2,h*.6,w*.4);glow.addColorStop(0,'rgba(0,201,184,.04)');glow.addColorStop(1,'rgba(0,201,184,0)');c.fillStyle=glow;c.fillRect(0,0,w,h);
+  var sorted=LAB_OBJECTS.map(function(obj,i){var p=project3D(obj.x,0,obj.z,lab3dCanvas,cam);return{obj:obj,idx:i,depth:p.depth};}).sort(function(a,b){return b.depth-a.depth});
+  sorted.forEach(function(item){
+    var obj=item.obj,isHovered=(hoveredObj===item.idx);
+    try{
+      if(obj.type==='box')drawBox(c,obj,lab3dCanvas,cam,isHovered);
+      else if(obj.type==='bottle')drawBottle(c,obj,lab3dCanvas,cam,isHovered);
+      else if(obj.type==='glass')drawGlass(c,obj,lab3dCanvas,cam);
+      else if(obj.type==='light')drawLight(c,obj,lab3dCanvas,cam);
+      else if(obj.type==='stool')drawStool(c,obj,lab3dCanvas,cam,isHovered);
+      else if(obj.type==='cylinder')drawCylinder(c,obj,lab3dCanvas,cam,isHovered);
+      else if(obj.type==='equipment'){var eobj=Object.assign({},obj,{y:(obj.y||1.18)+(Math.sin(labAnimTime*0.7+item.idx)*.005)});drawBox(c,eobj,lab3dCanvas,cam,isHovered);}
+    }catch(e){}
+    if(obj.label&&!isHovered&&(obj.type==='bottle'||obj.type==='equipment'||obj.type==='cylinder')){
+      var lp=project3D(obj.x,((obj.y||0)+(obj.h||0.6)+0.1),obj.z,lab3dCanvas,cam);
+      c.font='6px Rajdhani,sans-serif';c.fillStyle='rgba(201,168,76,.3)';c.textAlign='center';c.fillText(obj.label,lp.px,lp.py);
+    }
+  });
+  LAB_OBJECTS.forEach(function(obj){if(obj.type==='light'){
+    var p=project3D(obj.x,obj.y-0.3,obj.z,lab3dCanvas,cam);
+    var pulse=0.15+Math.sin(labAnimTime*1.2)*0.05;
+    var grd=c.createRadialGradient(p.px,p.py,0,p.px,p.py,80);
+    grd.addColorStop(0,'rgba(201,168,76,'+pulse+')');grd.addColorStop(1,'rgba(201,168,76,0)');
+    c.fillStyle=grd;c.beginPath();c.arc(p.px,p.py,80,0,Math.PI*2);c.fill();
+  }});
+  c.strokeStyle='rgba(201,168,76,.2)';c.lineWidth=1;
+  [[8,8,24,0],[w-8,8,w-24,0],[8,h-8,8,h-24],[w-8,h-8,w-24,h-8]].forEach(function(pts){c.beginPath();c.moveTo(pts[0],pts[1]);c.lineTo(pts[2],pts[3]);c.stroke();});
+  lab3dRaf=requestAnimationFrame(renderLab3D);
+}
+function resizeLab(){if(!lab3dCanvas)return;var mi=lab3dCanvas.parentElement;lab3dCanvas.width=mi.clientWidth;lab3dCanvas.height=mi.clientHeight;}
+function openLab3D(){lab3dModal.classList.add('open');lab3dActive=true;resizeLab();if(lab3dRaf)cancelAnimationFrame(lab3dRaf);renderLab3D();}
+function closeLab3D(){lab3dModal.classList.remove('open');lab3dActive=false;if(lab3dRaf){cancelAnimationFrame(lab3dRaf);lab3dRaf=null;}}
+lab3dBtn.addEventListener('click',openLab3D);
+document.getElementById('MODAL-CLOSE').addEventListener('click',closeLab3D);
+lab3dModal.addEventListener('click',function(e){if(e.target===lab3dModal)closeLab3D();});
+lab3dCanvas.addEventListener('mousedown',function(e){mouse.down=true;mouse.lastX=e.clientX;mouse.lastY=e.clientY;});
+window.addEventListener('mouseup',function(){mouse.down=false;});
+window.addEventListener('mousemove',function(e){
+  if(mouse.down){var dx=e.clientX-mouse.lastX,dy=e.clientY-mouse.lastY;cam.targetRotY+=dx*.008;cam.targetRotX=Math.max(0.05,Math.min(1.2,cam.targetRotX+dy*.006));mouse.lastX=e.clientX;mouse.lastY=e.clientY;}
+});
+lab3dCanvas.addEventListener('wheel',function(e){e.preventDefault();cam.targetZoom=Math.max(0.5,Math.min(2.5,cam.targetZoom-e.deltaY*.001));},{passive:false});
+lab3dCanvas.addEventListener('touchstart',function(e){mouse.down=true;mouse.lastX=e.touches[0].clientX;mouse.lastY=e.touches[0].clientY;},{passive:true});
+lab3dCanvas.addEventListener('touchmove',function(e){if(!mouse.down)return;var dx=e.touches[0].clientX-mouse.lastX,dy=e.touches[0].clientY-mouse.lastY;cam.targetRotY+=dx*.008;cam.targetRotX=Math.max(0.05,Math.min(1.2,cam.targetRotX+dy*.006));mouse.lastX=e.touches[0].clientX;mouse.lastY=e.touches[0].clientY;},{passive:true});
+lab3dCanvas.addEventListener('touchend',function(){mouse.down=false;},{passive:true});
+var VIEWS={full:{rotX:0.42,rotY:0.62,zoom:1.0},bar:{rotX:0.28,rotY:0.0,zoom:1.4},equip:{rotX:0.55,rotY:0.85,zoom:1.6},top:{rotX:1.15,rotY:0.62,zoom:1.1}};
+['VIEW-FULL','VIEW-BAR','VIEW-EQUIP','VIEW-TOP'].forEach(function(id,i){
+  var keys=['full','bar','equip','top'];
+  var btn=document.getElementById(id);
+  if(!btn)return;
+  btn.addEventListener('click',function(){var v=VIEWS[keys[i]];cam.targetRotX=v.rotX;cam.targetRotY=v.rotY;cam.targetZoom=v.zoom;document.querySelectorAll('.ctrl-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');});
+});
+window.addEventListener('resize',function(){if(lab3dActive)resizeLab();});
+setTimeout(navUpdate,80);
+})();
+</script>
+</body>
+</html>
