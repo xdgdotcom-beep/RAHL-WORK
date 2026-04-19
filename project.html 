@@ -59,7 +59,16 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
 .header-eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);}
 .header-title{font-family:'Playfair Display',serif;font-size:clamp(36px,4.5vw,60px);font-weight:400;color:#F2EAD8;line-height:1.1;letter-spacing:-0.5px;margin-bottom:6px;}
 .header-title em{font-style:italic;color:var(--gold-bright);}
-.header-tagline{font-size:13px;color:rgba(255,255,255,0.28);letter-spacing:1px;margin-bottom:40px;}
+.header-tagline{font-size:13px;color:rgba(255,255,255,0.28);letter-spacing:1px;margin-bottom:16px;}
+
+/* OPERATING HOURS STRIP */
+.hours-strip{display:flex;align-items:center;gap:28px;margin-bottom:36px;padding:13px 20px;background:rgba(184,150,90,0.08);border:1px solid rgba(184,150,90,0.2);border-radius:3px;flex-wrap:wrap;}
+.hours-item{display:flex;align-items:center;gap:10px;}
+.hours-icon{color:var(--gold);font-size:14px;opacity:0.85;}
+.hours-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);display:block;margin-bottom:2px;}
+.hours-value{font-size:12px;color:var(--gold-pale);letter-spacing:0.5px;}
+.hours-divider{width:1px;height:32px;background:rgba(184,150,90,0.2);}
+
 .header-stats{display:flex;gap:40px;flex-wrap:wrap;}
 .stat{position:relative;}
 .stat::after{content:'';position:absolute;right:-20px;top:8px;bottom:8px;width:1px;background:rgba(255,255,255,0.07);}
@@ -118,6 +127,8 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
 .badge-ns::before{background:var(--text-faint);}
 .badge-target{background:rgba(184,150,90,0.12);color:var(--gold);border:1px solid var(--border);}
 .badge-target::before{background:var(--gold);}
+.badge-done{background:rgba(74,124,90,0.12);color:#4A7C5A;border:1px solid rgba(74,124,90,0.25);}
+.badge-done::before{background:#4A7C5A;}
 
 /* GANTT */
 .legend{display:flex;align-items:center;gap:24px;margin-bottom:18px;font-size:11px;color:var(--text-muted);}
@@ -206,7 +217,6 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
 @media (max-width: 900px) {
   body { flex-direction: column; display: block; }
   
-  /* Convert Sidebar to Top Navigation */
   .sidebar {
     position: relative;
     width: 100%;
@@ -226,17 +236,17 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
   .sidebar-crown { margin-bottom: 0; font-size: 20px; }
   .sidebar-name { font-size: 16px; text-align: right; line-height: 1.1; }
   .sidebar-name br { display: none; }
-  .sidebar-sub { display: none; } /* Hidden to save vertical space */
+  .sidebar-sub { display: none; }
   
   .sidebar-nav {
     padding: 0 16px 12px;
     display: flex;
     overflow-x: auto;
     gap: 8px;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  .sidebar-nav::-webkit-scrollbar { display: none; } /* Hide horizontal scrollbar */
+  .sidebar-nav::-webkit-scrollbar { display: none; }
   
   .nav-label { display: none; }
   .nav-link {
@@ -254,18 +264,18 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
   
   .sidebar-footer { display: none; }
   
-  /* Main Content Adjustments */
   .main { margin-left: 0; width: 100%; }
   .page-header { padding: 32px 24px 24px; }
   .header-eyebrow { font-size: 9px; line-height: 1.4; }
   .header-title { font-size: 32px; }
   .header-stats { gap: 20px; flex-direction: column; }
-  .stat::after { display: none; } /* Remove stat dividers */
+  .stat::after { display: none; }
+  .hours-strip { gap: 16px; }
+  .hours-divider { display: none; }
   
   .content { padding: 24px 16px; }
   
-  /* Task List Responsiveness */
-  .task-head { display: none; } /* Hide grid headers on mobile */
+  .task-head { display: none; }
   .task-row {
     display: flex;
     flex-direction: column;
@@ -276,11 +286,9 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
   .task-name { font-size: 14px; }
   .task-dates, .task-owner { display: inline-block; }
   
-  /* Grids to Columns */
   .kpi-row { grid-template-columns: 1fr 1fr; gap: 12px; }
   .roi-grid { grid-template-columns: 1fr; }
   
-  /* Make all Tables swipeable/scrollable horizontally */
   .budget-table, .rev-table, .risk-table {
     display: block;
     overflow-x: auto;
@@ -290,7 +298,6 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
 }
 
 @media (max-width: 480px) {
-  /* Ultra-small screen adjustments */
   .kpi-row { grid-template-columns: 1fr; }
   .header-title { font-size: 28px; }
   .section-title { font-size: 22px; }
@@ -328,6 +335,34 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
     <div class="header-eyebrow">Four Seasons Resort Nevis · F&amp;B Strategic Initiative</div>
     <h1 class="header-title">The <em>Crowned</em> Monkey</h1>
     <p class="header-tagline">Rum Bar → Molecular Mixology Lab &nbsp;·&nbsp; April – June 2026</p>
+
+    <!-- OPERATING HOURS STRIP -->
+    <div class="hours-strip">
+      <div class="hours-item">
+        <span class="hours-icon">🕔</span>
+        <div>
+          <span class="hours-label">Daily Mixology</span>
+          <span class="hours-value">5:00 PM – 10:00 PM</span>
+        </div>
+      </div>
+      <div class="hours-divider"></div>
+      <div class="hours-item">
+        <span class="hours-icon">◈</span>
+        <div>
+          <span class="hours-label">Master Classes</span>
+          <span class="hours-value">3× Weekly · By Reservation</span>
+        </div>
+      </div>
+      <div class="hours-divider"></div>
+      <div class="hours-item">
+        <span class="hours-icon">◆</span>
+        <div>
+          <span class="hours-label">Capacity</span>
+          <span class="hours-value">30 Seats · 220 Nights / Year</span>
+        </div>
+      </div>
+    </div>
+
     <div class="header-stats">
       <div class="stat"><div class="stat-label">Grand Opening</div><div class="stat-value">15 Jun 2026</div></div>
       <div class="stat"><div class="stat-label">Total Investment</div><div class="stat-value">$73,500</div></div>
@@ -376,7 +411,8 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
             <div class="task-row milestone-row"><div class="task-name is-milestone"><span class="milestone-dot">◆</span>Glassware &amp; serveware delivery</div><div class="task-dates">5 May – 18 May<br>2 weeks</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash</div></div>
             <div class="task-row"><div class="task-name">LN2 local vendor confirmed</div><div class="task-dates">14 Apr – 21 Apr<br>1 week</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash</div></div>
             <div class="task-row"><div class="task-name">Supplies PAR list</div><div class="task-dates">14 Apr – 21 Apr</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash</div></div>
-            <div class="task-row"><div class="task-name">Cocktail menu R&amp;D &amp; recipe development</div><div class="task-dates">14 Apr – 21 Apr</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash</div></div>
+            <!-- UPDATED: Cocktail menu R&D status changed to Done -->
+            <div class="task-row"><div class="task-name">Cocktail menu R&amp;D &amp; recipe development</div><div class="task-dates">14 Apr – 21 Apr</div><div><span class="badge badge-done">Done</span></div><div class="task-owner">Subhash</div></div>
             <div class="task-row"><div class="task-name">Recipes &amp; costing</div><div class="task-dates">14 Apr – 21 Apr</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash</div></div>
             <div class="task-row"><div class="task-name">Order guide</div><div class="task-dates">14 Apr – 21 Apr</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash / Kristina</div></div>
             <div class="task-row"><div class="task-name">Bar set up</div><div class="task-dates">14 Apr – 21 Apr</div><div><span class="badge badge-ns">Not Started</span></div><div class="task-owner">Subhash / Kristina</div></div>
@@ -472,7 +508,7 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
             <tr><td>Molecular equip. delivery &amp; setup</td><td class="g-owner">Subhash</td><td class="bc"><span class="bar cp"></span></td><td class="bc"><span class="bar cp"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
             <tr><td>Glassware &amp; serveware</td><td class="g-owner">Subhash</td><td class="bc"><span class="bar"></span></td><td class="bc"><span class="bar"></span></td><td></td><td class="bc"><span class="bar"></span></td><td class="bc"><span class="bar"></span></td><td></td><td></td><td></td><td></td></tr>
             <tr><td>LN2 local vendor confirmed</td><td class="g-owner">Subhash</td><td class="bc"><span class="bar cp"></span></td><td class="bc"><span class="bar cp"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><td>Cocktail menu R&amp;D</td><td class="g-owner">Subhash</td><td></td><td class="bc"><span class="bar"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Cocktail menu R&amp;D ✓</td><td class="g-owner">Subhash</td><td></td><td class="bc"><span class="bar"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
             <tr class="gantt-phase-row"><td colspan="11">Phase III · Talent &amp; Training</td></tr>
             <tr><td>Molecular mixology training</td><td class="g-owner">Subhash/K.</td><td></td><td></td><td></td><td class="bc"><span class="bar cp"></span></td><td class="bc"><span class="bar cp"></span></td><td></td><td></td><td></td><td></td></tr>
             <tr><td>Service &amp; theatrical presentation</td><td class="g-owner">Subhash/K.</td><td></td><td></td><td></td><td class="bc"><span class="bar cp"></span></td><td class="bc"><span class="bar cp"></span></td><td></td><td></td><td></td><td></td></tr>
@@ -569,6 +605,8 @@ body{background:var(--paper);color:var(--text-body);font-family:'Jost',sans-seri
             <div class="roi-row"><span class="roi-label">Seat utilisation target</span><span class="roi-val">85%</span></div>
             <div class="roi-row"><span class="roi-label">Capacity (seats)</span><span class="roi-val">30</span></div>
             <div class="roi-row"><span class="roi-label">Operating nights / year</span><span class="roi-val">220</span></div>
+            <div class="roi-row"><span class="roi-label">Daily hours</span><span class="roi-val">5:00 PM – 10:00 PM</span></div>
+            <div class="roi-row"><span class="roi-label">Master classes / week</span><span class="roi-val">3× Weekly</span></div>
             <div class="roi-row"><span class="roi-label">Beverage cost % — Current</span><span class="roi-val">28%</span></div>
             <div class="roi-row"><span class="roi-label">Beverage cost % — Target</span><span class="roi-val">32%</span></div>
           </div>
