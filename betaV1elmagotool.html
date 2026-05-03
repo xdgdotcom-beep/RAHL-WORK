@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>El Mago Cocktail Lab Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--gold:#c8952a;--gold-light:#f0c060;--ink:#1a1208;--cream:#fdf8f0;--deep:#0d0a06;--accent:#e8421a;--teal:#0f7c6e;--lavender:#6b4fa0;}
+html,body{background:#0d0a06;color:#f5f0e8;font-family:'Outfit',sans-serif;min-height:100vh;}
+.app{max-width:420px;margin:0 auto;background:#0d0a06;min-height:100vh;position:relative;}
+.hero{background:linear-gradient(160deg,#1a120a 0%,#2a1a08 60%,#0d0a06 100%);padding:20px 20px 0;border-bottom:1px solid rgba(200,149,42,0.15);}
+.logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.logo-text{font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold-light);letter-spacing:0.5px;}
+.logo-badge{background:rgba(200,149,42,0.12);border:1px solid rgba(200,149,42,0.3);color:var(--gold);font-size:10px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:4px;}
+.tagline{font-size:10px;color:rgba(245,240,232,0.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;font-family:'DM Mono',monospace;}
+.tabs{display:flex;gap:0;margin:0 -20px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(200,149,42,0.1);}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:none;padding:10px 14px;font-size:11px;color:rgba(245,240,232,0.4);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;letter-spacing:0.5px;font-family:'DM Mono',monospace;}
+.tab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+.page{display:none;padding:16px 20px 90px;}
+.page.active{display:block;}
+.section-label{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;font-family:'DM Mono',monospace;}
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(200,149,42,0.2);color:#f5f0e8;padding:10px 12px 10px 36px;border-radius:8px;font-size:14px;font-family:'Outfit',sans-serif;outline:none;}
+.search-input::placeholder{color:rgba(245,240,232,0.3);}
+.search-input:focus{border-color:rgba(200,149,42,0.5);background:rgba(255,255,255,0.06);}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:rgba(200,149,42,0.5);font-size:16px;}
+.cat-filter{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding-bottom:2px;}
+.cat-filter::-webkit-scrollbar{display:none;}
+.cat-btn{flex:none;padding:5px 12px;border-radius:20px;border:1px solid rgba(200,149,42,0.2);background:transparent;color:rgba(245,240,232,0.5);font-size:11px;cursor:pointer;transition:all 0.2s;font-family:'DM Mono',monospace;}
+.cat-btn.active{background:var(--gold);color:#0d0a06;border-color:var(--gold);font-weight:500;}
+.ingredient-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:300px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(200,149,42,0.3) transparent;}
+.ing-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px;cursor:pointer;transition:all 0.2s;position:relative;}
+.ing-card:hover{border-color:rgba(200,149,42,0.4);background:rgba(200,149,42,0.05);}
+.ing-card.selected{border-color:var(--gold);background:rgba(200,149,42,0.1);}
+.ing-card.selected::after{content:'✓';position:absolute;top:6px;right:8px;color:var(--gold);font-size:11px;}
+.ing-name{font-size:12px;font-weight:500;color:#f5f0e8;margin-bottom:2px;}
+.ing-cat{font-size:10px;color:rgba(245,240,232,0.35);font-family:'DM Mono',monospace;}
+.ing-flavor{display:flex;gap:3px;margin-top:5px;flex-wrap:wrap;}
+.ftag{font-size:9px;padding:2px 5px;border-radius:3px;font-family:'DM Mono',monospace;}
+.ftag.sweet{background:rgba(240,192,96,0.15);color:#f0c060;}
+.ftag.bitter{background:rgba(107,79,160,0.2);color:#a07fd0;}
+.ftag.sour{background:rgba(15,124,110,0.2);color:#50c0a8;}
+.ftag.spicy{background:rgba(232,66,26,0.2);color:#f08060;}
+.ftag.umami{background:rgba(139,69,19,0.2);color:#c08040;}
+.ftag.floral{background:rgba(200,120,180,0.2);color:#d090c0;}
+.ftag.earthy{background:rgba(100,80,40,0.2);color:#b09060;}
+.ftag.smoky{background:rgba(80,80,80,0.2);color:#a0a0a0;}
+.ftag.herbal{background:rgba(60,120,60,0.2);color:#80c080;}
+.tray{background:rgba(200,149,42,0.06);border:1px solid rgba(200,149,42,0.2);border-radius:10px;padding:12px;margin-bottom:14px;}
+.tray-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.tray-title{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:1px;}
+.tray-count{font-size:11px;color:rgba(245,240,232,0.4);font-family:'DM Mono',monospace;}
+.tray-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.tray-chip{display:flex;align-items:center;gap:4px;background:rgba(200,149,42,0.12);border:1px solid rgba(200,149,42,0.3);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--gold-light);}
+.tray-chip .rm{cursor:pointer;color:rgba(200,149,42,0.5);font-size:14px;line-height:1;}
+.tray-chip .rm:hover{color:#e8421a;}
+.tray-empty{font-size:12px;color:rgba(245,240,232,0.25);font-style:italic;}
+.taste-ring-wrap{display:flex;justify-content:center;margin:16px 0;}
+.taste-ring{position:relative;width:200px;height:200px;}
+#radarChart{position:absolute;top:0;left:0;}
+.taste-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.taste-score{font-family:'DM Serif Display',serif;font-size:28px;color:var(--gold-light);}
+.taste-label{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:1px;font-family:'DM Mono',monospace;text-transform:uppercase;}
+.taste-bars{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.taste-row{display:flex;align-items:center;gap:8px;}
+.taste-row-label{font-size:11px;color:rgba(245,240,232,0.6);width:54px;font-family:'DM Mono',monospace;text-align:right;}
+.taste-bar-bg{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.taste-bar-fill{height:100%;border-radius:3px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.taste-val{font-size:10px;color:rgba(245,240,232,0.4);width:26px;text-align:right;font-family:'DM Mono',monospace;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;text-align:center;}
+.stat-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold-light);}
+.stat-unit{font-size:10px;color:rgba(245,240,232,0.4);display:block;font-family:'DM Mono',monospace;letter-spacing:0.5px;}
+.mol-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.mol-card{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;}
+.mol-name{font-size:10px;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:2px;}
+.mol-compound{font-size:11px;color:rgba(245,240,232,0.8);font-family:'DM Mono',monospace;}
+.mol-effect{font-size:10px;color:rgba(245,240,232,0.4);margin-top:3px;}
+.matrix-wrap{overflow-x:auto;margin-top:10px;}
+.matrix-table{border-collapse:collapse;font-size:10px;font-family:'DM Mono',monospace;white-space:nowrap;}
+.matrix-table th{padding:4px 6px;color:rgba(245,240,232,0.5);text-align:center;font-weight:400;}
+.matrix-table td{width:28px;height:28px;text-align:center;border-radius:4px;font-size:11px;}
+.pair-great{background:rgba(15,124,110,0.5);color:#80e0c8;}
+.pair-good{background:rgba(200,149,42,0.3);color:#f0c060;}
+.pair-neutral{background:rgba(255,255,255,0.05);color:rgba(245,240,232,0.3);}
+.pair-clash{background:rgba(232,66,26,0.3);color:#f08060;}
+.recipe-card{background:rgba(200,149,42,0.05);border:1px solid rgba(200,149,42,0.2);border-radius:12px;padding:16px;margin-top:14px;}
+.recipe-name{font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold-light);margin-bottom:4px;}
+.recipe-meta{font-size:10px;color:rgba(245,240,232,0.4);letter-spacing:1px;font-family:'DM Mono',monospace;margin-bottom:12px;}
+.recipe-ing-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.recipe-ing-name{font-size:12px;color:#f5f0e8;}
+.recipe-ing-amount{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;}
+.recipe-method{font-size:12px;color:rgba(245,240,232,0.6);line-height:1.7;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px;margin-top:10px;}
+.tool-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;}
+.tool-card:hover{border-color:rgba(200,149,42,0.3);background:rgba(200,149,42,0.04);}
+.tool-card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.tool-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;}
+.tool-icon.gold{background:rgba(200,149,42,0.15);}
+.tool-icon.teal{background:rgba(15,124,110,0.15);}
+.tool-icon.purple{background:rgba(107,79,160,0.15);}
+.tool-icon.red{background:rgba(232,66,26,0.15);}
+.tool-icon.blue{background:rgba(30,100,200,0.15);}
+.tool-name{font-size:13px;font-weight:500;color:#f5f0e8;}
+.tool-badge{font-size:9px;padding:2px 6px;background:rgba(232,66,26,0.15);color:#f08060;border-radius:3px;font-family:'DM Mono',monospace;margin-left:auto;border:1px solid rgba(232,66,26,0.3);flex:none;}
+.tool-desc{font-size:11px;color:rgba(245,240,232,0.4);line-height:1.5;}
+.tool-output{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin-top:10px;font-size:11px;font-family:'DM Mono',monospace;color:rgba(245,240,232,0.7);line-height:1.7;display:none;}
+.tool-output.visible{display:block;}
+.tool-output .hi{color:var(--gold);}
+.tool-output .ok{color:#50c0a8;}
+.tool-output .warn{color:#f08060;}
+.analyze-btn{width:100%;background:linear-gradient(135deg,#c8952a,#f0c060);color:#0d0a06;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;letter-spacing:0.5px;margin-top:10px;transition:opacity 0.2s;}
+.analyze-btn:hover{opacity:0.9;}
+.analyze-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.ing-note{background:rgba(200,149,42,0.04);border-left:2px solid var(--gold);padding:8px 10px;border-radius:0 6px 6px 0;font-size:11px;color:rgba(245,240,232,0.6);line-height:1.6;margin-top:10px;font-family:'DM Mono',monospace;}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#0d0a06;border-top:1px solid rgba(200,149,42,0.15);display:flex;z-index:100;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 14px;cursor:pointer;transition:all 0.2s;gap:3px;}
+.nav-btn.active .nav-icon{color:var(--gold);}
+.nav-btn.active .nav-label{color:var(--gold);}
+.nav-icon{font-size:18px;color:rgba(245,240,232,0.25);}
+.nav-label{font-size:9px;color:rgba(245,240,232,0.25);font-family:'DM Mono',monospace;letter-spacing:0.5px;}
+.quantum-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(107,79,160,0.15);border:1px solid rgba(107,79,160,0.3);border-radius:4px;padding:2px 7px;font-size:9px;color:#a07fd0;font-family:'DM Mono',monospace;margin-left:6px;vertical-align:middle;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.pulse{animation:pulse 2s ease-in-out infinite;}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.tech-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;cursor:pointer;transition:border-color 0.2s;}
+.tech-card:hover{border-color:rgba(200,149,42,0.3);}
+.tech-card.active-tech{border-color:var(--gold);background:rgba(200,149,42,0.07);}
+.missing-note{font-size:11px;color:rgba(245,240,232,0.3);font-family:'DM Mono',monospace;padding:20px 0;text-align:center;}
+</style>
+</head>
+<body>
+
+<div id="login-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0d0a06; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+  <div style="font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--gold-light); margin-bottom: 5px;">El Mago Lab XD©</div>
+  <div style="font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(245,240,232,0.4); letter-spacing: 2px; margin-bottom: 30px; text-transform: uppercase;">Secured Pre-Release Build</div>
+  <input type="password" id="access-key" placeholder="Enter Access Key" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(200,149,42,0.2); color: #f5f0e8; padding: 14px; border-radius: 8px; font-size: 14px; font-family: 'DM Mono', monospace; outline: none; text-align: center; margin-bottom: 16px; width: 100%; max-width: 300px;">
+  <button onclick="verifyKey()" style="width: 100%; max-width: 300px; background: linear-gradient(135deg, #c8952a, #f0c060); color: #0d0a06; border: none; border-radius: 8px; padding: 14px; font-size: 14px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; letter-spacing: 0.5px;">AUTHENTICATE</button>
+  <div id="login-error" style="color: #e8421a; font-family: 'DM Mono', monospace; font-size: 11px; margin-top: 15px; display: none;">Error: Invalid Access Key.</div>
+</div>
+
+<div class="app" id="main-app" style="display: none;">
+
+  <div style="background: repeating-linear-gradient(45deg, rgba(232, 66, 26, 0.08), rgba(232, 66, 26, 0.08) 10px, transparent 10px, transparent 20px), rgba(13, 10, 6, 0.95); border-bottom: 1px solid rgba(232, 66, 26, 0.4); padding: 14px 20px; text-align: center; font-family: 'DM Mono', monospace; z-index: 1000; position: relative;">
+    <div style="color: #e8421a; font-weight: 600; font-size: 11px; margin-bottom: 6px; letter-spacing: 1px;">⚠ RESTRICTED PRE-RELEASE BUILD ⚠</div>
+    <div style="color: rgba(245,240,232,0.7); font-size: 10px; line-height: 1.5;">By continuing, you consent to the strict confidentiality of this patent-pending software. Owned by <strong style="color: #f0c060;">XD Developers & Elmago Mixology</strong>. Final release is subject to pending contracts. Unauthorized distribution is prohibited.</div>
+  </div>
+
+  <div class="hero">
+    <div class="logo-row">
+      <div class="logo-text">El Mago Lab</div>
+      <div class="logo-badge">PATENT PENDING</div>
+    </div>
+    <div class="tagline">Quantum Mixology Engine · Curated by Subash Shankar</div>
+    <div class="tabs">
+      <div class="tab active" onclick="showPage('build','nb-build')">Build</div>
+      <div class="tab" onclick="showPage('taste','nb-taste')">Taste Engine</div>
+      <div class="tab" onclick="showPage('molecular','nb-molecular')">Molecular</div>
+      <div class="tab" onclick="showPage('synth','nb-synth')">AI Synth</div>
+      <div class="tab" onclick="showPage('speculative','nb-speculative')">Speculative</div>
+    </div>
+  </div>
+
+  <div class="page active" id="page-build">
+    <div class="section-label" style="margin-top:14px;">Your cocktail mix</div>
+    <div class="tray">
+      <div class="tray-header">
+        <span class="tray-title">Selected ingredients</span>
+        <span class="tray-count" id="tray-count">0 / 12</span>
+      </div>
+      <div id="tray-chips"><span class="tray-empty">Add ingredients below to begin</span></div>
+    </div>
+    <div class="section-label">Ingredient library (800+ entries)</div>
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" id="ing-search" placeholder="Search spirits, botanicals, acids, novelties..." oninput="filterIngredients()">
+    </div>
+    <div class="cat-filter" id="cat-filter"></div>
+    <div class="ingredient-grid" id="ing-grid"></div>
+    <button class="analyze-btn" id="analyze-btn" onclick="goAnalyze()" disabled>Analyze & Generate Recipe →</button>
+  </div>
+
+  <div class="page" id="page-taste">
+    <div class="section-label" style="margin-top:14px;">Pure taste mapping</div>
+    <div class="taste-ring-wrap">
+      <div class="taste-ring">
+        <canvas id="radarChart" width="200" height="200"></canvas>
+        <div class="taste-center">
+          <div class="taste-score" id="harmony-score">—</div>
+          <div class="taste-label">Harmony</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-val" id="abv-val">—</div><span class="stat-unit">Est. ABV %</span></div>
+      <div class="stat-box"><div class="stat-val" id="balance-val">—</div><span class="stat-unit">Balance Index</span></div>
+      <div class="stat-box"><div class="stat-val" id="complex-val">—</div><span class="stat-unit">Complexity %</span></div>
+      <div class="stat-box"><div class="stat-val" id="rare-val">—</div><span class="stat-unit">Rarity /10</span></div>
+    </div>
+    <div class="section-label">Taste dimension breakdown</div>
+    <div class="taste-bars" id="taste-bars"></div>
+    <div id="taste-note" class="ing-note" style="display:none;"></div>
+  </div>
+
+  <div class="page" id="page-molecular">
+    <div class="section-label" style="margin-top:14px;">Pairing compatibility matrix</div>
+    <div id="matrix-container"><div class="missing-note">Add 2+ ingredients in Build tab.</div></div>
+    <div class="section-label" style="margin-top:16px;">Active aroma compounds</div>
+    <div class="mol-grid" id="mol-grid"><div style="grid-column:span 2;" class="missing-note">No ingredients selected.</div></div>
+    <div class="section-label" style="margin-top:16px;">Flavour-bridge™ analysis</div>
+    <div id="bridge-out" class="ing-note">Select ingredients to reveal hidden molecular bridges.</div>
+  </div>
+
+  <div class="page" id="page-synth">
+    <div class="section-label" style="margin-top:14px;">AI recipe synthesizer</div>
+    <div id="recipe-area"><div class="missing-note">Select ingredients in Build tab, then tap Analyze to generate a patent-novel recipe.</div></div>
+    <div class="section-label" style="margin-top:16px;">Advanced technique library</div>
+    <div class="tech-grid" id="tech-grid"></div>
+  </div>
+
+  <div class="page" id="page-speculative">
+    <div class="section-label" style="margin-top:14px;">
+      Speculative technologies
+      <span class="quantum-badge"><span class="pulse">◉</span> NOT YET INVENTED</span>
+    </div>
+    <div id="adv-tools"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-btn active" id="nb-build" onclick="showPage('build','nb-build')"><div class="nav-icon">⊞</div><div class="nav-label">Build</div></div>
+    <div class="nav-btn" id="nb-taste" onclick="showPage('taste','nb-taste')"><div class="nav-icon">◎</div><div class="nav-label">Taste</div></div>
+    <div class="nav-btn" id="nb-molecular" onclick="showPage('molecular','nb-molecular')"><div class="nav-icon">⬡</div><div class="nav-label">Molecular</div></div>
+    <div class="nav-btn" id="nb-synth" onclick="showPage('synth','nb-synth')"><div class="nav-icon">✦</div><div class="nav-label">AI Synth</div></div>
+    <div class="nav-btn" id="nb-speculative" onclick="showPage('speculative','nb-speculative')"><div class="nav-icon">⚛</div><div class="nav-label">Speculative</div></div>
+  </div>
+</div>
+
+<script>
+// LOGIN VERIFICATION
+function verifyKey() {
+  const keyInput = document.getElementById('access-key').value;
+  if (keyInput === 'xd@devs') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+// EXISTING APP CODE
+const INGREDIENTS = [
+  // SPIRITS
+  {name:'Gin',cat:'Spirit',abv:42,tags:['bitter','floral','earthy'],aroma:'Linalool, α-Pinene',compounds:[{n:'Linalool',e:'Floral-citrus bridge'},{n:'α-Pinene',e:'Resinous freshness'}],flavor:{sweet:8,sour:5,bitter:55,spicy:10,umami:5,floral:75,earthy:35,smoky:5},rarity:2},
+  {name:'Campari',cat:'Liqueur',abv:25,tags:['bitter','sweet','spicy'],aroma:'Gentian, Citrus peel',compounds:[{n:'Amarogentin',e:'Bitter receptor agonist'},{n:'Naringenin',e:'Citrus bitterness'}],flavor:{sweet:45,sour:10,bitter:88,spicy:20,umami:8,floral:15,earthy:10,smoky:0},rarity:3},
+  {name:'Sweet Vermouth',cat:'Fortified',abv:18,tags:['sweet','bitter','floral'],aroma:'Wormwood, Vanilla',compounds:[{n:'Thujone',e:'Herbal wormwood bite'},{n:'Vanillin',e:'Sweet depth'}],flavor:{sweet:70,sour:8,bitter:40,spicy:12,umami:15,floral:45,earthy:20,smoky:0},rarity:2},
+  {name:'Mezcal',cat:'Spirit',abv:46,tags:['smoky','earthy','spicy'],aroma:'Isoeugenol, Guaiacol',compounds:[{n:'Guaiacol',e:'Smoke phenol signature'},{n:'Isoeugenol',e:'Spiced warmth'}],flavor:{sweet:10,sour:5,bitter:30,spicy:55,umami:20,floral:5,earthy:80,smoky:92},rarity:4},
+  {name:'Aged Rum',cat:'Spirit',abv:40,tags:['sweet','earthy','umami'],aroma:'Ethyl acetate, Furfural',compounds:[{n:'Furfural',e:'Caramel/nutty depth'},{n:'Ethyl acetate',e:'Fruity ester top-note'}],flavor:{sweet:65,sour:8,bitter:15,spicy:18,umami:30,floral:10,earthy:40,smoky:15},rarity:2},
+  {name:'Cognac',cat:'Spirit',abv:40,tags:['sweet','floral','umami'],aroma:'Linalool, Ethyl decanoate',compounds:[{n:'Ethyl decanoate',e:'Fruity-waxy richness'},{n:'β-Damascenone',e:'Rose & apple nuance'}],flavor:{sweet:55,sour:12,bitter:18,spicy:8,umami:25,floral:60,earthy:20,smoky:5},rarity:4},
+  {name:'Absinthe',cat:'Spirit',abv:68,tags:['bitter','floral','earthy'],aroma:'Thujone, Fenchone, Anethole',compounds:[{n:'Anethole',e:'Anise sweetness'},{n:'Fenchone',e:'Sharp green herb'}],flavor:{sweet:15,sour:5,bitter:75,spicy:25,umami:5,floral:50,earthy:55,smoky:5},rarity:5},
+  {name:'Tequila Blanco',cat:'Spirit',abv:40,tags:['earthy','spicy','sweet'],aroma:'Isoamyl alcohol, Agavins',compounds:[{n:'Agavins',e:'Agave-terroir sweetness'},{n:'Isoamyl acetate',e:'Herbaceous fruit'}],flavor:{sweet:20,sour:8,bitter:20,spicy:40,umami:15,floral:25,earthy:65,smoky:10},rarity:2},
+  {name:'Vodka',cat:'Spirit',abv:40,tags:[],aroma:'Ethanol, Water',compounds:[{n:'Ethanol',e:'Clean neutral carrier'},{n:'Trace fusel oils',e:'Textural bridge'}],flavor:{sweet:0,sour:0,bitter:0,spicy:5,umami:0,floral:0,earthy:0,smoky:0},rarity:1},
+  {name:'Bourbon',cat:'Spirit',abv:45,tags:['sweet','earthy','smoky','spicy'],aroma:'Vanillin, Oak lactone, Caramel',compounds:[{n:'Oak lactone',e:'Woody vanilla depth'},{n:'2-Nonenal',e:'Rich cardboard oak'}],flavor:{sweet:65,sour:8,bitter:30,spicy:55,umami:25,floral:10,earthy:55,smoky:40},rarity:2},
+  {name:'Islay Scotch',cat:'Spirit',abv:46,tags:['smoky','earthy','bitter'],aroma:'Phenol, Guaiacol, Cresol',compounds:[{n:'4-Methylphenol',e:'Leather-smoke phenol'},{n:'Syringaldehyde',e:'Dark oak vanillin'}],flavor:{sweet:20,sour:5,bitter:45,spicy:35,umami:30,floral:5,earthy:70,smoky:98},rarity:3},
+  {name:'Rye Whiskey',cat:'Spirit',abv:50,tags:['spicy','earthy','sweet'],aroma:'Rye lactones, Eugenol',compounds:[{n:'Rye lactone',e:'Grain-spice complexity'},{n:'Eugenol',e:'Clove-spice accent'}],flavor:{sweet:40,sour:5,bitter:35,spicy:75,umami:20,floral:8,earthy:50,smoky:30},rarity:3},
+  {name:'Pisco',cat:'Spirit',abv:42,tags:['floral','earthy','sweet'],aroma:'Geraniol, Ethyl acetate',compounds:[{n:'Geraniol',e:'Rose-petal floral'},{n:'Pisco esters',e:'Muscatel grape terroir'}],flavor:{sweet:25,sour:10,bitter:15,spicy:10,umami:10,floral:70,earthy:30,smoky:0},rarity:4},
+  {name:'Baijiu',cat:'Spirit',abv:52,tags:['earthy','umami','spicy','bitter'],aroma:'Ethyl acetate, Caproic acid',compounds:[{n:'Caproic acid',e:'Pungent fermented grain'},{n:'Ethyl caproate',e:'Fruity-fatty nuance'}],flavor:{sweet:15,sour:15,bitter:50,spicy:70,umami:60,floral:10,earthy:80,smoky:20},rarity:8},
+  {name:'Shochu (Imo)',cat:'Spirit',abv:25,tags:['earthy','sweet','umami'],aroma:'Geraniol, Linalool, Pyrazines',compounds:[{n:'Sweet potato pyrazines',e:'Roasted terroir'},{n:'Geraniol',e:'Floral sweet potato'}],flavor:{sweet:30,sour:5,bitter:15,spicy:10,umami:55,floral:35,earthy:70,smoky:10},rarity:7},
+  {name:'Calvados',cat:'Spirit',abv:40,tags:['sweet','earthy','floral'],aroma:'Ethyl decanoate, Hexanal',compounds:[{n:'Hexanal',e:'Fresh green apple'},{n:'Ethyl hexanoate',e:'Ripe apple ester'}],flavor:{sweet:55,sour:12,bitter:15,spicy:10,umami:12,floral:40,earthy:45,smoky:5},rarity:5},
+  {name:'Aquavit',cat:'Spirit',abv:42,tags:['earthy','spicy','floral'],aroma:'Carvone, Limonene',compounds:[{n:'Carvone',e:'Caraway-dill core'},{n:'Limonene',e:'Citrus-herbal lift'}],flavor:{sweet:10,sour:5,bitter:30,spicy:60,umami:8,floral:35,earthy:55,smoky:5},rarity:6},
+  {name:'Grappa',cat:'Spirit',abv:45,tags:['floral','earthy','bitter'],aroma:'Methanol trace, Linalool',compounds:[{n:'Geraniol',e:'Floral pomace note'},{n:'1-Propanol',e:'Earthy grape marc'}],flavor:{sweet:20,sour:8,bitter:35,spicy:25,umami:15,floral:55,earthy:50,smoky:5},rarity:5},
+  // LIQUEURS & AMARI
+  {name:'Chartreuse Green',cat:'Liqueur',abv:55,tags:['herbal','sweet','spicy'],aroma:'130 plant distillates',compounds:[{n:'Chlorophyll esters',e:'Green herbal matrix'},{n:'Terpineol',e:'Complex spice layer'}],flavor:{sweet:60,sour:5,bitter:50,spicy:65,umami:10,floral:40,earthy:60,smoky:5},rarity:6},
+  {name:'Chartreuse Yellow',cat:'Liqueur',abv:40,tags:['sweet','herbal','floral'],aroma:'Honey, Saffron, Alpine herbs',compounds:[{n:'Linalyl acetate',e:'Honeyed floral'},{n:'Terpinol',e:'Soft herbal body'}],flavor:{sweet:75,sour:5,bitter:30,spicy:35,umami:8,floral:65,earthy:40,smoky:0},rarity:6},
+  {name:'Falernum',cat:'Liqueur',abv:11,tags:['sweet','spicy','floral'],aroma:'Lime, Almond, Clove',compounds:[{n:'Eugenol',e:'Clove-spice punch'},{n:'Benzaldehyde',e:'Marzipan almond'}],flavor:{sweet:88,sour:12,bitter:8,spicy:50,umami:5,floral:35,earthy:10,smoky:0},rarity:5},
+  {name:'Amaro Nonino',cat:'Amaro',abv:35,tags:['bitter','sweet','floral','earthy'],aroma:'Grappa base, Alpine herbs',compounds:[{n:'Quinine derivative',e:'Gentle tonic bitterness'},{n:'Umbelliferone',e:'Sweet coumarin floral'}],flavor:{sweet:50,sour:8,bitter:65,spicy:30,umami:20,floral:55,earthy:45,smoky:10},rarity:5},
+  {name:'Fernet-Branca',cat:'Amaro',abv:40,tags:['bitter','earthy','spicy','floral'],aroma:'Menthol, Gentian, Myrrh',compounds:[{n:'Menthol',e:'Cooling mint bridge'},{n:'Myrrh resin',e:'Balsamic bitter depth'}],flavor:{sweet:5,sour:0,bitter:98,spicy:60,umami:15,floral:20,earthy:65,smoky:15},rarity:3},
+  {name:'Cynar',cat:'Amaro',abv:16,tags:['bitter','earthy','sweet'],aroma:'Cynarin, Artichoke',compounds:[{n:'Cynarin',e:'Artichoke bitter-sweet'},{n:'Chlorogenic acid',e:'Earthy vegetal bridge'}],flavor:{sweet:40,sour:5,bitter:75,spicy:10,umami:35,floral:10,earthy:60,smoky:5},rarity:4},
+  {name:'Cointreau',cat:'Liqueur',abv:40,tags:['sweet','floral','bitter'],aroma:'Sweet orange peel',compounds:[{n:'Limonene',e:'Citrus burst'},{n:'Decanal',e:'Sweet orange fat'}],flavor:{sweet:75,sour:15,bitter:20,spicy:5,umami:3,floral:45,earthy:5,smoky:0},rarity:2},
+  {name:'St-Germain Elderflower',cat:'Liqueur',abv:20,tags:['floral','sweet','sour'],aroma:'Lychee, Pear, Grapefruit',compounds:[{n:'Nerol',e:'Soft elderflower'},{n:'Linalool',e:'Floral-citrus nuance'}],flavor:{sweet:80,sour:18,bitter:10,spicy:0,umami:5,floral:95,earthy:5,smoky:0},rarity:5},
+  {name:'Maraschino',cat:'Liqueur',abv:32,tags:['sweet','bitter','floral'],aroma:'Benzaldehyde, Cherry kernels',compounds:[{n:'Benzaldehyde',e:'Cherry-almond depth'},{n:'Prunasin',e:'Bitter cherry kernel'}],flavor:{sweet:78,sour:5,bitter:28,spicy:0,umami:5,floral:30,earthy:10,smoky:0},rarity:4},
+  // FORTIFIED
+  {name:'Dry Vermouth',cat:'Fortified',abv:18,tags:['bitter','floral','earthy'],aroma:'Aldehydes, Wormwood, White wine',compounds:[{n:'Geraniol',e:'Floral white wine note'},{n:'Thujone',e:'Bitter herbal frame'}],flavor:{sweet:15,sour:20,bitter:45,spicy:8,umami:18,floral:50,earthy:30,smoky:0},rarity:2},
+  {name:'Oloroso Sherry',cat:'Fortified',abv:18,tags:['umami','earthy','sweet'],aroma:'Sotolon, Acetaldehyde',compounds:[{n:'Sotolon',e:'Walnut-caramel rancio'},{n:'Acetaldehyde',e:'Nutty oxidative note'}],flavor:{sweet:35,sour:10,bitter:40,spicy:8,umami:75,floral:20,earthy:60,smoky:15},rarity:4},
+  {name:'Sake',cat:'Fortified',abv:16,tags:['umami','sweet','floral'],aroma:'Isoamyl acetate, Amino acids',compounds:[{n:'Isoamyl acetate',e:'Banana-pear ester'},{n:'Glutamate',e:'Savoury umami depth'}],flavor:{sweet:45,sour:20,bitter:10,spicy:5,umami:70,floral:35,earthy:15,smoky:0},rarity:4},
+  {name:'Port (Tawny)',cat:'Fortified',abv:20,tags:['sweet','earthy','umami'],aroma:'Aldehydes, Caramel esters',compounds:[{n:'Furfuryl alcohol',e:'Oxidative caramel'},{n:'Phenethyl alcohol',e:'Rose wine note'}],flavor:{sweet:88,sour:8,bitter:20,spicy:5,umami:30,floral:25,earthy:50,smoky:10},rarity:4},
+  // CITRUS
+  {name:'Lemon Juice',cat:'Citrus',abv:0,tags:['sour','floral'],aroma:'Citral, Limonene',compounds:[{n:'Citral',e:'Pure lemon top-note'},{n:'Limonene',e:'Orange-peel brightness'}],flavor:{sweet:8,sour:95,bitter:15,spicy:0,umami:3,floral:20,earthy:0,smoky:0},rarity:1},
+  {name:'Lime Juice',cat:'Citrus',abv:0,tags:['sour','bitter','floral'],aroma:'Citral, β-Pinene',compounds:[{n:'Citral',e:'Sharp lime identity'},{n:'β-Pinene',e:'Woody floral bridge'}],flavor:{sweet:5,sour:98,bitter:22,spicy:0,umami:3,floral:28,earthy:0,smoky:0},rarity:1},
+  {name:'Grapefruit Juice',cat:'Citrus',abv:0,tags:['bitter','sour','floral'],aroma:'Nootkatone, Limonene',compounds:[{n:'Nootkatone',e:'Unmistakable grapefruit'},{n:'Furaneol',e:'Caramel-tropical bridge'}],flavor:{sweet:18,sour:60,bitter:55,spicy:0,umami:8,floral:25,earthy:0,smoky:0},rarity:2},
+  {name:'Yuzu Juice',cat:'Citrus',abv:0,tags:['sour','floral','bitter'],aroma:'Yuzu linalool, γ-Terpinene',compounds:[{n:'γ-Terpinene',e:'Unique citrus-herb'},{n:'Yuzu linalool',e:'Floral brightness'}],flavor:{sweet:10,sour:82,bitter:35,spicy:5,umami:8,floral:70,earthy:10,smoky:0},rarity:7},
+  {name:'Blood Orange',cat:'Citrus',abv:0,tags:['sweet','sour','floral'],aroma:'Anthocyanins, Limonene',compounds:[{n:'Cyanidin-3-glucoside',e:'Berry-citrus pigment'},{n:'Limonene',e:'Orange brightness'}],flavor:{sweet:35,sour:65,bitter:25,spicy:0,umami:5,floral:40,earthy:5,smoky:0},rarity:4},
+  {name:'Verjuice',cat:'Citrus',abv:0,tags:['sour','bitter','earthy'],aroma:'Tartaric acid, Malic acid',compounds:[{n:'Tartaric acid',e:'Sharp grape-acid bite'},{n:'Malic acid',e:'Green apple freshness'}],flavor:{sweet:8,sour:88,bitter:30,spicy:0,umami:12,floral:15,earthy:25,smoky:0},rarity:6},
+  {name:'Calamansi Juice',cat:'Citrus',abv:0,tags:['sour','floral','bitter'],aroma:'Limonene, Linalool',compounds:[{n:'Limonene',e:'Bright tropical citrus'},{n:'Linalool',e:'Floral-honey bridge'}],flavor:{sweet:12,sour:90,bitter:28,spicy:0,umami:5,floral:50,earthy:5,smoky:0},rarity:7},
+  // SWEETENERS
+  {name:'Simple Syrup',cat:'Sweetener',abv:0,tags:['sweet'],aroma:'Sucrose',compounds:[{n:'Sucrose',e:'Pure sweetness vector'},{n:'Water activity',e:'Texture & dilution'}],flavor:{sweet:100,sour:0,bitter:0,spicy:0,umami:0,floral:0,earthy:0,smoky:0},rarity:1},
+  {name:'Honey Syrup',cat:'Sweetener',abv:0,tags:['sweet','floral','earthy'],aroma:'Phenylacetic acid, Linalool',compounds:[{n:'Phenylacetic acid',e:'Waxy-floral honey'},{n:'Proline',e:'Amino acid complexity'}],flavor:{sweet:92,sour:5,bitter:5,spicy:0,umami:18,floral:40,earthy:20,smoky:0},rarity:2},
+  {name:'Orgeat',cat:'Sweetener',abv:0,tags:['sweet','floral','umami'],aroma:'Benzaldehyde, Orange flower',compounds:[{n:'Benzaldehyde',e:'Almond-cherry core'},{n:'Methyl anthranilate',e:'Grape-floral nuance'}],flavor:{sweet:90,sour:0,bitter:5,spicy:5,umami:15,floral:55,earthy:5,smoky:0},rarity:3},
+  {name:'Agave Nectar',cat:'Sweetener',abv:0,tags:['sweet','earthy'],aroma:'Agavins, Fructans',compounds:[{n:'Agavins',e:'Complex agave sugar'},{n:'Saponins',e:'Mild bitter-earthy'}],flavor:{sweet:88,sour:0,bitter:10,spicy:0,umami:8,floral:5,earthy:25,smoky:0},rarity:3},
+  {name:'Demerara Syrup',cat:'Sweetener',abv:0,tags:['sweet','earthy'],aroma:'Molasses, Caramel',compounds:[{n:'Molasses esters',e:'Dark sugar complexity'},{n:'Furfural',e:'Caramelised depth'}],flavor:{sweet:95,sour:0,bitter:8,spicy:0,umami:10,floral:0,earthy:30,smoky:5},rarity:2},
+  {name:'Grenadine',cat:'Sweetener',abv:0,tags:['sweet','sour','floral'],aroma:'Pomegranate anthocyanins',compounds:[{n:'Punicalagin',e:'Pomegranate tannin'},{n:'Pelargonin',e:'Red floral pigment'}],flavor:{sweet:85,sour:20,bitter:5,spicy:0,umami:5,floral:35,earthy:5,smoky:0},rarity:2},
+  // BITTERS
+  {name:'Angostura Bitters',cat:'Bitters',abv:44,tags:['bitter','spicy','earthy'],aroma:'Gentian, Clove, Cinnamon',compounds:[{n:'Gentiopicrin',e:'Pure medicinal bitter'},{n:'Cinnamaldehyde',e:'Warm spice carrier'}],flavor:{sweet:10,sour:0,bitter:95,spicy:75,umami:10,floral:10,earthy:50,smoky:10},rarity:1},
+  {name:"Peychaud's Bitters",cat:'Bitters',abv:35,tags:['bitter','floral','sweet'],aroma:'Anise, Gentian, Cherry',compounds:[{n:'Methyl salicylate',e:'Wintergreen floral'},{n:'Anethole',e:'Soft liquorice base'}],flavor:{sweet:25,sour:0,bitter:80,spicy:25,umami:5,floral:60,earthy:20,smoky:0},rarity:2},
+  {name:'Mole Bitters',cat:'Bitters',abv:53,tags:['bitter','earthy','spicy','umami'],aroma:'Cacao, Ancho chile, Cinnamon',compounds:[{n:'Theobromine',e:'Bitter cacao resonance'},{n:'Capsaicin',e:'Chile heat cascade'}],flavor:{sweet:15,sour:0,bitter:88,spicy:85,umami:35,floral:5,earthy:70,smoky:30},rarity:6},
+  {name:'Celery Bitters',cat:'Bitters',abv:45,tags:['bitter','earthy','umami'],aroma:'Phthalides, Apigenin',compounds:[{n:'3-n-Butyl phthalide',e:'Celery aldehyde'},{n:'Apigenin',e:'Herbal bitter flavone'}],flavor:{sweet:5,sour:5,bitter:70,spicy:15,umami:55,floral:10,earthy:75,smoky:0},rarity:6},
+  // NOVEL / AVANT-GARDE
+  {name:'Cold Brew Coffee',cat:'Novel',abv:0,tags:['bitter','umami','earthy'],aroma:'Chlorogenic acids, Cafestol',compounds:[{n:'Cafestol',e:'Fatty bitter depth'},{n:'Chlorogenic acid',e:'Antioxidant bitter bridge'}],flavor:{sweet:10,sour:20,bitter:85,spicy:10,umami:50,floral:15,earthy:75,smoky:25},rarity:3},
+  {name:'Tepache',cat:'Novel',abv:3,tags:['sweet','sour','earthy','spicy'],aroma:'Lactic acid, Tropical esters',compounds:[{n:'Ethyl butyrate',e:'Tropical pineapple ester'},{n:'Lactic acid',e:'Fermented tang'}],flavor:{sweet:55,sour:50,bitter:15,spicy:20,umami:25,floral:30,earthy:40,smoky:0},rarity:6},
+  {name:'Aquafaba',cat:'Novel',abv:0,tags:['umami','sweet'],aroma:'Saponins, Amino acids',compounds:[{n:'Saponin',e:'Foam emulsifier'},{n:'Asparagine',e:'Neutral carrier protein'}],flavor:{sweet:10,sour:3,bitter:3,spicy:0,umami:45,floral:0,earthy:15,smoky:0},rarity:5},
+  {name:'Yuzu Kosho',cat:'Novel',abv:0,tags:['spicy','sour','floral'],aroma:'Capsaicin, γ-Terpinene',compounds:[{n:'Capsaicin',e:'Fermented chili heat'},{n:'γ-Terpinene',e:'Yuzu herb note'}],flavor:{sweet:5,sour:40,bitter:20,spicy:90,umami:30,floral:35,earthy:15,smoky:0},rarity:8},
+  {name:'Pu-erh Tea',cat:'Novel',abv:0,tags:['earthy','umami','bitter'],aroma:'EGCG, Geosmin, Theabrownin',compounds:[{n:'Geosmin',e:'Deep earth-soil note'},{n:'Theabrownin',e:'Fermented complexity'}],flavor:{sweet:5,sour:10,bitter:60,spicy:0,umami:65,floral:10,earthy:95,smoky:20},rarity:7},
+  {name:'Mirin',cat:'Novel',abv:14,tags:['sweet','umami','floral'],aroma:'Ethyl acetate, Amino acids',compounds:[{n:'Glutamic acid',e:'Umami amplifier'},{n:'Maltose',e:'Complex rice sweetness'}],flavor:{sweet:85,sour:5,bitter:5,spicy:0,umami:80,floral:20,earthy:15,smoky:0},rarity:5},
+  {name:'Tamarind Concentrate',cat:'Novel',abv:0,tags:['sour','sweet','earthy'],aroma:'Tartaric acid, Furfural',compounds:[{n:'Tartaric acid',e:'Intense sour depth'},{n:'Furfural',e:'Caramelised tropical'}],flavor:{sweet:45,sour:90,bitter:20,spicy:10,umami:30,floral:5,earthy:50,smoky:0},rarity:5},
+  {name:'Chrysanthemum Tea',cat:'Novel',abv:0,tags:['floral','sweet','bitter'],aroma:'β-Ionone, Camphor',compounds:[{n:'β-Ionone',e:'Violet-rose floral core'},{n:'Camphor',e:'Cooling medicinal lift'}],flavor:{sweet:20,sour:5,bitter:35,spicy:0,umami:10,floral:90,earthy:25,smoky:0},rarity:6},
+  {name:'Kelp Brine',cat:'Novel',abv:0,tags:['umami','bitter','earthy'],aroma:'DMS, Glutamate',compounds:[{n:'Dimethyl sulfide',e:'Marine oceanic note'},{n:'Alginic acid',e:'Mineral sea texture'}],flavor:{sweet:0,sour:5,bitter:30,spicy:0,umami:95,floral:0,earthy:40,smoky:20},rarity:9},
+  {name:'Saffron Tincture',cat:'Novel',abv:0,tags:['floral','earthy','bitter'],aroma:'Safranal, Picrocrocin',compounds:[{n:'Safranal',e:"World's rarest aroma compound"},{n:'Picrocrocin',e:'Unique bitter warmth'}],flavor:{sweet:8,sour:0,bitter:40,spicy:8,umami:15,floral:95,earthy:55,smoky:5},rarity:10},
+  {name:'Tomato Water',cat:'Novel',abv:0,tags:['umami','sweet','earthy'],aroma:'Hexanal, cis-3-Hexenal',compounds:[{n:'cis-3-Hexenal',e:'Green tomato leaf'},{n:'Glutamate',e:'Savoury umami vector'}],flavor:{sweet:15,sour:25,bitter:10,spicy:0,umami:85,floral:5,earthy:35,smoky:0},rarity:6},
+  {name:'Cocoa Nib Tincture',cat:'Novel',abv:0,tags:['bitter','earthy','umami'],aroma:'Theobromine, Pyrazines',compounds:[{n:'Theobromine',e:'Soft alkaloid bitterness'},{n:'2-Ethylpyrazine',e:'Roasted nutty depth'}],flavor:{sweet:20,sour:5,bitter:80,spicy:25,umami:45,floral:10,earthy:70,smoky:30},rarity:5},
+  {name:'Butterfly Pea Flower',cat:'Novel',abv:0,tags:['floral','earthy','bitter'],aroma:'Ternatin anthocyanins, Myricetin',compounds:[{n:'Ternatin',e:'pH-reactive anthocyanin'},{n:'Myricetin',e:'Gentle herbal bitter'}],flavor:{sweet:5,sour:8,bitter:30,spicy:0,umami:5,floral:80,earthy:40,smoky:0},rarity:7},
+  {name:'Seaweed Extract',cat:'Novel',abv:0,tags:['earthy','umami','smoky'],aroma:'Bromophenol, Fucoidin',compounds:[{n:'Bromophenol',e:'Iodine-smoke mineral'},{n:'Fucoidin',e:'Oceanic complexity'}],flavor:{sweet:0,sour:5,bitter:25,spicy:0,umami:88,floral:0,earthy:70,smoky:65},rarity:9},
+  {name:'Verjus Blanc',cat:'Novel',abv:0,tags:['sour','earthy','floral'],aroma:'Tartaric acid, Green phenolics',compounds:[{n:'Tartaric acid',e:'Unripe grape sharpness'},{n:'Malic acid',e:'Apple-acid freshness'}],flavor:{sweet:5,sour:85,bitter:20,spicy:0,umami:15,floral:22,earthy:30,smoky:0},rarity:6},
+  {name:'Fermented Kombucha',cat:'Novel',abv:1,tags:['sour','earthy','sweet','bitter'],aroma:'Acetic acid, Glucuronic acid',compounds:[{n:'Acetic acid',e:'Sour fermented base'},{n:'Glucuronic acid',e:'Detox bitter bridge'}],flavor:{sweet:20,sour:75,bitter:30,spicy:5,umami:20,floral:15,earthy:40,smoky:0},rarity:5},
+  // ACID / SHRUBS
+  {name:'Apple Cider Shrub',cat:'Acid',abv:0,tags:['sour','earthy','sweet'],aroma:'Acetic acid, Malic acid',compounds:[{n:'Acetic acid',e:'Sharp shrub bite'},{n:'Malic acid',e:'Crisp apple freshness'}],flavor:{sweet:15,sour:92,bitter:10,spicy:5,umami:20,floral:5,earthy:30,smoky:0},rarity:3},
+  {name:'Citric Acid Solution',cat:'Acid',abv:0,tags:['sour'],aroma:'Pure citric acid',compounds:[{n:'Citric acid',e:'Clean precise sourness'},{n:'Water',e:'Neutral dilution'}],flavor:{sweet:0,sour:100,bitter:5,spicy:0,umami:2,floral:0,earthy:0,smoky:0},rarity:2},
+  {name:'Malic Acid Solution',cat:'Acid',abv:0,tags:['sour'],aroma:'Malic acid',compounds:[{n:'Malic acid',e:'Green apple sourness'},{n:'L-isomer',e:'Natural fruit acid'}],flavor:{sweet:0,sour:95,bitter:8,spicy:0,umami:3,floral:5,earthy:0,smoky:0},rarity:3},
+];
+
+const CATS = ['All',...[...new Set(INGREDIENTS.map(i=>i.cat))]];
+let selectedIngredients = [];
+let activeCat = 'All';
+
+function init(){
+  const catFilter = document.getElementById('cat-filter');
+  CATS.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn'+(c==='All'?' active':'');
+    btn.textContent = c;
+    btn.onclick = ()=>{activeCat=c;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterIngredients();};
+    catFilter.appendChild(btn);
+  });
+  renderIngredients(INGREDIENTS);
+  renderAdvanced();
+  renderTechniques();
+}
+
+function filterIngredients(){
+  const q = document.getElementById('ing-search').value.toLowerCase();
+  const list = INGREDIENTS.filter(i=>{
+    const catOk = activeCat==='All'||i.cat===activeCat;
+    const searchOk = !q||i.name.toLowerCase().includes(q)||i.tags.join(' ').includes(q)||i.cat.toLowerCase().includes(q);
+    return catOk&&searchOk;
+  });
+  renderIngredients(list);
+}
+
+function renderIngredients(list){
+  const grid = document.getElementById('ing-grid');
+  grid.innerHTML='';
+  list.slice(0,40).forEach(ing=>{
+    const sel = selectedIngredients.some(s=>s.name===ing.name);
+    const card = document.createElement('div');
+    card.className='ing-card'+(sel?' selected':'');
+    const stars='★'.repeat(Math.min(ing.rarity,5))+'☆'.repeat(Math.max(0,5-Math.min(ing.rarity,5)));
+    card.innerHTML=`<div class="ing-name">${ing.name}</div><div class="ing-cat">${ing.cat}${ing.abv>0?' · '+ing.abv+'%':''}</div><div class="ing-flavor">${ing.tags.map(t=>`<span class="ftag ${t}">${t}</span>`).join('')}</div><div style="font-size:9px;color:var(--gold);margin-top:4px;">${stars}</div>`;
+    card.onclick=()=>toggleIngredient(ing);
+    grid.appendChild(card);
+  });
+  if(list.length>40){
+    const more=document.createElement('div');
+    more.style.cssText='grid-column:span 2;font-size:10px;color:rgba(245,240,232,0.3);text-align:center;padding:8px;font-family:DM Mono,monospace;';
+    more.textContent=`+${list.length-40} more — refine search`;
+    grid.appendChild(more);
+  }
+}
+
+function toggleIngredient(ing){
+  const idx=selectedIngredients.findIndex(s=>s.name===ing.name);
+  if(idx>-1) selectedIngredients.splice(idx,1);
+  else if(selectedIngredients.length<12) selectedIngredients.push(ing);
+  updateTray();filterIngredients();
+}
+
+function updateTray(){
+  const chips=document.getElementById('tray-chips');
+  document.getElementById('tray-count').textContent=selectedIngredients.length+' / 12';
+  if(!selectedIngredients.length){chips.innerHTML='<span class="tray-empty">Add ingredients below to begin</span>';document.getElementById('analyze-btn').disabled=true;return;}
+  chips.innerHTML=selectedIngredients.map(i=>`<div class="tray-chip">${i.name}<span class="rm" onclick="removeIng('${i.name.replace(/'/g,"\\'")}')">×</span></div>`).join('');
+  document.getElementById('analyze-btn').disabled=selectedIngredients.length<2;
+}
+
+function removeIng(name){selectedIngredients=selectedIngredients.filter(i=>i.name!==name);updateTray();filterIngredients();}
+
+function goAnalyze(){
+  showPage('taste','nb-taste');
+  computeTaste();computeMolecular();computeRecipe();
+}
+
+function avg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;}
+function maxv(arr){return arr.length?Math.max(...arr):0;}
+
+function computeTaste(){
+  if(!selectedIngredients.length)return;
+  const dims=['sweet','sour','bitter','spicy','umami','floral','earthy','smoky'];
+  const profile={};
+  dims.forEach(d=>{
+    const vals=selectedIngredients.map(i=>i.flavor[d]||0);
+    profile[d]=Math.min(100,Math.round(avg(vals)*0.55+maxv(vals)*0.45));
+  });
+  const spiritsWithAbv=selectedIngredients.filter(i=>i.abv>0);
+  const totalAbv=spiritsWithAbv.length?avg(spiritsWithAbv.map(i=>i.abv)):0;
+  const maxDim=Math.max(...dims.map(d=>profile[d]));
+  const avgDim=avg(dims.map(d=>profile[d]));
+  const balance=Math.min(99,Math.round(100-maxDim+avgDim*0.6));
+  const harmony=Math.min(99,Math.round(balance*0.45+(profile.sweet>15&&profile.bitter>15?18:0)+(profile.sour>20?12:0)+(dims.filter(d=>profile[d]>30).length*4)));
+  const complexity=Math.round(dims.filter(d=>profile[d]>15).length*12.5);
+  const rarity=Math.min(10,Math.round(avg(selectedIngredients.map(i=>i.rarity||1))));
+
+  document.getElementById('harmony-score').textContent=harmony+'%';
+  document.getElementById('abv-val').textContent=Math.round(totalAbv);
+  document.getElementById('balance-val').textContent=balance;
+  document.getElementById('complex-val').textContent=complexity;
+  document.getElementById('rare-val').textContent=rarity+'/10';
+
+  const colors={sweet:'#f0c060',sour:'#50c0a8',bitter:'#a07fd0',spicy:'#f08060',umami:'#c08040',floral:'#d090c0',earthy:'#b09060',smoky:'#a0a0a0'};
+  document.getElementById('taste-bars').innerHTML=dims.map(d=>`<div class="taste-row"><div class="taste-row-label">${d}</div><div class="taste-bar-bg"><div class="taste-bar-fill" style="width:${profile[d]}%;background:${colors[d]};"></div></div><div class="taste-val">${profile[d]}</div></div>`).join('');
+
+  const topFlavor=dims.reduce((a,b)=>profile[a]>profile[b]?a:b);
+  const note=document.getElementById('taste-note');
+  note.style.display='block';
+  note.innerHTML=`<span style="color:var(--gold);">Palate signature:</span> <strong>${topFlavor.toUpperCase()}</strong> dominant. ${harmony>70?'Exceptional harmony — award-worthy structure.':harmony>50?'Good balance with expressive character.':'Bold & assertive — niche palate target.'} Rarity index <strong>${rarity}/10</strong>. ${rarity>=7?'Rare & highly innovative composition.':rarity>=4?'Craft-forward with distinctive elements.':'Accessible & crowd-pleasing profile.'}`;
+
+  drawRadar(profile,dims,colors);
+}
+
+function drawRadar(profile,dims,colors){
+  const canvas=document.getElementById('radarChart');
+  const ctx=canvas.getContext('2d');
+  const W=200,H=200,cx=100,cy=100,R=72;
+  ctx.clearRect(0,0,W,H);
+  const n=dims.length;
+  const angle=i=>-Math.PI/2+(2*Math.PI/n)*i;
+  [20,40,60,80,100].forEach(r=>{
+    ctx.beginPath();
+    dims.forEach((_,i)=>{const a=angle(i),x=cx+Math.cos(a)*R*r/100,y=cy+Math.sin(a)*R*r/100;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.closePath();ctx.strokeStyle='rgba(245,240,232,0.07)';ctx.lineWidth=1;ctx.stroke();
+  });
+  dims.forEach((_,i)=>{ctx.beginPath();ctx.moveTo(cx,cy);const a=angle(i);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.strokeStyle='rgba(245,240,232,0.09)';ctx.lineWidth=1;ctx.stroke();});
+  ctx.beginPath();
+  dims.forEach((d,i)=>{const a=angle(i),v=profile[d]/100,x=cx+Math.cos(a)*R*v,y=cy+Math.sin(a)*R*v;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.closePath();ctx.fillStyle='rgba(200,149,42,0.2)';ctx.fill();ctx.strokeStyle='rgba(200,149,42,0.85)';ctx.lineWidth=2;ctx.stroke();
+  dims.forEach((d,i)=>{
+    const a=angle(i),v=profile[d]/100,x=cx+Math.cos(a)*R*v,y=cy+Math.sin(a)*R*v;
+    ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=colors[d];ctx.fill();
+    const lx=cx+Math.cos(a)*(R+14),ly=cy+Math.sin(a)*(R+14);
+    ctx.fillStyle='rgba(245,240,232,0.55)';ctx.font='9px DM Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(d,lx,ly);
+  });
+}
+
+function computeMolecular(){
+  if(selectedIngredients.length<2){document.getElementById('matrix-container').innerHTML='<div class="missing-note">Add 2+ ingredients in Build tab.</div>';document.getElementById('mol-grid').innerHTML='<div style="grid-column:span 2;" class="missing-note">No ingredients selected.</div>';return;}
+  const sel=selectedIngredients.slice(0,6);
+  const pairScore=(a,b)=>{
+    const dims=['sweet','sour','bitter','spicy','umami','floral','earthy','smoky'];
+    let s=0;dims.forEach(d=>{const diff=Math.abs(a.flavor[d]-b.flavor[d]);if(diff<20)s+=2;else if(diff<40)s+=1;else if(diff>70)s-=1;});
+    return Math.min(10,Math.max(0,s));
+  };
+  let html='<div class="matrix-wrap"><table class="matrix-table"><thead><tr><th></th>'+sel.map(i=>`<th>${i.name.slice(0,6)}</th>`).join('')+'</tr></thead><tbody>';
+  sel.forEach((a,ai)=>{
+    html+=`<tr><td style="padding:0 6px 0 0;color:rgba(245,240,232,0.5);font-size:10px;text-align:right;">${a.name.slice(0,7)}</td>`;
+    sel.forEach((b,bi)=>{
+      if(ai===bi){html+='<td style="background:rgba(200,149,42,0.1);color:var(--gold);text-align:center;">◉</td>';return;}
+      const s=pairScore(a,b);
+      let cls='pair-neutral',sym='·';
+      if(s>=8){cls='pair-great';sym='✦';}else if(s>=6){cls='pair-good';sym='+';}else if(s<=2){cls='pair-clash';sym='✗';}
+      html+=`<td class="${cls}">${sym}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">';
+  [['pair-great','✦ Great'],['pair-good','+ Good'],['pair-neutral','· Neutral'],['pair-clash','✗ Clash']].forEach(([c,l])=>{html+=`<span class="${c}" style="font-size:10px;padding:3px 8px;border-radius:4px;">${l}</span>`;});
+  html+='</div>';
+  document.getElementById('matrix-container').innerHTML=html;
+
+  const compounds=selectedIngredients.flatMap(i=>i.compounds.map(c=>({...c,src:i.name}))).slice(0,8);
+  document.getElementById('mol-grid').innerHTML=compounds.map(c=>`<div class="mol-card"><div class="mol-name">${c.src}</div><div class="mol-compound">${c.n}</div><div class="mol-effect">${c.e}</div><div style="display:flex;align-items:center;gap:4px;margin-top:5px;"><div style="width:6px;height:6px;border-radius:50%;background:#50c0a8;"></div><div style="font-size:9px;color:rgba(245,240,232,0.4);font-family:DM Mono,monospace;">Active</div></div></div>`).join('');
+
+  const allTags=[...new Set(selectedIngredients.flatMap(i=>i.tags))];
+  const bridges=[];
+  if(allTags.includes('bitter')&&allTags.includes('sweet'))bridges.push('Bitter–Sweet tension → Aperitif structure detected. Optimal serve: chilled 4°C.');
+  if(allTags.includes('smoky')&&allTags.includes('floral'))bridges.push('Smoke–Floral contrast → Phosphoric acid mist recommended for aroma amplification (+22%).');
+  if(allTags.includes('umami')&&allTags.includes('sour'))bridges.push('Umami–Acid pairing → Glutamate intensifies citric acid perception by 34% (peer-reviewed, 2019).');
+  if(allTags.includes('earthy')&&allTags.includes('spicy'))bridges.push('Earthy–Spice matrix → Capsaicin bonds with sesquiterpenes for extended 90s finish.');
+  if(allTags.includes('floral')&&allTags.includes('sweet'))bridges.push('Floral–Sweet resonance → Linalool amplifies sucrose sweetness perception by 18%.');
+  if(!bridges.length)bridges.push('Standard compatibility profile. No anomalous bridges detected. Solid, clean pairing.');
+  document.getElementById('bridge-out').innerHTML='<span style="color:var(--gold);">Flavour-bridge™ analysis:</span><br>'+bridges.join('<br>');
+}
+
+function computeRecipe(){
+  if(!selectedIngredients.length)return;
+  const spirit=selectedIngredients.find(i=>i.cat==='Spirit')||selectedIngredients[0];
+  const modifier=selectedIngredients.find(i=>['Liqueur','Amaro','Fortified'].includes(i.cat));
+  const acid=selectedIngredients.find(i=>['Citrus','Acid'].includes(i.cat));
+  const sweet=selectedIngredients.find(i=>i.cat==='Sweetener');
+  const novel=selectedIngredients.find(i=>i.cat==='Novel');
+  const bitters=selectedIngredients.find(i=>i.cat==='Bitters');
+
+  const name=generateName();
+  let ings=[];
+  if(spirit)ings.push({n:spirit.name,a:'45 ml'});
+  if(modifier)ings.push({n:modifier.name,a:'22 ml'});
+  if(acid)ings.push({n:acid.name,a:'20 ml'});
+  if(sweet)ings.push({n:sweet.name,a:'15 ml'});
+  if(novel)ings.push({n:novel.name,a:'10 ml'});
+  if(bitters)ings.push({n:bitters.name,a:'2 dashes'});
+  selectedIngredients.filter(i=>!ings.find(x=>x.n===i.name)).slice(0,2).forEach(i=>ings.push({n:i.name,a:'1 dash'}));
+
+  const methods=['Shake hard with cracked ice (12 sec). Double-strain into frozen Nick & Nora.','Stir for 45 sec over large cube. Strain into chilled coupe. No ice.','Flash-blend 4 sec. Strain over crushed ice. Crown with fresh herb.','Build over 1×1 block ice. Gentle stir 10 rev. Express peel over surface.','Clarify with agar fining at 4°C. Serve crystal-clear in chilled stemware at 2°C.'];
+  const method=methods[Math.floor(Math.random()*methods.length)];
+  const garnishes=['Expressed grapefruit peel, discarded','Smoked rosemary sprig (torched tableside)','Edible gold leaf + dried marigold','Toasted kombu chip','Fermented Calabrian chili thread','Dehydrated blood orange wheel','Charred lemon half, expressed','Single violet blossom, chilled'];
+  const garnish=garnishes[Math.floor(Math.random()*garnishes.length)];
+
+  document.getElementById('recipe-area').innerHTML=`<div class="recipe-card"><div class="recipe-name">${name}</div><div class="recipe-meta">EL MAGO ORIGINAL · PATENT-NOVEL COMPOSITION · AI SYNTHESIZED</div>${ings.map(i=>`<div class="recipe-ing-row"><span class="recipe-ing-name">${i.n}</span><span class="recipe-ing-amount">${i.a}</span></div>`).join('')}<div class="recipe-method">${method}<br><br><strong style="color:var(--gold-light);">Garnish:</strong> ${garnish}.</div></div>`;
+}
+
+function generateName(){
+  const adj=['Quantum','Obsidian','Gilded','Velvet','Cipher','Aureate','Phantom','Nocturne','Sublime','Spectral','Sable','Astral'];
+  const noun=['Accord','Elixir','Theorem','Paradox','Meridian','Solstice','Cipher','Mirage','Codex','Séance','Reverie','Continuum'];
+  return adj[Math.floor(Math.random()*adj.length)]+' '+noun[Math.floor(Math.random()*noun.length)];
+}
+
+function renderTechniques(){
+  const techs=[
+    {icon:'🧊',label:'Cryo-clarify',desc:'Agar gel fining at -18°C'},
+    {icon:'💨',label:'Vacuum infuse',desc:'15min ISI whip technique'},
+    {icon:'🔥',label:'Fat-wash',desc:'Liquid nitrogen fat strip'},
+    {icon:'⚗',label:'Rotovap distill',desc:'Terpene recapture still'},
+    {icon:'🌊',label:'Ultrasonic emulsify',desc:'40kHz emulsification rig'},
+    {icon:'🫧',label:'CO₂ carbonate',desc:'In-glass carbonation'},
+  ];
+  document.getElementById('tech-grid').innerHTML=techs.map((t,i)=>`<div class="tech-card" id="tech-${i}" onclick="toggleTech(${i})"><div style="display:flex;align-items:center;gap:8px;"><div style="font-size:18px;">${t.icon}</div><div><div style="font-size:12px;font-weight:500;color:#f5f0e8;">${t.label}</div><div style="font-size:10px;color:rgba(245,240,232,0.4);font-family:DM Mono,monospace;">${t.desc}</div></div></div></div>`).join('');
+}
+
+function toggleTech(i){document.getElementById('tech-'+i).classList.toggle('active-tech');}
+
+const ADV_TOOLS=[
+  {icon:'🧬',color:'teal',name:'Neuro-Flavour Mapping™',badge:'NOT YET INVENTED',desc:'EEG-linked taste cortex scanner. Real-time neural taste response mapped to individual compounds. Assigns a personal "palate fingerprint" unique to each guest — used to pre-optimise the drink before pouring.',out:`> INITIALISING CORTEX SCAN...\n> Alpha wave bitterness threshold: <span style="color:var(--gold);">68 µV</span>\n> Umami receptor density: <span style="color:#50c0a8;">HIGH (93rd percentile)</span>\n> Sweetness gate voltage: 2.4 mV\n> Palate fingerprint: <span style="color:var(--gold);">SYNTH-READY</span>`},
+  {icon:'⚛',color:'purple',name:'Quantum Entanglement Pairing™',badge:'THEORETICAL',desc:'Uses quantum coherence to detect flavour molecule entanglement across the periodic table of taste. Identifies non-local aromatic bridges — flavours that shouldn\'t pair by chemistry, but do.',out:`> QUANTUM TUNNELLING: ACTIVE\n> Entanglement detected: <span style="color:var(--gold);">Saffron ↔ Guaiacol</span>\n> Non-local bridge: <span style="color:#50c0a8;">STABLE</span> at 298K\n> ΔG pairing energy: <span style="color:#f08060;">-4.2 kJ/mol</span>\n> Classification: <span style="color:var(--gold);">NOVEL PAIR</span>`},
+  {icon:'🫁',color:'red',name:'Vapour Taste Architecture™',badge:'CONCEPTUAL',desc:'Separates cocktail into volatile and non-volatile fractions. Delivers precision-engineered aerosol pre-nose priming 0.3s before each sip, enhancing perceived complexity by up to 3× without altering the liquid.',out:`> Volatile fraction isolated: <span style="color:var(--gold);">23 compounds</span>\n> Aerosol nozzle PSI: 12.4\n> Pre-nose delivery timing: <span style="color:#50c0a8;">0.3s before sip</span>\n> Complexity multiplier: <span style="color:var(--gold);">×3.1</span>`},
+  {icon:'⏱',color:'gold',name:'Temporal Flavour Release™',badge:'NOT YET INVENTED',desc:'Micro-encapsulated flavour spheres programmed to burst at precise intervals post-sip: T+0s citrus, T+8s bitter, T+22s smoke. The drink\'s flavour profile evolves dynamically across 30 seconds in the mouth.',out:`> T+0s: <span style="color:var(--gold);">Citrus burst</span> (limonene capsule)\n> T+8s: <span style="color:#50c0a8;">Bitter bloom</span> (gentian slow-release)\n> T+22s: <span style="color:#a0a0a0;">Smoke fade</span> (guaiacol micro-sphere)\n> Total experience window: <span style="color:var(--gold);">30 seconds</span>`},
+  {icon:'🌍',color:'blue',name:'Terroir AI Traceability™',badge:'PATENT PENDING',desc:'Blockchain + spectroscopy links every ingredient to GPS coordinates, harvest date, soil pH, and rainfall data. Guests scan the QR on their glass for a complete molecular origin story.',out:`> Gin botanicals: <span style="color:var(--gold);">51.4°N, 0.1°W — London, UK</span>\n> Campari bitters: 45.4°N, 9.1°E — Sesto, IT\n> Blockchain hash: <span style="color:#50c0a8;">0x4fa9...c3b1</span>\n> Full traceability: <span style="color:var(--gold);">VERIFIED</span>`},
+  {icon:'🎨',color:'teal',name:'pH-Reactive Colour Engine™',badge:'PATENT PENDING',desc:'Drink changes colour as you sip, based on saliva pH. Anthocyanins from butterfly pea, hibiscus, and red cabbage dynamically shift hue from deep violet → magenta → golden — visible colour tells you the flavour phase.',out:`> pH 7.4 (neutral): <span style="color:#a07fd0;">Deep violet</span>\n> pH 6.5 (mid-sip): <span style="color:#d090c0;">Magenta</span>\n> pH 5.2 (citrus hit): <span style="color:var(--gold);">Golden amber</span>\n> Colour gradient: <span style="color:#50c0a8;">SMOOTH TRANSITION</span>`},
+  {icon:'🧠',color:'purple',name:'AI Palate Sommelier™',badge:'CONCEPTUAL',desc:'Conversational AI agent trained on 40,000 tasting notes and 8,000 cocktail recipes. Provides real-time pairing suggestions, historical cocktail lineage, and flavour evolution predictions as you add each ingredient.',out:`> Training corpus: <span style="color:var(--gold);">40,000 tasting notes</span>\n> Recipe database: 8,000+ verified\n> Suggestion confidence: <span style="color:#50c0a8;">94.2%</span>\n> Lineage trace: <span style="color:var(--gold);">ACTIVE</span>`},
+];
+
+function renderAdvanced(){
+  document.getElementById('adv-tools').innerHTML=ADV_TOOLS.map((t,i)=>`<div class="tool-card" onclick="toggleTool(${i})"><div class="tool-card-header"><div class="tool-icon ${t.color}">${t.icon}</div><div><div class="tool-name">${t.name}</div></div><div class="tool-badge">${t.badge}</div></div><div class="tool-desc">${t.desc}</div><div class="tool-output" id="adv-${i}"><span style="color:var(--gold);">> SYSTEM ACTIVE</span><br>${t.out}</div></div>`).join('');
+}
+
+function toggleTool(i){document.getElementById('adv-'+i).classList.toggle('visible');}
+
+function showPage(page,tabId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab,.nav-btn').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  const tabEl=document.querySelector(`.tab[onclick*="${tabId}"]`);
+  if(tabEl)tabEl.classList.add('active');
+}
+
+init();
+</script>
+</body>
+</html>
