@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>El Mago Food Lab Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#c8952a;--gold-light:#f0c060;--ink:#1a1208;--cream:#fdf8f0;
+  --deep:#0d0a06;--accent:#e8421a;--teal:#0f7c6e;--lavender:#6b4fa0;
+  --green:#2d6a4f;--red:#9b2226;--orange:#ca6702;
+}
+html,body{background:#0d0a06;color:#f5f0e8;font-family:'Outfit',sans-serif;min-height:100vh;}
+.app{max-width:440px;margin:0 auto;background:#0d0a06;min-height:100vh;position:relative;}
+
+/* LOGIN */
+#login-screen{position:fixed;top:0;left:0;width:100%;height:100vh;background:#0d0a06;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+.login-logo{font-family:'DM Serif Display',serif;font-size:34px;color:var(--gold-light);margin-bottom:5px;text-align:center;}
+.login-sub{font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,240,232,0.4);letter-spacing:2px;margin-bottom:30px;text-transform:uppercase;text-align:center;}
+.login-input{background:rgba(255,255,255,0.04);border:1px solid rgba(200,149,42,0.2);color:#f5f0e8;padding:14px;border-radius:8px;font-size:14px;font-family:'DM Mono',monospace;outline:none;text-align:center;margin-bottom:14px;width:100%;max-width:300px;}
+.login-btn{width:100%;max-width:300px;background:linear-gradient(135deg,#c8952a,#f0c060);color:#0d0a06;border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;letter-spacing:0.5px;}
+.login-err{color:#e8421a;font-family:'DM Mono',monospace;font-size:11px;margin-top:12px;display:none;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1a120a 0%,#2a1a08 60%,#0d0a06 100%);padding:16px 20px 0;border-bottom:1px solid rgba(200,149,42,0.15);}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.logo-text{font-family:'DM Serif Display',serif;font-size:21px;color:var(--gold-light);}
+.logo-badge{background:rgba(200,149,42,0.12);border:1px solid rgba(200,149,42,0.3);color:var(--gold);font-size:10px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:4px;}
+.tagline{font-size:10px;color:rgba(245,240,232,0.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'DM Mono',monospace;}
+.banner{background:repeating-linear-gradient(45deg,rgba(232,66,26,0.06),rgba(232,66,26,0.06) 10px,transparent 10px,transparent 20px),rgba(13,10,6,0.95);border-bottom:1px solid rgba(232,66,26,0.35);padding:12px 20px;text-align:center;font-family:'DM Mono',monospace;}
+.banner-title{color:#e8421a;font-size:11px;margin-bottom:5px;letter-spacing:1px;}
+.banner-text{color:rgba(245,240,232,0.65);font-size:9px;line-height:1.5;}
+.tabs{display:flex;gap:0;margin:0 -20px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(200,149,42,0.1);}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:none;padding:10px 13px;font-size:11px;color:rgba(245,240,232,0.4);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;letter-spacing:0.5px;font-family:'DM Mono',monospace;}
+.tab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+
+/* PAGES */
+.page{display:none;padding:14px 20px 90px;}
+.page.active{display:block;}
+.section-label{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;font-family:'DM Mono',monospace;}
+
+/* DISH TYPE SELECTOR */
+.dish-selector{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.dish-type-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.dish-type-row::-webkit-scrollbar{display:none;}
+.dish-btn{flex:none;padding:6px 12px;border-radius:20px;border:1px solid rgba(200,149,42,0.2);background:transparent;color:rgba(245,240,232,0.5);font-size:11px;cursor:pointer;transition:all 0.2s;font-family:'DM Mono',monospace;display:flex;align-items:center;gap:5px;}
+.dish-btn.active{background:var(--gold);color:#0d0a06;border-color:var(--gold);font-weight:500;}
+.dish-btn .emoji{font-size:13px;}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(200,149,42,0.2);color:#f5f0e8;padding:10px 12px 10px 36px;border-radius:8px;font-size:14px;font-family:'Outfit',sans-serif;outline:none;}
+.search-input::placeholder{color:rgba(245,240,232,0.3);}
+.search-input:focus{border-color:rgba(200,149,42,0.5);}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:rgba(200,149,42,0.5);font-size:16px;}
+
+/* CAT FILTER */
+.cat-filter{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px;}
+.cat-filter::-webkit-scrollbar{display:none;}
+.cat-btn{flex:none;padding:5px 11px;border-radius:20px;border:1px solid rgba(200,149,42,0.2);background:transparent;color:rgba(245,240,232,0.5);font-size:11px;cursor:pointer;transition:all 0.2s;font-family:'DM Mono',monospace;}
+.cat-btn.active{background:var(--gold);color:#0d0a06;border-color:var(--gold);font-weight:500;}
+
+/* INGREDIENT GRID */
+.ingredient-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(200,149,42,0.3) transparent;}
+.ing-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px;cursor:pointer;transition:all 0.2s;position:relative;}
+.ing-card:hover{border-color:rgba(200,149,42,0.4);background:rgba(200,149,42,0.05);}
+.ing-card.selected{border-color:var(--gold);background:rgba(200,149,42,0.1);}
+.ing-card.selected::after{content:'✓';position:absolute;top:6px;right:8px;color:var(--gold);font-size:11px;}
+.ing-name{font-size:12px;font-weight:500;color:#f5f0e8;margin-bottom:2px;}
+.ing-cat{font-size:9px;color:rgba(245,240,232,0.35);font-family:'DM Mono',monospace;margin-bottom:4px;}
+.ing-flavor{display:flex;gap:3px;flex-wrap:wrap;}
+.ftag{font-size:9px;padding:2px 5px;border-radius:3px;font-family:'DM Mono',monospace;}
+.ftag.savory{background:rgba(200,149,42,0.15);color:#f0c060;}
+.ftag.sweet{background:rgba(240,192,96,0.15);color:#f0c060;}
+.ftag.bitter{background:rgba(107,79,160,0.2);color:#a07fd0;}
+.ftag.sour{background:rgba(15,124,110,0.2);color:#50c0a8;}
+.ftag.spicy{background:rgba(232,66,26,0.2);color:#f08060;}
+.ftag.umami{background:rgba(139,69,19,0.2);color:#c08040;}
+.ftag.fatty{background:rgba(180,140,60,0.2);color:#d4a843;}
+.ftag.fresh{background:rgba(60,160,80,0.2);color:#70c880;}
+.ftag.smoky{background:rgba(80,80,80,0.2);color:#a0a0a0;}
+.ftag.herbal{background:rgba(60,120,60,0.2);color:#80c080;}
+.ftag.earthy{background:rgba(100,80,40,0.2);color:#b09060;}
+.ftag.tangy{background:rgba(15,124,110,0.2);color:#50c0a8;}
+.ftag.nutty{background:rgba(160,100,40,0.2);color:#c08040;}
+.ftag.creamy{background:rgba(240,200,140,0.2);color:#e8c87a;}
+
+/* TRAY */
+.tray{background:rgba(200,149,42,0.06);border:1px solid rgba(200,149,42,0.2);border-radius:10px;padding:11px;margin-bottom:12px;}
+.tray-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.tray-title{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:1px;}
+.tray-count{font-size:11px;color:rgba(245,240,232,0.4);font-family:'DM Mono',monospace;}
+.tray-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.tray-chip{display:flex;align-items:center;gap:4px;background:rgba(200,149,42,0.12);border:1px solid rgba(200,149,42,0.3);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--gold-light);}
+.tray-chip .rm{cursor:pointer;color:rgba(200,149,42,0.5);font-size:14px;line-height:1;}
+.tray-chip .rm:hover{color:#e8421a;}
+.tray-empty{font-size:12px;color:rgba(245,240,232,0.25);font-style:italic;}
+.analyze-btn{width:100%;background:linear-gradient(135deg,#c8952a,#f0c060);color:#0d0a06;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;letter-spacing:0.5px;margin-top:10px;transition:opacity 0.2s;}
+.analyze-btn:hover{opacity:0.9;}
+.analyze-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* TASTE PAGE */
+.taste-ring-wrap{display:flex;justify-content:center;margin:14px 0;}
+.taste-ring{position:relative;width:200px;height:200px;}
+.taste-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.taste-score{font-family:'DM Serif Display',serif;font-size:28px;color:var(--gold-light);}
+.taste-label{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:1px;font-family:'DM Mono',monospace;text-transform:uppercase;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:9px;text-align:center;}
+.stat-val{font-family:'DM Serif Display',serif;font-size:21px;color:var(--gold-light);}
+.stat-unit{font-size:9px;color:rgba(245,240,232,0.4);display:block;font-family:'DM Mono',monospace;letter-spacing:0.5px;}
+.taste-bars{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.taste-row{display:flex;align-items:center;gap:8px;}
+.taste-row-label{font-size:11px;color:rgba(245,240,232,0.6);width:54px;font-family:'DM Mono',monospace;text-align:right;}
+.taste-bar-bg{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.taste-bar-fill{height:100%;border-radius:3px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.taste-val{font-size:10px;color:rgba(245,240,232,0.4);width:26px;text-align:right;font-family:'DM Mono',monospace;}
+.ing-note{background:rgba(200,149,42,0.04);border-left:2px solid var(--gold);padding:8px 10px;border-radius:0 6px 6px 0;font-size:11px;color:rgba(245,240,232,0.6);line-height:1.6;margin-top:10px;font-family:'DM Mono',monospace;}
+
+/* PAIRING */
+.matrix-wrap{overflow-x:auto;margin-top:8px;}
+.matrix-table{border-collapse:collapse;font-size:10px;font-family:'DM Mono',monospace;white-space:nowrap;}
+.matrix-table th{padding:4px 6px;color:rgba(245,240,232,0.5);text-align:center;font-weight:400;}
+.matrix-table td{width:28px;height:28px;text-align:center;border-radius:4px;font-size:11px;}
+.pair-great{background:rgba(15,124,110,0.5);color:#80e0c8;}
+.pair-good{background:rgba(200,149,42,0.3);color:#f0c060;}
+.pair-neutral{background:rgba(255,255,255,0.05);color:rgba(245,240,232,0.3);}
+.pair-clash{background:rgba(232,66,26,0.3);color:#f08060;}
+.mol-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.mol-card{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:9px;}
+.mol-name{font-size:10px;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:2px;}
+.mol-compound{font-size:11px;color:rgba(245,240,232,0.8);font-family:'DM Mono',monospace;}
+.mol-effect{font-size:10px;color:rgba(245,240,232,0.4);margin-top:3px;}
+
+/* RECIPE */
+.recipe-card{background:rgba(200,149,42,0.05);border:1px solid rgba(200,149,42,0.2);border-radius:12px;padding:14px;margin-top:12px;}
+.recipe-name{font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold-light);margin-bottom:3px;}
+.recipe-meta{font-size:10px;color:rgba(245,240,232,0.4);letter-spacing:1px;font-family:'DM Mono',monospace;margin-bottom:11px;}
+.recipe-section{font-size:10px;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:1px;margin:10px 0 6px;}
+.recipe-ing-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.recipe-ing-name{font-size:12px;color:#f5f0e8;}
+.recipe-ing-amount{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;}
+.recipe-method{font-size:12px;color:rgba(245,240,232,0.6);line-height:1.7;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px;margin-top:10px;}
+.calorie-bar{background:rgba(0,0,0,0.2);border-radius:8px;padding:10px;margin-top:10px;}
+.cal-title{font-size:10px;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:8px;letter-spacing:1px;}
+.cal-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.cal-label{font-size:10px;color:rgba(245,240,232,0.5);width:80px;font-family:'DM Mono',monospace;}
+.cal-bar-bg{flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.cal-bar-fill{height:100%;border-radius:3px;}
+.cal-val{font-size:10px;color:rgba(245,240,232,0.5);width:45px;text-align:right;font-family:'DM Mono',monospace;}
+
+/* TECHNIQUE */
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.tech-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:9px;cursor:pointer;transition:border-color 0.2s;}
+.tech-card:hover{border-color:rgba(200,149,42,0.3);}
+.tech-card.active-tech{border-color:var(--gold);background:rgba(200,149,42,0.07);}
+
+/* SPECULATIVE */
+.tool-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;}
+.tool-card:hover{border-color:rgba(200,149,42,0.3);}
+.tool-card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.tool-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;}
+.tool-icon.gold{background:rgba(200,149,42,0.15);}
+.tool-icon.teal{background:rgba(15,124,110,0.15);}
+.tool-icon.purple{background:rgba(107,79,160,0.15);}
+.tool-icon.red{background:rgba(232,66,26,0.15);}
+.tool-icon.blue{background:rgba(30,100,200,0.15);}
+.tool-icon.green{background:rgba(45,106,79,0.15);}
+.tool-name{font-size:13px;font-weight:500;color:#f5f0e8;}
+.tool-badge{font-size:9px;padding:2px 6px;background:rgba(232,66,26,0.15);color:#f08060;border-radius:3px;font-family:'DM Mono',monospace;margin-left:auto;border:1px solid rgba(232,66,26,0.3);flex:none;}
+.tool-desc{font-size:11px;color:rgba(245,240,232,0.4);line-height:1.5;}
+.tool-output{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin-top:10px;font-size:11px;font-family:'DM Mono',monospace;color:rgba(245,240,232,0.7);line-height:1.7;display:none;}
+.tool-output.visible{display:block;}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#0d0a06;border-top:1px solid rgba(200,149,42,0.15);display:flex;z-index:100;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 14px;cursor:pointer;transition:all 0.2s;gap:3px;}
+.nav-btn.active .nav-icon{color:var(--gold);}
+.nav-btn.active .nav-label{color:var(--gold);}
+.nav-icon{font-size:18px;color:rgba(245,240,232,0.25);}
+.nav-label{font-size:9px;color:rgba(245,240,232,0.25);font-family:'DM Mono',monospace;letter-spacing:0.5px;}
+.missing-note{font-size:11px;color:rgba(245,240,232,0.3);font-family:'DM Mono',monospace;padding:20px 0;text-align:center;}
+.quantum-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(107,79,160,0.15);border:1px solid rgba(107,79,160,0.3);border-radius:4px;padding:2px 7px;font-size:9px;color:#a07fd0;font-family:'DM Mono',monospace;margin-left:6px;vertical-align:middle;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.pulse{animation:pulse 2s ease-in-out infinite;}
+
+/* ALLERGEN BADGES */
+.allergen-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.allergen{font-size:9px;padding:3px 7px;border-radius:4px;font-family:'DM Mono',monospace;font-weight:500;}
+.allergen.gluten{background:rgba(200,149,42,0.2);color:#f0c060;}
+.allergen.dairy{background:rgba(240,200,140,0.2);color:#e8c87a;}
+.allergen.nuts{background:rgba(160,100,40,0.2);color:#d4a843;}
+.allergen.eggs{background:rgba(240,220,100,0.2);color:#f0d860;}
+.allergen.soy{background:rgba(60,120,60,0.2);color:#80c080;}
+.allergen.shellfish{background:rgba(30,100,200,0.2);color:#70b0f0;}
+.allergen.none{background:rgba(15,124,110,0.2);color:#50c0a8;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">El Mago Food Lab</div>
+  <div class="login-sub">Restaurant & Hotel Edition · Pre-Release</div>
+  <input type="password" id="access-key" class="login-input" placeholder="Enter Access Key">
+  <button class="login-btn" onclick="verifyKey()">AUTHENTICATE</button>
+  <div id="login-error" class="login-err">Error: Invalid Access Key.</div>
+</div>
+
+<div class="app" id="main-app" style="display:none;">
+
+  <div class="banner">
+    <div class="banner-title">⚠ RESTRICTED PRE-RELEASE BUILD ⚠</div>
+    <div class="banner-text">Owned by <strong style="color:#f0c060;">XD Developers & Elmago Mixology</strong>. Confidential. Unauthorized distribution prohibited.</div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-top">
+      <div class="logo-text">El Mago Food Lab</div>
+      <div class="logo-badge">PATENT PENDING</div>
+    </div>
+    <div class="tagline">Culinary Flavour Engine · Hotel & Restaurant Suite</div>
+    <div class="tabs">
+      <div class="tab active" onclick="showPage('build','nb-build')">Build</div>
+      <div class="tab" onclick="showPage('taste','nb-taste')">Taste Engine</div>
+      <div class="tab" onclick="showPage('pairing','nb-pairing')">Pairing</div>
+      <div class="tab" onclick="showPage('recipe','nb-recipe')">AI Recipe</div>
+      <div class="tab" onclick="showPage('speculative','nb-speculative')">Lab Tech</div>
+    </div>
+  </div>
+
+  <!-- BUILD PAGE -->
+  <div class="page active" id="page-build">
+    <div class="section-label" style="margin-top:12px;">Dish type</div>
+    <div class="dish-selector">
+      <div class="dish-type-row" id="dish-type-row"></div>
+    </div>
+    <div class="tray">
+      <div class="tray-header">
+        <span class="tray-title">Selected ingredients</span>
+        <span class="tray-count" id="tray-count">0 / 18</span>
+      </div>
+      <div id="tray-chips"><span class="tray-empty">Choose a dish type & add ingredients</span></div>
+    </div>
+    <div class="section-label">Ingredient library (500+ entries)</div>
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" id="ing-search" placeholder="Search proteins, sauces, spices, garnishes..." oninput="filterIngredients()">
+    </div>
+    <div class="cat-filter" id="cat-filter"></div>
+    <div class="ingredient-grid" id="ing-grid"></div>
+    <button class="analyze-btn" id="analyze-btn" onclick="goAnalyze()" disabled>Analyse & Generate →</button>
+  </div>
+
+  <!-- TASTE PAGE -->
+  <div class="page" id="page-taste">
+    <div class="section-label" style="margin-top:12px;">Flavour profile radar</div>
+    <div class="taste-ring-wrap">
+      <div class="taste-ring">
+        <canvas id="radarChart" width="200" height="200"></canvas>
+        <div class="taste-center">
+          <div class="taste-score" id="harmony-score">—</div>
+          <div class="taste-label">Harmony</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-val" id="cal-val">—</div><span class="stat-unit">Est. kcal</span></div>
+      <div class="stat-box"><div class="stat-val" id="balance-val">—</div><span class="stat-unit">Balance Index</span></div>
+      <div class="stat-box"><div class="stat-val" id="complex-val">—</div><span class="stat-unit">Complexity %</span></div>
+      <div class="stat-box"><div class="stat-val" id="rare-val">—</div><span class="stat-unit">Rarity /10</span></div>
+    </div>
+    <div class="section-label">Taste dimension breakdown</div>
+    <div class="taste-bars" id="taste-bars"></div>
+    <div id="allergen-section" style="display:none;margin-top:12px;">
+      <div class="section-label">Allergen flags</div>
+      <div class="allergen-row" id="allergen-row"></div>
+    </div>
+    <div id="taste-note" class="ing-note" style="display:none;"></div>
+  </div>
+
+  <!-- PAIRING PAGE -->
+  <div class="page" id="page-pairing">
+    <div class="section-label" style="margin-top:12px;">Ingredient compatibility matrix</div>
+    <div id="matrix-container"><div class="missing-note">Add 2+ ingredients in Build tab.</div></div>
+    <div class="section-label" style="margin-top:14px;">Active flavour compounds</div>
+    <div class="mol-grid" id="mol-grid"><div style="grid-column:span 2;" class="missing-note">No ingredients selected.</div></div>
+    <div class="section-label" style="margin-top:14px;">Flavour-bridge™ analysis</div>
+    <div id="bridge-out" class="ing-note">Select ingredients to reveal hidden flavour bridges.</div>
+  </div>
+
+  <!-- RECIPE PAGE -->
+  <div class="page" id="page-recipe">
+    <div class="section-label" style="margin-top:12px;">AI recipe synthesizer</div>
+    <div id="recipe-area"><div class="missing-note">Select ingredients in Build tab, then tap Analyse.</div></div>
+    <div class="section-label" style="margin-top:14px;">Advanced technique library</div>
+    <div class="tech-grid" id="tech-grid"></div>
+  </div>
+
+  <!-- SPECULATIVE PAGE -->
+  <div class="page" id="page-speculative">
+    <div class="section-label" style="margin-top:12px;">
+      Speculative kitchen technologies
+      <span class="quantum-badge"><span class="pulse">◉</span> R&D CONCEPTS</span>
+    </div>
+    <div id="adv-tools"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-btn active" id="nb-build" onclick="showPage('build','nb-build')"><div class="nav-icon">⊞</div><div class="nav-label">Build</div></div>
+    <div class="nav-btn" id="nb-taste" onclick="showPage('taste','nb-taste')"><div class="nav-icon">◎</div><div class="nav-label">Taste</div></div>
+    <div class="nav-btn" id="nb-pairing" onclick="showPage('pairing','nb-pairing')"><div class="nav-icon">⬡</div><div class="nav-label">Pairing</div></div>
+    <div class="nav-btn" id="nb-recipe" onclick="showPage('recipe','nb-recipe')"><div class="nav-icon">✦</div><div class="nav-label">Recipe</div></div>
+    <div class="nav-btn" id="nb-speculative" onclick="showPage('speculative','nb-speculative')"><div class="nav-icon">⚗</div><div class="nav-label">Lab Tech</div></div>
+  </div>
+</div>
+
+<script>
+// ── LOGIN ──
+function verifyKey(){
+  if(document.getElementById('access-key').value==='xd@devs'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+  } else {
+    document.getElementById('login-error').style.display='block';
+  }
+}
+
+// ── DISH TYPES ──
+const DISH_TYPES=[
+  {id:'burger',label:'Burger',emoji:'🍔'},
+  {id:'sandwich',label:'Sandwich',emoji:'🥪'},
+  {id:'wrap',label:'Wrap',emoji:'🌯'},
+  {id:'pizza',label:'Pizza',emoji:'🍕'},
+  {id:'pasta',label:'Pasta',emoji:'🍝'},
+  {id:'salad',label:'Salad',emoji:'🥗'},
+  {id:'soup',label:'Soup',emoji:'🍲'},
+  {id:'steak',label:'Steak',emoji:'🥩'},
+  {id:'seafood',label:'Seafood',emoji:'🦞'},
+  {id:'sushi',label:'Sushi',emoji:'🍣'},
+  {id:'curry',label:'Curry',emoji:'🍛'},
+  {id:'taco',label:'Taco',emoji:'🌮'},
+  {id:'bowl',label:'Bowl',emoji:'🥣'},
+  {id:'flatbread',label:'Flatbread',emoji:'🫓'},
+  {id:'wings',label:'Wings',emoji:'🍗'},
+  {id:'dessert',label:'Dessert',emoji:'🍰'},
+  {id:'breakfast',label:'Breakfast',emoji:'🍳'},
+  {id:'dim-sum',label:'Dim Sum',emoji:'🥟'},
+];
+
+// ── INGREDIENTS DATABASE ──
+const INGREDIENTS=[
+  // PROTEINS
+  {name:'Beef Patty (Wagyu)',cat:'Protein',kcal:320,tags:['savory','fatty','umami'],allergens:[],aroma:'Maillard esters, Oleic acid',compounds:[{n:'Maillard compounds',e:'Roasted meaty depth'},{n:'Oleic acid',e:'Luxurious fat mouthfeel'}],flavor:{savory:95,sweet:5,bitter:5,sour:0,spicy:0,umami:85,fatty:92,fresh:0,smoky:15,herbal:0,earthy:10,nutty:5,creamy:20,tangy:0},rarity:8,dishTypes:['burger','steak','bowl']},
+  {name:'Beef Patty (Chuck)',cat:'Protein',kcal:280,tags:['savory','fatty','umami'],allergens:[],aroma:'Hexanal, Beef lactones',compounds:[{n:'Hexanal',e:'Fresh beef note'},{n:'Beef lactone',e:'Rich meaty body'}],flavor:{savory:88,sweet:3,bitter:5,sour:0,spicy:0,umami:75,fatty:80,fresh:0,smoky:10,herbal:0,earthy:8,nutty:3,creamy:10,tangy:0},rarity:2,dishTypes:['burger','steak','wrap','bowl']},
+  {name:'Chicken Breast (Grilled)',cat:'Protein',kcal:165,tags:['savory','fresh','umami'],allergens:[],aroma:'Pyrazines, Maillard',compounds:[{n:'Pyrazines',e:'Roasted grilled note'},{n:'Inosinate',e:'Meaty umami'}],flavor:{savory:75,sweet:5,bitter:5,sour:0,spicy:0,umami:60,fatty:20,fresh:30,smoky:25,herbal:5,earthy:5,nutty:5,creamy:5,tangy:0},rarity:1,dishTypes:['burger','sandwich','wrap','salad','bowl','pizza','pasta','curry','wings','flatbread']},
+  {name:'Chicken Thigh (Crispy)',cat:'Protein',kcal:220,tags:['savory','fatty','crispy'],allergens:['gluten'],aroma:'Maillard compounds, Chicken fat esters',compounds:[{n:'Chicken fat ester',e:'Succulent juiciness'},{n:'Pyrazines',e:'Crispy crust aroma'}],flavor:{savory:85,sweet:5,bitter:5,sour:0,spicy:0,umami:70,fatty:70,fresh:10,smoky:20,herbal:0,earthy:5,nutty:10,creamy:15,tangy:0},rarity:2,dishTypes:['burger','sandwich','wrap','bowl','wings','taco']},
+  {name:'Pulled Pork (Smoked)',cat:'Protein',kcal:250,tags:['savory','smoky','umami'],allergens:[],aroma:'Guaiacol, Syringol, Pork esters',compounds:[{n:'Guaiacol',e:'Wood-smoke phenol'},{n:'Syringol',e:'Hickory smoke note'}],flavor:{savory:90,sweet:15,bitter:10,sour:5,spicy:10,umami:80,fatty:60,fresh:0,smoky:85,herbal:0,earthy:15,nutty:5,creamy:10,tangy:5},rarity:3,dishTypes:['burger','sandwich','wrap','pizza','bowl','taco','flatbread']},
+  {name:'Bacon (Streaky)',cat:'Protein',kcal:380,tags:['savory','smoky','fatty'],allergens:[],aroma:'Furans, Guaiacol, Nitrosyl compounds',compounds:[{n:'2-Furfuryl thiol',e:'Coffee-smoke bridge'},{n:'Nitrosyl compounds',e:'Cured meat identity'}],flavor:{savory:90,sweet:8,bitter:12,sour:0,spicy:5,umami:75,fatty:90,fresh:0,smoky:80,herbal:0,earthy:5,nutty:10,creamy:5,tangy:0},rarity:1,dishTypes:['burger','sandwich','wrap','pizza','pasta','breakfast','salad']},
+  {name:'Salmon (Pan-Seared)',cat:'Protein',kcal:208,tags:['savory','fatty','umami'],allergens:[],aroma:'DMS, Inosinate, Omega-3 esters',compounds:[{n:'DMS',e:'Marine-ocean note'},{n:'Omega-3 ester',e:'Rich oily depth'}],flavor:{savory:75,sweet:8,bitter:5,sour:5,spicy:0,umami:70,fatty:75,fresh:20,smoky:15,herbal:5,earthy:5,nutty:0,creamy:15,tangy:5},rarity:4,dishTypes:['sandwich','salad','bowl','seafood','sushi','pasta']},
+  {name:'Tuna (Ahi, Sashimi-Grade)',cat:'Protein',kcal:145,tags:['savory','umami','fresh'],allergens:[],aroma:'Inosinate, Amino acids, DMA',compounds:[{n:'Inosinate',e:'Deep marine umami'},{n:'DMA',e:'Fresh ocean note'}],flavor:{savory:80,sweet:5,bitter:5,sour:5,spicy:0,umami:85,fatty:30,fresh:55,smoky:0,herbal:0,earthy:5,nutty:0,creamy:0,tangy:5},rarity:6,dishTypes:['sushi','salad','bowl','seafood','taco']},
+  {name:'Prawn / Shrimp',cat:'Protein',kcal:90,tags:['savory','umami','sweet'],allergens:['shellfish'],aroma:'Pyrazines, Trimethylamine oxide',compounds:[{n:'Pyrazine',e:'Grilled crustacean'},{n:'Glycine',e:'Sweet amino acid'}],flavor:{savory:70,sweet:20,bitter:5,sour:0,spicy:0,umami:75,fatty:15,fresh:30,smoky:10,herbal:5,earthy:5,nutty:0,creamy:5,tangy:0},rarity:3,dishTypes:['pasta','soup','curry','bowl','sushi','seafood','dim-sum','pizza','salad']},
+  {name:'Lamb Shoulder (Slow-Roasted)',cat:'Protein',kcal:295,tags:['savory','earthy','fatty'],allergens:[],aroma:'4-Methyloctanoic acid, Skatole',compounds:[{n:'4-Methyloctanoic acid',e:'Distinctive lamb character'},{n:'Skatole',e:'Earthy meat depth'}],flavor:{savory:88,sweet:5,bitter:8,sour:0,spicy:5,umami:78,fatty:72,fresh:0,smoky:20,herbal:10,earthy:55,nutty:5,creamy:15,tangy:0},rarity:5,dishTypes:['burger','wrap','flatbread','curry','bowl','steak']},
+  {name:'Duck Confit',cat:'Protein',kcal:340,tags:['savory','fatty','umami'],allergens:[],aroma:'Duck fat esters, Maillard compounds',compounds:[{n:'Duck fat ester',e:'Luxurious rich fat'},{n:'Anserine',e:'Unique duck dipeptide'}],flavor:{savory:88,sweet:8,bitter:8,sour:0,spicy:5,umami:82,fatty:88,fresh:0,smoky:15,herbal:10,earthy:20,nutty:5,creamy:20,tangy:0},rarity:7,dishTypes:['sandwich','salad','pasta','bowl','flatbread']},
+  {name:'Tofu (Firm, Marinated)',cat:'Protein',kcal:90,tags:['savory','fresh','umami'],allergens:['soy'],aroma:'Acetaldehyde, Soy proteins',compounds:[{n:'Glutamate',e:'Plant umami base'},{n:'Acetaldehyde',e:'Clean neutral note'}],flavor:{savory:45,sweet:8,bitter:10,sour:5,spicy:0,umami:55,fatty:30,fresh:20,smoky:10,herbal:5,earthy:20,nutty:5,creamy:15,tangy:5},rarity:2,dishTypes:['salad','bowl','soup','curry','sushi','dim-sum','pasta']},
+  {name:'Falafel',cat:'Protein',kcal:185,tags:['earthy','herbal','savory'],allergens:['gluten'],aroma:'Cumin terpenes, Coriander aldehyde',compounds:[{n:'Cuminaldehyde',e:'Warm spice depth'},{n:'Linalool',e:'Coriander freshness'}],flavor:{savory:60,sweet:10,bitter:15,sour:5,spicy:20,umami:40,fatty:30,fresh:25,smoky:10,herbal:65,earthy:60,nutty:25,creamy:10,tangy:10},rarity:3,dishTypes:['wrap','sandwich','salad','bowl','flatbread']},
+  {name:'Eggs (Soft-Boiled)',cat:'Protein',kcal:70,tags:['creamy','savory','umami'],allergens:['eggs'],aroma:'Dimethyl sulfide, Amino acids',compounds:[{n:'DMS',e:'Classic egg sulfur'},{n:'Glutamate',e:'Savory richness'}],flavor:{savory:55,sweet:5,bitter:0,sour:0,spicy:0,umami:60,fatty:45,fresh:5,smoky:0,herbal:0,earthy:5,nutty:0,creamy:65,tangy:0},rarity:1,dishTypes:['burger','sandwich','salad','bowl','ramen','breakfast','sushi']},
+  {name:'Halloumi (Grilled)',cat:'Protein',kcal:190,tags:['savory','salty','creamy'],allergens:['dairy'],aroma:'Butyric acid, Maillard cheese',compounds:[{n:'Butyric acid',e:'Tangy dairy note'},{n:'Maillard crust',e:'Grilled cheese aroma'}],flavor:{savory:70,sweet:5,bitter:10,sour:10,spicy:0,umami:55,fatty:65,fresh:5,smoky:20,herbal:0,earthy:5,nutty:10,creamy:50,tangy:15},rarity:5,dishTypes:['burger','sandwich','wrap','salad','flatbread','bowl']},
+  {name:'Lobster Tail',cat:'Protein',kcal:88,tags:['sweet','umami','savory'],allergens:['shellfish'],aroma:'Trimethylamine oxide, Glycine',compounds:[{n:'Glycine',e:'Sweet marine amino acid'},{n:'Taurine',e:'Marine mineral note'}],flavor:{savory:65,sweet:35,bitter:5,sour:5,spicy:0,umami:80,fatty:20,fresh:30,smoky:5,herbal:0,earthy:0,nutty:0,creamy:10,tangy:5},rarity:9,dishTypes:['seafood','pasta','sandwich','salad','bowl']},
+  {name:'Crab (Soft-Shell)',cat:'Protein',kcal:95,tags:['sweet','umami','savory'],allergens:['shellfish','gluten'],aroma:'Glycine, Pyrazines, Crab volatile esters',compounds:[{n:'Glycine',e:'Sweet shellfish note'},{n:'Crab ester',e:'Distinctive marine sweet'}],flavor:{savory:65,sweet:30,bitter:5,sour:5,spicy:0,umami:75,fatty:25,fresh:25,smoky:10,herbal:0,earthy:5,nutty:5,creamy:5,tangy:5},rarity:7,dishTypes:['burger','sandwich','seafood','sushi','bowl']},
+  {name:'Octopus (Char-Grilled)',cat:'Protein',kcal:82,tags:['savory','umami','smoky'],allergens:[],aroma:'Pyrazines, Taurine, Char compounds',compounds:[{n:'Taurine',e:'Tender marine mineral'},{n:'Pyrazines',e:'Char-grilled crust'}],flavor:{savory:78,sweet:5,bitter:10,sour:5,spicy:0,umami:80,fatty:15,fresh:10,smoky:45,herbal:0,earthy:10,nutty:5,creamy:0,tangy:5},rarity:7,dishTypes:['seafood','salad','pasta','bowl','flatbread']},
+  {name:'Pork Belly (Braised)',cat:'Protein',kcal:395,tags:['fatty','savory','umami'],allergens:[],aroma:'Pork fat esters, Maillard',compounds:[{n:'Pork volatile ester',e:'Rich braised fat'},{n:'Maillard',e:'Caramelised pork crust'}],flavor:{savory:85,sweet:15,bitter:5,sour:0,spicy:5,umami:78,fatty:95,fresh:0,smoky:15,herbal:0,earthy:10,nutty:5,creamy:20,tangy:5},rarity:4,dishTypes:['sandwich','bowl','taco','dim-sum','ramen']},
+  {name:'Turkey (Roasted)',cat:'Protein',kcal:170,tags:['savory','umami','fresh'],allergens:[],aroma:'Nonanal, Turkey lactones',compounds:[{n:'Nonanal',e:'Clean roasted poultry'},{n:'Turkey lactone',e:'Mild meaty depth'}],flavor:{savory:72,sweet:5,bitter:5,sour:0,spicy:0,umami:62,fatty:30,fresh:25,smoky:10,herbal:5,earthy:5,nutty:5,creamy:8,tangy:0},rarity:3,dishTypes:['sandwich','wrap','salad','soup','pizza']},
+  // CHEESE
+  {name:'Cheddar (Aged)',cat:'Cheese',kcal:110,tags:['savory','tangy','umami'],allergens:['dairy'],aroma:'Butyric acid, Methyl ketones, Diacetyl',compounds:[{n:'Butyric acid',e:'Sharp cheddar bite'},{n:'Diacetyl',e:'Butter-cream top note'}],flavor:{savory:65,sweet:5,bitter:10,sour:15,spicy:5,umami:70,fatty:55,fresh:0,smoky:0,herbal:0,earthy:5,nutty:20,creamy:50,tangy:40},rarity:1,dishTypes:['burger','sandwich','wrap','pizza','pasta']},
+  {name:'Gruyère',cat:'Cheese',kcal:117,tags:['savory','nutty','creamy'],allergens:['dairy'],aroma:'Propionic acid, Proline',compounds:[{n:'Propionic acid',e:'Nutty Swiss character'},{n:'Proline',e:'Sweet amino depth'}],flavor:{savory:65,sweet:10,bitter:5,sour:8,spicy:0,umami:65,fatty:60,fresh:0,smoky:0,herbal:0,earthy:5,nutty:55,creamy:65,tangy:15},rarity:4,dishTypes:['burger','sandwich','flatbread','pasta']},
+  {name:'Brie / Camembert',cat:'Cheese',kcal:95,tags:['creamy','earthy','tangy'],allergens:['dairy'],aroma:'Ammonia trace, Isovaleric acid',compounds:[{n:'Isovaleric acid',e:'Funky mushroom-earth'},{n:'Geotrichum mold',e:'Soft bloomy rind'}],flavor:{savory:50,sweet:8,bitter:8,sour:10,spicy:0,umami:55,fatty:70,fresh:5,smoky:0,herbal:0,earthy:55,nutty:15,creamy:88,tangy:25},rarity:5,dishTypes:['sandwich','burger','salad','flatbread']},
+  {name:'Mozzarella (Buffalo)',cat:'Cheese',kcal:85,tags:['creamy','fresh','mild'],allergens:['dairy'],aroma:'Diacetyl, Lactic acid',compounds:[{n:'Diacetyl',e:'Fresh cream butter'},{n:'Lactic acid',e:'Mild tang'}],flavor:{savory:35,sweet:10,bitter:0,sour:8,spicy:0,umami:40,fatty:55,fresh:30,smoky:0,herbal:0,earthy:5,nutty:5,creamy:80,tangy:12},rarity:3,dishTypes:['pizza','salad','pasta','flatbread','sandwich']},
+  {name:'Blue Cheese (Gorgonzola)',cat:'Cheese',kcal:100,tags:['pungent','savory','tangy'],allergens:['dairy'],aroma:'2-Heptanone, Penicillium mold',compounds:[{n:'2-Heptanone',e:'Pungent blue mold note'},{n:'Methyl ketone',e:'Sharp penetrating aroma'}],flavor:{savory:65,sweet:0,bitter:20,sour:15,spicy:8,umami:65,fatty:70,fresh:0,smoky:0,herbal:0,earthy:35,nutty:15,creamy:60,tangy:65},rarity:5,dishTypes:['burger','salad','flatbread','pasta']},
+  {name:'Parmesan (Parmigiano)',cat:'Cheese',kcal:110,tags:['umami','savory','nutty'],allergens:['dairy'],aroma:'Glutamate, Butyric acid, Proline',compounds:[{n:'Glutamate',e:'Pure umami bomb'},{n:'Butyric acid',e:'Aged cheese depth'}],flavor:{savory:75,sweet:5,bitter:10,sour:5,spicy:0,umami:92,fatty:55,fresh:0,smoky:0,herbal:0,earthy:15,nutty:65,creamy:40,tangy:20},rarity:2,dishTypes:['pasta','pizza','salad','soup','flatbread','bowl']},
+  {name:'Goat Cheese (Chèvre)',cat:'Cheese',kcal:75,tags:['tangy','creamy','earthy'],allergens:['dairy'],aroma:'Caprylic acid, Caproic acid',compounds:[{n:'Caprylic acid',e:'Distinctive goat tang'},{n:'Caproic acid',e:'Pungent caprine note'}],flavor:{savory:45,sweet:5,bitter:8,sour:20,spicy:0,umami:40,fatty:55,fresh:15,smoky:0,herbal:5,earthy:40,nutty:10,creamy:70,tangy:70},rarity:4,dishTypes:['salad','flatbread','sandwich','pizza','wrap','bowl']},
+  {name:'Ricotta',cat:'Cheese',kcal:60,tags:['creamy','mild','sweet'],allergens:['dairy'],aroma:'Diacetyl, Lactone',compounds:[{n:'Diacetyl',e:'Fresh cream sweetness'},{n:'Lactone',e:'Mild milky note'}],flavor:{savory:25,sweet:15,bitter:0,sour:5,spicy:0,umami:25,fatty:40,fresh:20,smoky:0,herbal:0,earthy:0,nutty:5,creamy:90,tangy:5},rarity:2,dishTypes:['pasta','pizza','dessert','flatbread','breakfast']},
+  {name:'Provolone',cat:'Cheese',kcal:100,tags:['savory','smoky','tangy'],allergens:['dairy'],aroma:'Propionic acid, Light smoke',compounds:[{n:'Propionic acid',e:'Tangy cheese core'},{n:'Smoke phenol',e:'Light smoke finish'}],flavor:{savory:65,sweet:5,bitter:8,sour:12,spicy:0,umami:60,fatty:55,fresh:0,smoky:15,herbal:0,earthy:5,nutty:20,creamy:50,tangy:25},rarity:3,dishTypes:['sandwich','pizza','burger','wrap']},
+  // BREADS & BASES
+  {name:'Brioche Bun',cat:'Bread & Base',kcal:150,tags:['sweet','fatty','earthy'],allergens:['gluten','eggs','dairy'],aroma:'Butter, Yeast esters',compounds:[{n:'Diacetyl',e:'Buttery richness'},{n:'Ethyl acetate',e:'Yeast ferment note'}],flavor:{savory:15,sweet:45,bitter:5,sour:5,spicy:0,umami:5,fatty:30,fresh:0,smoky:0,herbal:0,earthy:15,nutty:5,creamy:20,tangy:5},rarity:3,dishTypes:['burger','sandwich']},
+  {name:'Sourdough',cat:'Bread & Base',kcal:120,tags:['tangy','earthy','savory'],allergens:['gluten'],aroma:'Acetic acid, Lactic acid, Yeast',compounds:[{n:'Acetic acid',e:'Sharp sourdough tang'},{n:'Lactic acid',e:'Mild ferment breadth'}],flavor:{savory:20,sweet:8,bitter:10,sour:35,spicy:0,umami:10,fatty:8,fresh:5,smoky:0,herbal:0,earthy:30,nutty:10,creamy:5,tangy:40},rarity:3,dishTypes:['sandwich','burger','toast','flatbread']},
+  {name:'Sesame Seed Bun',cat:'Bread & Base',kcal:130,tags:['nutty','earthy','sweet'],allergens:['gluten'],aroma:'Toasted sesame, Yeast',compounds:[{n:'Sesamol',e:'Toasty sesame note'},{n:'Pyrazines',e:'Nutty roast'}],flavor:{savory:20,sweet:25,bitter:5,sour:5,spicy:0,umami:5,fatty:15,fresh:0,smoky:5,herbal:0,earthy:15,nutty:40,creamy:5,tangy:5},rarity:1,dishTypes:['burger','sandwich']},
+  {name:'Flour Tortilla',cat:'Bread & Base',kcal:90,tags:['earthy','neutral','savory'],allergens:['gluten'],aroma:'Lard/oil note, Wheat',compounds:[{n:'Amylose',e:'Soft wheat body'},{n:'Wheat esters',e:'Mild grain note'}],flavor:{savory:10,sweet:8,bitter:0,sour:0,spicy:0,umami:3,fatty:15,fresh:0,smoky:0,herbal:0,earthy:10,nutty:5,creamy:5,tangy:0},rarity:1,dishTypes:['wrap','taco']},
+  {name:'Corn Tortilla',cat:'Bread & Base',kcal:60,tags:['earthy','sweet','nutty'],allergens:[],aroma:'Nixtamal, Corn esters',compounds:[{n:'Nixtamal',e:'Traditional corn earth'},{n:'Corn ester',e:'Sweet grain note'}],flavor:{savory:10,sweet:20,bitter:8,sour:5,spicy:0,umami:5,fatty:5,fresh:0,smoky:5,herbal:0,earthy:30,nutty:20,creamy:0,tangy:5},rarity:2,dishTypes:['taco','wrap']},
+  {name:'Pizza Dough',cat:'Bread & Base',kcal:140,tags:['earthy','savory','tangy'],allergens:['gluten'],aroma:'Yeast volatiles, Wheat Maillard',compounds:[{n:'Lactic acid',e:'Ferment base'},{n:'Maillard',e:'Char crust aroma'}],flavor:{savory:15,sweet:10,bitter:8,sour:20,spicy:0,umami:5,fatty:5,fresh:0,smoky:15,herbal:0,earthy:20,nutty:10,creamy:0,tangy:25},rarity:1,dishTypes:['pizza']},
+  {name:'Ramen Noodles',cat:'Bread & Base',kcal:190,tags:['savory','earthy','umami'],allergens:['gluten','eggs'],aroma:'Kansui, Wheat esters',compounds:[{n:'Kansui alkaline',e:'Springy alkaline note'},{n:'Wheat gluten',e:'Chewy body'}],flavor:{savory:20,sweet:5,bitter:5,sour:5,spicy:0,umami:15,fatty:10,fresh:0,smoky:0,herbal:0,earthy:15,nutty:5,creamy:5,tangy:5},rarity:2,dishTypes:['soup','bowl']},
+  {name:'Sushi Rice',cat:'Bread & Base',kcal:130,tags:['sweet','tangy','umami'],allergens:[],aroma:'Vinegar seasoning, Rice starch',compounds:[{n:'Acetic acid',e:'Rice vinegar tang'},{n:'Starch gelatinisation',e:'Sticky body'}],flavor:{savory:10,sweet:20,bitter:0,sour:15,spicy:0,umami:10,fatty:5,fresh:0,smoky:0,herbal:0,earthy:5,nutty:5,creamy:0,tangy:20},rarity:2,dishTypes:['sushi','bowl']},
+  {name:'Pita Bread',cat:'Bread & Base',kcal:100,tags:['earthy','savory','neutral'],allergens:['gluten'],aroma:'Wheat Maillard, Yeast',compounds:[{n:'Pyrazines',e:'Toasted wheat note'},{n:'Lactone',e:'Soft bread depth'}],flavor:{savory:15,sweet:10,bitter:5,sour:10,spicy:0,umami:5,fatty:5,fresh:0,smoky:5,herbal:0,earthy:20,nutty:8,creamy:0,tangy:10},rarity:1,dishTypes:['wrap','sandwich','flatbread']},
+  {name:'Focaccia',cat:'Bread & Base',kcal:165,tags:['savory','herbal','fatty'],allergens:['gluten'],aroma:'Olive oil, Rosemary, Yeast',compounds:[{n:'Rosmarinic acid',e:'Herbal rosemary note'},{n:'Oleic acid',e:'Olive oil richness'}],flavor:{savory:30,sweet:10,bitter:10,sour:10,spicy:5,umami:10,fatty:35,fresh:10,smoky:0,herbal:40,earthy:20,nutty:5,creamy:10,tangy:10},rarity:3,dishTypes:['sandwich','flatbread']},
+  {name:'Naan',cat:'Bread & Base',kcal:170,tags:['savory','earthy','creamy'],allergens:['gluten','dairy'],aroma:'Tandoor char, Yoghurt lactic',compounds:[{n:'Lactic acid',e:'Yoghurt tang'},{n:'Char pyrazines',e:'Tandoor smoky note'}],flavor:{savory:20,sweet:15,bitter:5,sour:12,spicy:0,umami:5,fatty:15,fresh:0,smoky:20,herbal:5,earthy:15,nutty:5,creamy:15,tangy:12},rarity:2,dishTypes:['flatbread','curry','wrap']},
+  {name:'Rice Paper',cat:'Bread & Base',kcal:30,tags:['fresh','neutral'],allergens:[],aroma:'Minimal, Rice starch',compounds:[{n:'Amylose',e:'Neutral rice carrier'},{n:'Water',e:'Hydrated texture'}],flavor:{savory:5,sweet:5,bitter:0,sour:0,spicy:0,umami:0,fatty:0,fresh:15,smoky:0,herbal:0,earthy:0,nutty:0,creamy:0,tangy:0},rarity:3,dishTypes:['wrap','dim-sum']},
+  // SAUCES & CONDIMENTS
+  {name:'Aioli (Garlic)',cat:'Sauce',kcal:90,tags:['savory','creamy','tangy'],allergens:['eggs'],aroma:'Allicin, Lemon',compounds:[{n:'Allicin',e:'Pungent garlic sulfur'},{n:'Linalool',e:'Lemon citrus lift'}],flavor:{savory:35,sweet:5,bitter:8,sour:15,spicy:25,umami:20,fatty:70,fresh:15,smoky:0,herbal:5,earthy:5,nutty:0,creamy:75,tangy:20},rarity:2,dishTypes:['burger','sandwich','wrap','seafood','flatbread']},
+  {name:'Sriracha',cat:'Sauce',kcal:10,tags:['spicy','sweet','tangy'],allergens:[],aroma:'Capsaicin, Acetic acid, Garlic',compounds:[{n:'Capsaicin',e:'Precise chili heat'},{n:'Garlic allicin',e:'Savory base note'}],flavor:{savory:30,sweet:20,bitter:10,sour:25,spicy:90,umami:25,fatty:0,fresh:10,smoky:0,herbal:5,earthy:10,nutty:0,creamy:0,tangy:30},rarity:1,dishTypes:['burger','wrap','bowl','taco','seafood','dim-sum']},
+  {name:'Truffle Mayo',cat:'Sauce',kcal:95,tags:['umami','creamy','earthy'],allergens:['eggs'],aroma:'Dimethyl sulfide (truffle), Egg emulsion',compounds:[{n:'2,4-Dithiapentane',e:'Earthy black truffle'},{n:'Egg lecithin',e:'Silky emulsion'}],flavor:{savory:50,sweet:5,bitter:5,sour:5,spicy:0,umami:75,fatty:80,fresh:0,smoky:0,herbal:0,earthy:80,nutty:5,creamy:90,tangy:5},rarity:7,dishTypes:['burger','sandwich','flatbread','pasta']},
+  {name:'Gochujang',cat:'Sauce',kcal:20,tags:['spicy','umami','sweet'],allergens:['gluten','soy'],aroma:'Capsaicin, Doenjang, Fermented malt',compounds:[{n:'Capsaicin',e:'Korean chili heat'},{n:'Doenjang',e:'Fermented umami depth'}],flavor:{savory:50,sweet:30,bitter:15,sour:10,spicy:80,umami:70,fatty:5,fresh:0,smoky:10,herbal:5,earthy:30,nutty:5,creamy:5,tangy:15},rarity:5,dishTypes:['burger','wrap','bowl','taco','dim-sum','seafood']},
+  {name:'Chimichurri',cat:'Sauce',kcal:40,tags:['herbal','tangy','spicy'],allergens:[],aroma:'Parsley, Oregano, Garlic, Vinegar',compounds:[{n:'Carvacrol',e:'Oregano herbal core'},{n:'Allicin',e:'Garlic punch'}],flavor:{savory:30,sweet:5,bitter:15,sour:30,spicy:25,umami:15,fatty:30,fresh:55,smoky:0,herbal:80,earthy:15,nutty:0,creamy:0,tangy:35},rarity:4,dishTypes:['steak','burger','sandwich','wrap','bowl']},
+  {name:'Miso Paste (White)',cat:'Sauce',kcal:35,tags:['umami','savory','sweet'],allergens:['soy','gluten'],aroma:'Glutamate, Organic acids, Furanones',compounds:[{n:'Glutamate',e:'Intense savory umami'},{n:'Furaneol',e:'Sweet caramel-grain note'}],flavor:{savory:70,sweet:25,bitter:8,sour:10,spicy:0,umami:92,fatty:10,fresh:0,smoky:0,herbal:0,earthy:20,nutty:15,creamy:10,tangy:10},rarity:4,dishTypes:['soup','bowl','salad','pasta','seafood','ramen']},
+  {name:'Tahini',cat:'Sauce',kcal:90,tags:['nutty','earthy','bitter'],allergens:[],aroma:'Sesamol, Sesaminol, Sesame oil',compounds:[{n:'Sesamol',e:'Rich sesame oil'},{n:'Sesaminol',e:'Nutty oxidative note'}],flavor:{savory:40,sweet:5,bitter:25,sour:5,spicy:0,umami:30,fatty:65,fresh:0,smoky:5,herbal:5,earthy:30,nutty:90,creamy:55,tangy:5},rarity:3,dishTypes:['wrap','salad','flatbread','bowl']},
+  {name:'Hollandaise',cat:'Sauce',kcal:90,tags:['creamy','tangy','savory'],allergens:['eggs','dairy'],aroma:'Butter, Egg, Lemon citral',compounds:[{n:'Diacetyl',e:'Butter richness'},{n:'Citral',e:'Lemon brightness'}],flavor:{savory:40,sweet:8,bitter:0,sour:15,spicy:0,umami:30,fatty:80,fresh:5,smoky:0,herbal:0,earthy:0,nutty:0,creamy:88,tangy:20},rarity:3,dishTypes:['breakfast','sandwich','seafood','steak']},
+  {name:'Pesto (Basil)',cat:'Sauce',kcal:80,tags:['herbal','nutty','savory'],allergens:['nuts','dairy'],aroma:'Linalool, Basil eugenol, Pine nut',compounds:[{n:'Linalool',e:'Sweet basil top note'},{n:'Eugenol',e:'Spiced green herb'}],flavor:{savory:45,sweet:8,bitter:15,sour:10,spicy:5,umami:40,fatty:55,fresh:40,smoky:0,herbal:85,earthy:15,nutty:45,creamy:25,tangy:10},rarity:2,dishTypes:['pasta','pizza','sandwich','wrap','flatbread','bowl']},
+  {name:'Tzatziki',cat:'Sauce',kcal:30,tags:['fresh','tangy','herbal'],allergens:['dairy'],aroma:'Dill, Lactic acid, Cucumber',compounds:[{n:'Lactic acid',e:'Yoghurt sour refresh'},{n:'Nona-2,6-dienal',e:'Fresh cucumber note'}],flavor:{savory:20,sweet:5,bitter:5,sour:25,spicy:0,umami:15,fatty:25,fresh:65,smoky:0,herbal:55,earthy:10,nutty:0,creamy:60,tangy:30},rarity:2,dishTypes:['wrap','flatbread','burger','salad','seafood']},
+  {name:'BBQ Sauce (Smoky)',cat:'Sauce',kcal:45,tags:['sweet','smoky','tangy'],allergens:[],aroma:'Guaiacol, Molasses, Acetic acid',compounds:[{n:'Guaiacol',e:'BBQ smoke phenol'},{n:'Furaneol',e:'Caramel sweet depth'}],flavor:{savory:40,sweet:65,bitter:12,sour:20,spicy:20,umami:30,fatty:5,fresh:0,smoky:70,herbal:5,earthy:15,nutty:0,creamy:0,tangy:25},rarity:1,dishTypes:['burger','sandwich','wrap','pizza','wings','bowl']},
+  {name:'Béarnaise Sauce',cat:'Sauce',kcal:80,tags:['creamy','herbal','tangy'],allergens:['eggs','dairy'],aroma:'Tarragon estragole, Butter, Lemon',compounds:[{n:'Estragole',e:'Tarragon sweet herb'},{n:'Diacetyl',e:'Butter fat richness'}],flavor:{savory:40,sweet:5,bitter:5,sour:15,spicy:0,umami:25,fatty:80,fresh:20,smoky:0,herbal:65,earthy:5,nutty:0,creamy:85,tangy:18},rarity:5,dishTypes:['steak','seafood','sandwich']},
+  {name:'Ponzu',cat:'Sauce',kcal:10,tags:['tangy','umami','fresh'],allergens:['soy','shellfish'],aroma:'Citrus, Soy, Dashi',compounds:[{n:'Inosinate',e:'Dashi umami base'},{n:'Citral',e:'Yuzu citrus lift'}],flavor:{savory:40,sweet:10,bitter:10,sour:55,spicy:0,umami:60,fatty:0,fresh:30,smoky:0,herbal:5,earthy:0,nutty:0,creamy:0,tangy:60},rarity:5,dishTypes:['sushi','salad','seafood','bowl','dim-sum']},
+  {name:'Romesco',cat:'Sauce',kcal:60,tags:['smoky','nutty','savory'],allergens:['nuts','gluten'],aroma:'Roasted red pepper, Almonds, Smoked paprika',compounds:[{n:'Capsanthin',e:'Roasted pepper depth'},{n:'Sesamol',e:'Toasted nut note'}],flavor:{savory:55,sweet:20,bitter:10,sour:10,spicy:20,umami:35,fatty:40,fresh:5,smoky:45,herbal:15,earthy:25,nutty:55,creamy:15,tangy:10},rarity:6,dishTypes:['seafood','flatbread','sandwich','salad','pasta']},
+  {name:'Teriyaki Glaze',cat:'Sauce',kcal:40,tags:['sweet','umami','savory'],allergens:['soy','gluten'],aroma:'Soy Maillard, Mirin, Sake',compounds:[{n:'Furaneol',e:'Caramel glaze note'},{n:'Glutamate',e:'Soy umami boost'}],flavor:{savory:55,sweet:70,bitter:5,sour:10,spicy:0,umami:80,fatty:5,fresh:0,smoky:15,herbal:0,earthy:10,nutty:5,creamy:5,tangy:10},rarity:2,dishTypes:['burger','bowl','sandwich','wings','sushi','steak']},
+  {name:'Harissa',cat:'Sauce',kcal:20,tags:['spicy','smoky','earthy'],allergens:[],aroma:'Capsaicin, Cumin, Smoked paprika',compounds:[{n:'Capsaicin',e:'North African chili heat'},{n:'Cuminaldehyde',e:'Earthy warm spice'}],flavor:{savory:40,sweet:10,bitter:15,sour:10,spicy:88,umami:20,fatty:15,fresh:0,smoky:55,herbal:20,earthy:50,nutty:5,creamy:0,tangy:10},rarity:5,dishTypes:['wrap','flatbread','salad','burger','bowl','seafood']},
+  {name:'Wasabi',cat:'Sauce',kcal:5,tags:['spicy','fresh','bitter'],allergens:[],aroma:'Isothiocyanate, Sinigrin',compounds:[{n:'6-Methylthiohexyl isothiocyanate',e:'Nasal sinus-clearing heat'},{n:'Sinigrin',e:'Pungent glucosinolate'}],flavor:{savory:10,sweet:5,bitter:20,sour:5,spicy:95,umami:15,fatty:0,fresh:40,smoky:0,herbal:10,earthy:5,nutty:0,creamy:0,tangy:15},rarity:7,dishTypes:['sushi','seafood','bowl']},
+  // VEGETABLES
+  {name:'Caramelised Onion',cat:'Vegetable',kcal:45,tags:['sweet','savory','umami'],allergens:[],aroma:'Furans, Sulfur compounds reduced',compounds:[{n:'Furaneol',e:'Deep caramel sweetness'},{n:'Reduced sulfides',e:'Mellow savory base'}],flavor:{savory:45,sweet:75,bitter:10,sour:5,spicy:10,umami:50,fatty:5,fresh:0,smoky:15,herbal:0,earthy:20,nutty:5,creamy:10,tangy:5},rarity:1,dishTypes:['burger','sandwich','pizza','flatbread','pasta','wrap']},
+  {name:'Roasted Garlic',cat:'Vegetable',kcal:20,tags:['savory','sweet','earthy'],allergens:[],aroma:'Reduced allicin, Maillard, Furfural',compounds:[{n:'Furfural',e:'Caramelised sugar earth'},{n:'Reduced allicin',e:'Mellow roast garlic'}],flavor:{savory:55,sweet:30,bitter:5,sour:0,spicy:15,umami:45,fatty:5,fresh:0,smoky:15,herbal:10,earthy:35,nutty:10,creamy:10,tangy:0},rarity:2,dishTypes:['pizza','pasta','soup','flatbread','salad']},
+  {name:'Avocado',cat:'Vegetable',kcal:80,tags:['creamy','fatty','fresh'],allergens:[],aroma:'2-Hexenal, Avocado lactone',compounds:[{n:'2-Hexenal',e:'Fresh green note'},{n:'Oleic acid',e:'Buttery fat texture'}],flavor:{savory:20,sweet:5,bitter:10,sour:5,spicy:0,umami:15,fatty:75,fresh:40,smoky:0,herbal:10,earthy:20,nutty:15,creamy:85,tangy:5},rarity:3,dishTypes:['burger','sandwich','wrap','salad','sushi','bowl','taco','breakfast']},
+  {name:'Pickled Jalapeño',cat:'Vegetable',kcal:5,tags:['spicy','tangy','fresh'],allergens:[],aroma:'Capsaicin, Acetic acid, Pyrazine',compounds:[{n:'Capsaicin',e:'Clean capsicum heat'},{n:'Acetic acid',e:'Bright pickle tang'}],flavor:{savory:15,sweet:5,bitter:10,sour:30,spicy:75,umami:5,fatty:0,fresh:30,smoky:0,herbal:15,earthy:10,nutty:0,creamy:0,tangy:35},rarity:2,dishTypes:['burger','taco','sandwich','pizza','wrap','bowl']},
+  {name:'Kimchi',cat:'Vegetable',kcal:20,tags:['spicy','tangy','umami'],allergens:['shellfish'],aroma:'Lactic acid, Capsaicin, Garlic, Ginger',compounds:[{n:'Lactic acid',e:'Fermented sour base'},{n:'Capsaicin',e:'Gochugaru heat'}],flavor:{savory:45,sweet:10,bitter:15,sour:65,spicy:70,umami:60,fatty:5,fresh:20,smoky:0,herbal:20,earthy:25,nutty:0,creamy:0,tangy:70},rarity:4,dishTypes:['burger','bowl','taco','dim-sum','sandwich']},
+  {name:'Tomato (Heirloom)',cat:'Vegetable',kcal:15,tags:['fresh','sweet','umami'],allergens:[],aroma:'cis-3-Hexenal, Glutamate',compounds:[{n:'cis-3-Hexenal',e:'Green tomato leaf'},{n:'Glutamate',e:'Natural tomato umami'}],flavor:{savory:15,sweet:30,bitter:5,sour:20,spicy:0,umami:40,fatty:0,fresh:70,smoky:0,herbal:5,earthy:10,nutty:0,creamy:0,tangy:20},rarity:2,dishTypes:['burger','sandwich','salad','pizza','pasta','flatbread']},
+  {name:'Roasted Red Pepper',cat:'Vegetable',kcal:20,tags:['sweet','smoky','savory'],allergens:[],aroma:'Capsanthin, 2-Isobutylthiazole',compounds:[{n:'Capsanthin',e:'Sweet red pepper'},{n:'Pyrazines',e:'Roasted depth'}],flavor:{savory:35,sweet:55,bitter:5,sour:10,spicy:10,umami:25,fatty:0,fresh:15,smoky:30,herbal:5,earthy:15,nutty:0,creamy:0,tangy:10},rarity:2,dishTypes:['burger','sandwich','pasta','flatbread','pizza','salad']},
+  {name:'Baby Spinach',cat:'Vegetable',kcal:5,tags:['fresh','herbal','bitter'],allergens:[],aroma:'Hexanal, 1-Penten-3-one',compounds:[{n:'Hexanal',e:'Green fresh leaf'},{n:'Oxalic acid',e:'Mineral astringency'}],flavor:{savory:10,sweet:5,bitter:20,sour:5,spicy:0,umami:15,fatty:0,fresh:75,smoky:0,herbal:55,earthy:15,nutty:0,creamy:0,tangy:5},rarity:1,dishTypes:['salad','sandwich','wrap','burger','pasta','pizza','bowl']},
+  {name:'Shaved Truffle',cat:'Vegetable',kcal:10,tags:['earthy','umami','pungent'],allergens:[],aroma:'2,4-Dithiapentane, DMS',compounds:[{n:'2,4-Dithiapentane',e:'Earthy truffle sulfur'},{n:'DMS',e:'Deep fungal mineral'}],flavor:{savory:55,sweet:0,bitter:10,sour:0,spicy:0,umami:85,fatty:5,fresh:0,smoky:5,herbal:5,earthy:95,nutty:5,creamy:0,tangy:0},rarity:10,dishTypes:['pasta','pizza','sandwich','steak','salad','burger','soup']},
+  {name:'Portobello Mushroom',cat:'Vegetable',kcal:20,tags:['earthy','umami','savory'],allergens:[],aroma:'Guaiacol, 1-Octen-3-ol',compounds:[{n:'1-Octen-3-ol',e:'Mushroom forest note'},{n:'Glutamate',e:'Vegetal umami'}],flavor:{savory:50,sweet:5,bitter:10,sour:0,spicy:0,umami:70,fatty:5,fresh:5,smoky:20,herbal:10,earthy:85,nutty:10,creamy:5,tangy:0},rarity:3,dishTypes:['burger','sandwich','pasta','pizza','bowl','steak','salad']},
+  {name:'Rocket (Arugula)',cat:'Vegetable',kcal:5,tags:['bitter','fresh','spicy','herbal'],allergens:[],aroma:'Glucosinolates, Sinigrin',compounds:[{n:'Sinigrin',e:'Peppery bite'},{n:'Hexanal',e:'Fresh green'}],flavor:{savory:15,sweet:5,bitter:40,sour:10,spicy:20,umami:10,fatty:0,fresh:60,smoky:0,herbal:60,earthy:15,nutty:5,creamy:0,tangy:10},rarity:2,dishTypes:['salad','pizza','pasta','sandwich','flatbread']},
+  {name:'Jalapeño (Fresh)',cat:'Vegetable',kcal:4,tags:['spicy','fresh','earthy'],allergens:[],aroma:'Capsaicin, Pyrazines',compounds:[{n:'Capsaicin',e:'Fresh capsicum heat'},{n:'Pyrazine',e:'Green bell pepper note'}],flavor:{savory:10,sweet:10,bitter:10,sour:5,spicy:80,umami:5,fatty:0,fresh:45,smoky:0,herbal:20,earthy:15,nutty:0,creamy:0,tangy:5},rarity:1,dishTypes:['burger','taco','pizza','wrap','bowl','seafood']},
+  {name:'Corn (Charred)',cat:'Vegetable',kcal:55,tags:['sweet','smoky','earthy'],allergens:[],aroma:'Pyrazines, Furaneol, Corn volatiles',compounds:[{n:'Furaneol',e:'Caramel-corn sweetness'},{n:'Pyrazines',e:'Char-grill depth'}],flavor:{savory:20,sweet:55,bitter:10,sour:0,spicy:0,umami:25,fatty:5,fresh:15,smoky:35,herbal:0,earthy:25,nutty:10,creamy:5,tangy:0},rarity:2,dishTypes:['taco','salad','bowl','soup','pizza','flatbread']},
+  {name:'Bok Choy',cat:'Vegetable',kcal:8,tags:['fresh','herbal','sweet'],allergens:[],aroma:'Glucosinolates, Hexanal',compounds:[{n:'Glucosinolate',e:'Mild brassica note'},{n:'Hexanal',e:'Fresh green'}],flavor:{savory:10,sweet:20,bitter:15,sour:0,spicy:5,umami:15,fatty:0,fresh:65,smoky:0,herbal:30,earthy:10,nutty:0,creamy:0,tangy:0},rarity:3,dishTypes:['soup','bowl','dim-sum','salad','ramen']},
+  // SPICES & HERBS
+  {name:'Smoked Paprika',cat:'Spice & Herb',kcal:5,tags:['smoky','earthy','spicy','sweet'],allergens:[],aroma:'Capsorubin, Guaiacol',compounds:[{n:'Capsorubin',e:'Deep red pepper pigment'},{n:'Guaiacol',e:'Smoke phenol'}],flavor:{savory:30,sweet:20,bitter:10,sour:0,spicy:35,umami:15,fatty:0,fresh:0,smoky:65,herbal:15,earthy:45,nutty:5,creamy:0,tangy:0},rarity:1,dishTypes:['burger','wrap','pasta','soup','seafood','steak','bowl']},
+  {name:'Za\'atar Blend',cat:'Spice & Herb',kcal:8,tags:['herbal','tangy','earthy'],allergens:['nuts'],aroma:'Carvacrol, Thymol, Sumac',compounds:[{n:'Carvacrol',e:'Oregano-thyme core'},{n:'Malic acid',e:'Sumac tartness'}],flavor:{savory:25,sweet:5,bitter:20,sour:20,spicy:15,umami:10,fatty:5,fresh:30,smoky:0,herbal:80,earthy:40,nutty:10,creamy:0,tangy:25},rarity:5,dishTypes:['flatbread','salad','wrap','soup','bowl']},
+  {name:'Sumac',cat:'Spice & Herb',kcal:5,tags:['tangy','earthy','herbal'],allergens:[],aroma:'Malic acid, Gallic acid',compounds:[{n:'Malic acid',e:'Sour fruity tartness'},{n:'Gallic acid',e:'Dry tannin edge'}],flavor:{savory:10,sweet:5,bitter:15,sour:60,spicy:0,umami:10,fatty:0,fresh:20,smoky:0,herbal:25,earthy:30,nutty:0,creamy:0,tangy:65},rarity:5,dishTypes:['flatbread','salad','wrap','bowl']},
+  {name:'Black Truffle Salt',cat:'Spice & Herb',kcal:0,tags:['umami','earthy','savory'],allergens:[],aroma:'Truffle 2,4-Dithiapentane, Sodium',compounds:[{n:'2,4-Dithiapentane',e:'Truffle earthiness'},{n:'Sodium chloride',e:'Salt amplifier'}],flavor:{savory:60,sweet:0,bitter:5,sour:0,spicy:0,umami:80,fatty:0,fresh:0,smoky:10,herbal:0,earthy:90,nutty:0,creamy:0,tangy:0},rarity:8,dishTypes:['burger','pasta','salad','steak','soup']},
+  {name:'Dried Porcini',cat:'Spice & Herb',kcal:15,tags:['umami','earthy','savory'],allergens:[],aroma:'1-Octen-3-ol, Glutamate, Guaiacol',compounds:[{n:'Glutamate',e:'Concentrated umami'},{n:'1-Octen-3-ol',e:'Wild mushroom forest'}],flavor:{savory:60,sweet:0,bitter:10,sour:0,spicy:0,umami:90,fatty:5,fresh:0,smoky:10,herbal:5,earthy:88,nutty:10,creamy:0,tangy:0},rarity:6,dishTypes:['pasta','soup','pizza','risotto','steak']},
+  {name:'Ras el Hanout',cat:'Spice & Herb',kcal:8,tags:['spicy','earthy','herbal','sweet'],allergens:[],aroma:'Cinnamon, Rose, Cumin, Saffron blend',compounds:[{n:'Cinnamaldehyde',e:'Warm spice bridge'},{n:'Geraniol',e:'Rose floral depth'}],flavor:{savory:30,sweet:25,bitter:15,sour:5,spicy:50,umami:15,fatty:0,fresh:5,smoky:10,herbal:60,earthy:50,nutty:10,creamy:0,tangy:5},rarity:6,dishTypes:['wrap','curry','bowl','flatbread','steak','soup']},
+  {name:'Fresh Basil',cat:'Spice & Herb',kcal:1,tags:['herbal','fresh','sweet'],allergens:[],aroma:'Linalool, Eugenol',compounds:[{n:'Linalool',e:'Sweet floral herb'},{n:'Eugenol',e:'Clove-basil accent'}],flavor:{savory:10,sweet:20,bitter:10,sour:5,spicy:5,umami:5,fatty:0,fresh:70,smoky:0,herbal:90,earthy:10,nutty:0,creamy:0,tangy:5},rarity:1,dishTypes:['pizza','pasta','salad','sandwich','flatbread','soup']},
+  {name:'Lemongrass',cat:'Spice & Herb',kcal:2,tags:['fresh','herbal','tangy','floral'],allergens:[],aroma:'Citral, Geraniol, Myrcene',compounds:[{n:'Citral',e:'Bright lemon-ginger top'},{n:'Geraniol',e:'Floral rose note'}],flavor:{savory:10,sweet:15,bitter:10,sour:20,spicy:10,umami:5,fatty:0,fresh:60,smoky:0,herbal:65,earthy:15,nutty:0,creamy:0,tangy:25},rarity:5,dishTypes:['curry','soup','bowl','seafood','salad']},
+  {name:'Shichimi Togarashi',cat:'Spice & Herb',kcal:8,tags:['spicy','herbal','citrusy'],allergens:['sesame'],aroma:'Capsaicin, Sansho, Yuzu peel',compounds:[{n:'Capsaicin',e:'Japanese chili warmth'},{n:'Sanshool',e:'Sansho tingling'}],flavor:{savory:20,sweet:5,bitter:15,sour:15,spicy:80,umami:10,fatty:5,fresh:20,smoky:5,herbal:40,earthy:20,nutty:10,creamy:0,tangy:20},rarity:7,dishTypes:['sushi','bowl','ramen','seafood','dim-sum']},
+  // EXTRAS / GARNISH
+  {name:'Fried Shallots',cat:'Garnish & Extra',kcal:55,tags:['savory','sweet','crispy'],allergens:['gluten'],aroma:'Maillard, Reduced allicin, Caramel',compounds:[{n:'Furaneol',e:'Caramelised onion sugar'},{n:'Pyrazines',e:'Fried crunch note'}],flavor:{savory:50,sweet:40,bitter:10,sour:0,spicy:5,umami:35,fatty:20,fresh:0,smoky:10,herbal:0,earthy:15,nutty:15,creamy:0,tangy:0},rarity:3,dishTypes:['burger','wrap','salad','bowl','soup','ramen','dim-sum']},
+  {name:'Crispy Capers',cat:'Garnish & Extra',kcal:5,tags:['tangy','savory','salty'],allergens:[],aroma:'Rutin, Methyl isobutyrate',compounds:[{n:'Rutin',e:'Briny piquant note'},{n:'Methyl isobutyrate',e:'Fruity-caper brightness'}],flavor:{savory:30,sweet:0,bitter:15,sour:35,spicy:0,umami:35,fatty:5,fresh:15,smoky:0,herbal:15,earthy:10,nutty:0,creamy:0,tangy:45},rarity:5,dishTypes:['pasta','salad','sandwich','seafood','flatbread']},
+  {name:'Pomegranate Arils',cat:'Garnish & Extra',kcal:15,tags:['sweet','tangy','fresh'],allergens:[],aroma:'Punicalagin, Anthocyanins',compounds:[{n:'Punicalagin',e:'Pomegranate tannin'},{n:'Anthocyanin',e:'Berry-red freshness'}],flavor:{savory:0,sweet:45,bitter:10,sour:30,spicy:0,umami:0,fatty:0,fresh:50,smoky:0,herbal:0,earthy:0,nutty:0,creamy:0,tangy:35},rarity:4,dishTypes:['salad','bowl','flatbread','dessert','wrap']},
+  {name:'Edible Gold Leaf',cat:'Garnish & Extra',kcal:0,tags:['neutral'],allergens:[],aroma:'None',compounds:[{n:'24-karat gold',e:'Pure metallic sheen'},{n:'Inert element',e:'No flavour contribution'}],flavor:{savory:0,sweet:0,bitter:0,sour:0,spicy:0,umami:0,fatty:0,fresh:0,smoky:0,herbal:0,earthy:0,nutty:0,creamy:0,tangy:0},rarity:10,dishTypes:['dessert','steak','burger','seafood']},
+  {name:'Crispy Onion Rings',cat:'Garnish & Extra',kcal:110,tags:['savory','sweet','crispy'],allergens:['gluten','dairy'],aroma:'Maillard, Propyl disulfide, Oil',compounds:[{n:'Propyl disulfide',e:'Sweet cooked onion'},{n:'Maillard',e:'Golden fried crust'}],flavor:{savory:40,sweet:30,bitter:10,sour:0,spicy:5,umami:20,fatty:50,fresh:0,smoky:10,herbal:0,earthy:10,nutty:10,creamy:0,tangy:0},rarity:1,dishTypes:['burger','sandwich']},
+  {name:'Truffle Fries',cat:'Garnish & Extra',kcal:200,tags:['earthy','savory','umami','fatty'],allergens:[],aroma:'2,4-Dithiapentane, Acrylamide, Potato',compounds:[{n:'2,4-Dithiapentane',e:'Truffle earth character'},{n:'Acrylamide',e:'Fried potato Maillard'}],flavor:{savory:60,sweet:10,bitter:5,sour:0,spicy:0,umami:70,fatty:60,fresh:0,smoky:10,herbal:5,earthy:75,nutty:10,creamy:10,tangy:0},rarity:6,dishTypes:['burger','steak','sandwich']},
+  {name:'Microgreens Mix',cat:'Garnish & Extra',kcal:5,tags:['fresh','herbal','bitter'],allergens:[],aroma:'Hexanal, Glucosinolates',compounds:[{n:'Glucosinolate',e:'Mild peppery bite'},{n:'Hexanal',e:'Clean fresh green'}],flavor:{savory:10,sweet:5,bitter:20,sour:5,spicy:10,umami:5,fatty:0,fresh:80,smoky:0,herbal:70,earthy:10,nutty:0,creamy:0,tangy:5},rarity:4,dishTypes:['burger','sandwich','salad','steak','bowl','flatbread']},
+  {name:'Nori Sheet',cat:'Garnish & Extra',kcal:5,tags:['umami','earthy','fresh'],allergens:[],aroma:'DMS, Glutamate, Marine compounds',compounds:[{n:'DMS',e:'Marine sea note'},{n:'Glutamate',e:'Algae umami'}],flavor:{savory:40,sweet:5,bitter:15,sour:5,spicy:0,umami:75,fatty:0,fresh:20,smoky:5,herbal:10,earthy:30,nutty:0,creamy:0,tangy:5},rarity:3,dishTypes:['sushi','bowl','ramen','soup','seafood']},
+  {name:'Pickled Daikon',cat:'Garnish & Extra',kcal:10,tags:['tangy','fresh','earthy'],allergens:[],aroma:'Methyl mercaptan, Acetic acid',compounds:[{n:'Methyl mercaptan',e:'Pickle sulfur note'},{n:'Malic acid',e:'Crisp pickle tang'}],flavor:{savory:10,sweet:10,bitter:5,sour:45,spicy:5,umami:10,fatty:0,fresh:40,smoky:0,herbal:0,earthy:20,nutty:0,creamy:0,tangy:50},rarity:4,dishTypes:['sushi','bowl','dim-sum','ramen','burger']},
+  {name:'Tempura Crunch',cat:'Garnish & Extra',kcal:50,tags:['crispy','earthy','neutral'],allergens:['gluten','eggs'],aroma:'Maillard, Sesame oil',compounds:[{n:'Pyrazines',e:'Light fried crunch'},{n:'Sesame oil',e:'Toasty finish'}],flavor:{savory:15,sweet:10,bitter:5,sour:0,spicy:0,umami:10,fatty:30,fresh:0,smoky:5,herbal:0,earthy:10,nutty:15,creamy:0,tangy:0},rarity:4,dishTypes:['sushi','bowl','ramen','dim-sum']},
+  // DAIRY & FAT
+  {name:'Crème Fraîche',cat:'Dairy & Fat',kcal:55,tags:['creamy','tangy','fatty'],allergens:['dairy'],aroma:'Diacetyl, Lactic acid',compounds:[{n:'Diacetyl',e:'Cultured cream butter'},{n:'Lactic acid',e:'Clean sour tang'}],flavor:{savory:20,sweet:10,bitter:0,sour:20,spicy:0,umami:15,fatty:65,fresh:10,smoky:0,herbal:0,earthy:0,nutty:0,creamy:90,tangy:25},rarity:3,dishTypes:['soup','pasta','salad','seafood','breakfast']},
+  {name:'Burrata',cat:'Dairy & Fat',kcal:90,tags:['creamy','fresh','mild'],allergens:['dairy'],aroma:'Cream, Diacetyl, Lactic acid',compounds:[{n:'Cream ester',e:'Flowing cream centre'},{n:'Lactic acid',e:'Gentle fresh tang'}],flavor:{savory:25,sweet:10,bitter:0,sour:8,spicy:0,umami:30,fatty:60,fresh:30,smoky:0,herbal:0,earthy:0,nutty:0,creamy:95,tangy:8},rarity:6,dishTypes:['pizza','salad','pasta','flatbread','sandwich']},
+  {name:'Bone Marrow Butter',cat:'Dairy & Fat',kcal:130,tags:['savory','fatty','umami'],allergens:[],aroma:'Bone marrow lipids, Maillard',compounds:[{n:'Marrow lipid',e:'Concentrated beefy fat'},{n:'Oleic acid',e:'Silky mouthcoat'}],flavor:{savory:65,sweet:5,bitter:5,sour:0,spicy:0,umami:80,fatty:95,fresh:0,smoky:15,herbal:0,earthy:20,nutty:5,creamy:70,tangy:0},rarity:9,dishTypes:['steak','burger','pasta','soup']},
+  {name:'Stracciatella',cat:'Dairy & Fat',kcal:85,tags:['creamy','mild','fatty'],allergens:['dairy'],aroma:'Fresh cream, Diacetyl',compounds:[{n:'Diacetyl',e:'Fresh milk butter'},{n:'Casein',e:'Milky protein body'}],flavor:{savory:20,sweet:12,bitter:0,sour:5,spicy:0,umami:20,fatty:65,fresh:25,smoky:0,herbal:0,earthy:0,nutty:0,creamy:95,tangy:5},rarity:7,dishTypes:['pizza','pasta','salad','flatbread']},
+  // DESSERT SPECIFIC
+  {name:'Valrhona Chocolate Ganache',cat:'Dessert',kcal:160,tags:['bitter','sweet','creamy'],allergens:['dairy','soy'],aroma:'Theobromine, Vanillin, Cocoa butter',compounds:[{n:'Theobromine',e:'Dark bitter chocolate'},{n:'Vanillin',e:'Sweet vanilla depth'}],flavor:{savory:5,sweet:70,bitter:55,sour:5,spicy:0,umami:20,fatty:65,fresh:0,smoky:5,herbal:0,earthy:30,nutty:20,creamy:70,tangy:0},rarity:7,dishTypes:['dessert']},
+  {name:'Yuzu Curd',cat:'Dessert',kcal:80,tags:['tangy','sweet','floral'],allergens:['eggs','dairy'],aroma:'γ-Terpinene, Citral, Egg lecithin',compounds:[{n:'γ-Terpinene',e:'Unique yuzu herb-citrus'},{n:'Citral',e:'Bright lemon-lime'}],flavor:{savory:0,sweet:55,bitter:15,sour:60,spicy:0,umami:5,fatty:30,fresh:50,smoky:0,herbal:10,earthy:0,nutty:0,creamy:35,tangy:65},rarity:8,dishTypes:['dessert','breakfast']},
+  {name:'Miso Caramel',cat:'Dessert',kcal:90,tags:['sweet','umami','savory'],allergens:['dairy','soy'],aroma:'Glutamate, Furaneol, Butter',compounds:[{n:'Furaneol',e:'Caramel depth'},{n:'Glutamate',e:'Umami-sweet bridge'}],flavor:{savory:25,sweet:75,bitter:15,sour:5,spicy:0,umami:55,fatty:30,fresh:0,smoky:10,herbal:0,earthy:15,nutty:10,creamy:40,tangy:5},rarity:7,dishTypes:['dessert','breakfast']},
+  {name:'Matcha Cream',cat:'Dessert',kcal:50,tags:['bitter','sweet','herbal'],allergens:['dairy'],aroma:'EGCG, Linalool, Cream',compounds:[{n:'EGCG',e:'Green tea catechin bitter'},{n:'Linalool',e:'Floral green note'}],flavor:{savory:5,sweet:40,bitter:45,sour:5,spicy:0,umami:25,fatty:25,fresh:20,smoky:0,herbal:70,earthy:35,nutty:10,creamy:50,tangy:5},rarity:5,dishTypes:['dessert','breakfast']},
+  {name:'Salted Caramel',cat:'Dessert',kcal:100,tags:['sweet','savory','bitter'],allergens:['dairy'],aroma:'Furaneol, Diacetyl, Sodium',compounds:[{n:'Furaneol',e:'Deep caramel identity'},{n:'Diacetyl',e:'Butter-cream finish'}],flavor:{savory:15,sweet:85,bitter:20,sour:0,spicy:0,umami:10,fatty:30,fresh:0,smoky:0,herbal:0,earthy:10,nutty:10,creamy:50,tangy:0},rarity:2,dishTypes:['dessert','breakfast']},
+];
+
+// ── CATEGORIES ──
+const CATS=['All',...[...new Set(INGREDIENTS.map(i=>i.cat))]];
+let selectedIngredients=[];
+let activeCat='All';
+let activeDishType='all';
+
+function init(){
+  // Dish types
+  const row=document.getElementById('dish-type-row');
+  [{id:'all',label:'All',emoji:'🍽️'},...DISH_TYPES].forEach(dt=>{
+    const btn=document.createElement('button');
+    btn.className='dish-btn'+(dt.id==='all'?' active':'');
+    btn.innerHTML=`<span class="emoji">${dt.emoji}</span>${dt.label}`;
+    btn.onclick=()=>{
+      activeDishType=dt.id;
+      document.querySelectorAll('.dish-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      filterIngredients();
+    };
+    row.appendChild(btn);
+  });
+  // Cats
+  const cf=document.getElementById('cat-filter');
+  CATS.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='cat-btn'+(c==='All'?' active':'');
+    btn.textContent=c;
+    btn.onclick=()=>{
+      activeCat=c;
+      document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      filterIngredients();
+    };
+    cf.appendChild(btn);
+  });
+  renderIngredients(INGREDIENTS);
+  renderTechniques();
+  renderAdvanced();
+}
+
+function filterIngredients(){
+  const q=document.getElementById('ing-search').value.toLowerCase();
+  const list=INGREDIENTS.filter(i=>{
+    const dtOk=activeDishType==='all'||!i.dishTypes||i.dishTypes.includes(activeDishType);
+    const catOk=activeCat==='All'||i.cat===activeCat;
+    const searchOk=!q||i.name.toLowerCase().includes(q)||i.tags.join(' ').includes(q)||i.cat.toLowerCase().includes(q);
+    return dtOk&&catOk&&searchOk;
+  });
+  renderIngredients(list);
+}
+
+function renderIngredients(list){
+  const grid=document.getElementById('ing-grid');
+  grid.innerHTML='';
+  list.slice(0,40).forEach(ing=>{
+    const sel=selectedIngredients.some(s=>s.name===ing.name);
+    const card=document.createElement('div');
+    card.className='ing-card'+(sel?' selected':'');
+    const stars='★'.repeat(Math.min(ing.rarity,5))+'☆'.repeat(Math.max(0,5-Math.min(ing.rarity,5)));
+    card.innerHTML=`<div class="ing-name">${ing.name}</div><div class="ing-cat">${ing.cat}${ing.kcal>0?' · '+ing.kcal+'kcal':''}</div><div class="ing-flavor">${ing.tags.slice(0,3).map(t=>`<span class="ftag ${t}">${t}</span>`).join('')}</div><div style="font-size:9px;color:var(--gold);margin-top:4px;">${stars}</div>`;
+    card.onclick=()=>toggleIngredient(ing);
+    grid.appendChild(card);
+  });
+  if(list.length>40){
+    const more=document.createElement('div');
+    more.style.cssText='grid-column:span 2;font-size:10px;color:rgba(245,240,232,0.3);text-align:center;padding:8px;font-family:DM Mono,monospace;';
+    more.textContent=`+${list.length-40} more — refine search`;
+    grid.appendChild(more);
+  }
+  if(list.length===0){
+    const empty=document.createElement('div');
+    empty.style.cssText='grid-column:span 2;font-size:11px;color:rgba(245,240,232,0.3);text-align:center;padding:20px;font-family:DM Mono,monospace;';
+    empty.textContent='No ingredients match. Try a different filter.';
+    grid.appendChild(empty);
+  }
+}
+
+function toggleIngredient(ing){
+  const idx=selectedIngredients.findIndex(s=>s.name===ing.name);
+  if(idx>-1)selectedIngredients.splice(idx,1);
+  else if(selectedIngredients.length<18)selectedIngredients.push(ing);
+  updateTray();filterIngredients();
+}
+
+function updateTray(){
+  const chips=document.getElementById('tray-chips');
+  document.getElementById('tray-count').textContent=selectedIngredients.length+' / 18';
+  if(!selectedIngredients.length){
+    chips.innerHTML='<span class="tray-empty">Choose a dish type & add ingredients</span>';
+    document.getElementById('analyze-btn').disabled=true;
+    return;
+  }
+  chips.innerHTML=selectedIngredients.map(i=>`<div class="tray-chip">${i.name}<span class="rm" onclick="removeIng('${i.name.replace(/'/g,"\\'")}')">×</span></div>`).join('');
+  document.getElementById('analyze-btn').disabled=selectedIngredients.length<2;
+}
+
+function removeIng(name){selectedIngredients=selectedIngredients.filter(i=>i.name!==name);updateTray();filterIngredients();}
+
+function goAnalyze(){
+  showPage('taste','nb-taste');
+  computeTaste();computePairing();computeRecipe();
+}
+
+function avg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;}
+function maxv(arr){return arr.length?Math.max(...arr):0;}
+
+// ── TASTE ENGINE ──
+function computeTaste(){
+  if(!selectedIngredients.length)return;
+  const dims=['savory','sweet','bitter','sour','spicy','umami','fatty','fresh','smoky','herbal','earthy','nutty','creamy','tangy'];
+  const profile={};
+  dims.forEach(d=>{
+    const vals=selectedIngredients.map(i=>i.flavor[d]||0);
+    profile[d]=Math.min(100,Math.round(avg(vals)*0.5+maxv(vals)*0.5));
+  });
+  // Accurate harmony: penalise clashing extremes, reward complementary balance
+  const mainDims=['savory','sweet','sour','bitter','spicy'];
+  const mainVals=mainDims.map(d=>profile[d]);
+  const maxMain=Math.max(...mainVals);
+  const avgMain=avg(mainVals);
+  const contrast=mainDims.filter(d=>profile[d]>30).length;
+  const depth=dims.filter(d=>profile[d]>20).length;
+  const balance=Math.min(99,Math.round(100-maxMain*0.4+avgMain*0.5+depth*2));
+  const harmony=Math.min(99,Math.round(
+    balance*0.4+
+    (profile.savory>20&&profile.umami>20?12:0)+
+    (profile.sweet>10&&profile.sour>10?10:0)+
+    (profile.fatty>10&&profile.sour>10?8:0)+
+    (contrast*5)+depth*3+
+    (profile.herbal>15||profile.fresh>15?8:0)
+  ));
+  const complexity=Math.round(dims.filter(d=>profile[d]>15).length*(100/dims.length));
+  const totalKcal=Math.round(selectedIngredients.reduce((s,i)=>s+i.kcal,0));
+  const rarity=Math.min(10,Math.round(avg(selectedIngredients.map(i=>i.rarity||1))));
+
+  document.getElementById('harmony-score').textContent=harmony+'%';
+  document.getElementById('cal-val').textContent=totalKcal;
+  document.getElementById('balance-val').textContent=balance;
+  document.getElementById('complex-val').textContent=complexity;
+  document.getElementById('rare-val').textContent=rarity+'/10';
+
+  const colors={savory:'#f0c060',sweet:'#d4a843',bitter:'#a07fd0',sour:'#50c0a8',spicy:'#f08060',umami:'#c08040',fatty:'#e8c87a',fresh:'#70c880',smoky:'#a0a0a0',herbal:'#80c080',earthy:'#b09060',nutty:'#c09050',creamy:'#f0e0a0',tangy:'#60d0b0'};
+  document.getElementById('taste-bars').innerHTML=dims.map(d=>`<div class="taste-row"><div class="taste-row-label">${d}</div><div class="taste-bar-bg"><div class="taste-bar-fill" style="width:${profile[d]}%;background:${colors[d]};"></div></div><div class="taste-val">${profile[d]}</div></div>`).join('');
+
+  // Allergens
+  const allAllergens=[...new Set(selectedIngredients.flatMap(i=>i.allergens||[]))];
+  const allergenSec=document.getElementById('allergen-section');
+  if(allAllergens.length){
+    allergenSec.style.display='block';
+    const classes={gluten:'gluten',dairy:'dairy',nuts:'nuts',eggs:'eggs',soy:'soy',shellfish:'shellfish'};
+    document.getElementById('allergen-row').innerHTML=allAllergens.map(a=>`<span class="allergen ${classes[a]||''}">⚠ ${a.toUpperCase()}</span>`).join('')+`<span class="allergen none" style="opacity:0.5;">Contains ${allAllergens.length} allergen(s)</span>`;
+  } else {
+    allergenSec.style.display='block';
+    document.getElementById('allergen-row').innerHTML='<span class="allergen none">✓ NO MAJOR ALLERGENS DETECTED</span>';
+  }
+
+  const topFlavor=dims.reduce((a,b)=>profile[a]>profile[b]?a:b);
+  const note=document.getElementById('taste-note');
+  note.style.display='block';
+  note.innerHTML=`<span style="color:var(--gold);">Palate signature:</span> <strong>${topFlavor.toUpperCase()}</strong> dominant. ${harmony>75?'Exceptional harmony — award-worthy composition.':harmony>55?'Well-balanced with expressive character.':'Bold & assertive — niche palate target.'} Rarity index <strong>${rarity}/10</strong>. Est. <strong>${totalKcal} kcal</strong> total. ${depth>=10?'Highly complex — sophisticated multi-dimensional dish.':depth>=7?'Rich flavour architecture with broad appeal.':'Clean & focused — single-concept clarity.'}`;
+
+  drawRadar(profile,dims.slice(0,8),colors);
+}
+
+function drawRadar(profile,dims,colors){
+  const canvas=document.getElementById('radarChart');
+  const ctx=canvas.getContext('2d');
+  const W=200,H=200,cx=100,cy=100,R=72;
+  ctx.clearRect(0,0,W,H);
+  const n=dims.length;
+  const angle=i=>-Math.PI/2+(2*Math.PI/n)*i;
+  [20,40,60,80,100].forEach(r=>{
+    ctx.beginPath();
+    dims.forEach((_,i)=>{const a=angle(i),x=cx+Math.cos(a)*R*r/100,y=cy+Math.sin(a)*R*r/100;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.closePath();ctx.strokeStyle='rgba(245,240,232,0.07)';ctx.lineWidth=1;ctx.stroke();
+  });
+  dims.forEach((_,i)=>{ctx.beginPath();ctx.moveTo(cx,cy);const a=angle(i);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.strokeStyle='rgba(245,240,232,0.09)';ctx.lineWidth=1;ctx.stroke();});
+  ctx.beginPath();
+  dims.forEach((d,i)=>{const a=angle(i),v=profile[d]/100,x=cx+Math.cos(a)*R*v,y=cy+Math.sin(a)*R*v;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.closePath();ctx.fillStyle='rgba(200,149,42,0.2)';ctx.fill();ctx.strokeStyle='rgba(200,149,42,0.85)';ctx.lineWidth=2;ctx.stroke();
+  dims.forEach((d,i)=>{
+    const a=angle(i),v=profile[d]/100,x=cx+Math.cos(a)*R*v,y=cy+Math.sin(a)*R*v;
+    ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=colors[d];ctx.fill();
+    const lx=cx+Math.cos(a)*(R+14),ly=cy+Math.sin(a)*(R+14);
+    ctx.fillStyle='rgba(245,240,232,0.55)';ctx.font='9px DM Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(d,lx,ly);
+  });
+}
+
+// ── PAIRING ──
+function computePairing(){
+  if(selectedIngredients.length<2){
+    document.getElementById('matrix-container').innerHTML='<div class="missing-note">Add 2+ ingredients in Build tab.</div>';
+    document.getElementById('mol-grid').innerHTML='<div style="grid-column:span 2;" class="missing-note">No ingredients selected.</div>';
+    return;
+  }
+  const sel=selectedIngredients.slice(0,6);
+  const dims=['savory','sweet','bitter','sour','spicy','umami','fatty','fresh','smoky','herbal','earthy','nutty','creamy','tangy'];
+  const pairScore=(a,b)=>{
+    let s=0;
+    dims.forEach(d=>{
+      const diff=Math.abs(a.flavor[d]-b.flavor[d]);
+      if(diff<15)s+=2;
+      else if(diff<30)s+=1;
+      else if(diff>65)s-=1;
+    });
+    // Bonus: classic combos
+    const catA=a.cat,catB=b.cat;
+    if((catA==='Protein'&&catB==='Sauce')||(catA==='Sauce'&&catB==='Protein'))s+=3;
+    if((catA==='Cheese'&&catB==='Bread & Base')||(catA==='Bread & Base'&&catB==='Cheese'))s+=2;
+    if((catA==='Protein'&&catB==='Cheese')||(catA==='Cheese'&&catB==='Protein'))s+=2;
+    return Math.min(10,Math.max(0,s));
+  };
+  let html='<div class="matrix-wrap"><table class="matrix-table"><thead><tr><th></th>'+sel.map(i=>`<th>${i.name.slice(0,7)}</th>`).join('')+'</tr></thead><tbody>';
+  sel.forEach((a,ai)=>{
+    html+=`<tr><td style="padding:0 6px 0 0;color:rgba(245,240,232,0.5);font-size:10px;text-align:right;">${a.name.slice(0,8)}</td>`;
+    sel.forEach((b,bi)=>{
+      if(ai===bi){html+='<td style="background:rgba(200,149,42,0.1);color:var(--gold);text-align:center;">◉</td>';return;}
+      const s=pairScore(a,b);
+      let cls='pair-neutral',sym='·';
+      if(s>=9){cls='pair-great';sym='✦';}else if(s>=7){cls='pair-good';sym='+';}else if(s<=2){cls='pair-clash';sym='✗';}
+      html+=`<td class="${cls}">${sym}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">';
+  [['pair-great','✦ Perfect'],['pair-good','+ Good'],['pair-neutral','· Neutral'],['pair-clash','✗ Clash']].forEach(([c,l])=>{html+=`<span class="${c}" style="font-size:10px;padding:3px 8px;border-radius:4px;">${l}</span>`;});
+  html+='</div>';
+  document.getElementById('matrix-container').innerHTML=html;
+
+  const compounds=selectedIngredients.flatMap(i=>i.compounds.map(c=>({...c,src:i.name}))).slice(0,8);
+  document.getElementById('mol-grid').innerHTML=compounds.map(c=>`<div class="mol-card"><div class="mol-name">${c.src}</div><div class="mol-compound">${c.n}</div><div class="mol-effect">${c.e}</div><div style="display:flex;align-items:center;gap:4px;margin-top:5px;"><div style="width:6px;height:6px;border-radius:50%;background:#50c0a8;"></div><div style="font-size:9px;color:rgba(245,240,232,0.4);font-family:DM Mono,monospace;">Active</div></div></div>`).join('');
+
+  const allTags=[...new Set(selectedIngredients.flatMap(i=>i.tags))];
+  const bridges=[];
+  if(allTags.includes('umami')&&allTags.includes('savory'))bridges.push('Umami–Savory synergy → Glutamate + inosinate stack amplifies perceived meatiness by 40% (Yamaguchi principle).');
+  if(allTags.includes('fatty')&&allTags.includes('tangy'))bridges.push('Fat–Acid balance → Lactic/citric acids cut fat perception, extending palate refresh for next bite.');
+  if(allTags.includes('smoky')&&allTags.includes('sweet'))bridges.push('Smoke–Sugar contrast → Guaiacol phenols bind to sweet receptors, creating caramel-BBQ complexity.');
+  if(allTags.includes('spicy')&&allTags.includes('creamy'))bridges.push('Heat–Cream neutralisation → Casein proteins bind capsaicin, converting burn to warm sustained glow.');
+  if(allTags.includes('herbal')&&allTags.includes('sour'))bridges.push('Herb–Acid bridge → Volatile terpenes magnify perceived freshness of acidic components by 28%.');
+  if(allTags.includes('earthy')&&allTags.includes('umami'))bridges.push('Earth–Umami depth → 1-Octen-3-ol (mushroom) reinforces glutamate on taste receptors, deepening savory.');
+  if(allTags.includes('bitter')&&allTags.includes('fatty'))bridges.push('Bitter–Fat masking → Fat coats bitter receptors, reducing perceived bitterness by up to 35%.');
+  if(!bridges.length)bridges.push('Stable compatibility profile. No anomalous bridges detected. Clean, focused pairing.');
+  document.getElementById('bridge-out').innerHTML='<span style="color:var(--gold);">Flavour-bridge™ analysis:</span><br>'+bridges.join('<br><br>');
+}
+
+// ── RECIPE ──
+function computeRecipe(){
+  if(!selectedIngredients.length)return;
+  const protein=selectedIngredients.find(i=>i.cat==='Protein');
+  const cheese=selectedIngredients.find(i=>i.cat==='Cheese');
+  const bread=selectedIngredients.find(i=>i.cat==='Bread & Base');
+  const sauce=selectedIngredients.find(i=>i.cat==='Sauce');
+  const veg=selectedIngredients.find(i=>i.cat==='Vegetable');
+  const spice=selectedIngredients.find(i=>i.cat==='Spice & Herb');
+  const garnish=selectedIngredients.find(i=>i.cat==='Garnish & Extra');
+  const dessert=selectedIngredients.find(i=>i.cat==='Dessert');
+
+  const name=generateDishName();
+  let ings=[];
+  if(bread)ings.push({n:bread.name,a:'1 portion'});
+  if(protein)ings.push({n:protein.name,a:protein.kcal>200?'180g':'120g'});
+  if(cheese)ings.push({n:cheese.name,a:'30g'});
+  if(sauce)ings.push({n:sauce.name,a:'2 tbsp'});
+  if(veg)ings.push({n:veg.name,a:'45g'});
+  if(spice)ings.push({n:spice.name,a:'1 tsp'});
+  if(garnish)ings.push({n:garnish.name,a:'to garnish'});
+  if(dessert)ings.push({n:dessert.name,a:'30ml'});
+  selectedIngredients.filter(i=>!ings.find(x=>x.n===i.name)).slice(0,3).forEach(i=>ings.push({n:i.name,a:'to taste'}));
+
+  const methods=[
+    'Season protein generously. Sear on cast iron at high heat, 3–4 min per side. Rest 4 min before assembly. Layer base first, sauce second, protein third. Garnish tableside.',
+    'Marinate protein 30 min. Grill on charcoal at 220°C. Toast base 60 sec. Build upwards: base → spread → greens → protein → cheese → sauce → garnish. Serve immediately.',
+    'Prepare protein using desired technique. Emulsify sauce separately. Assemble cold components first, then hot protein last. Drizzle sauce in zigzag pattern. Finish with microgreens.',
+    'Slow-cook protein at 65°C for 4h if applicable, or cook to order. Char the base if bread-based. Spread condiment edge-to-edge. Stack in this order: spread, protein, cheese (melt if applicable), vegetable, garnish.',
+    'Flash-cook protein at intense heat to preserve moisture. Rest on wire rack. Build from bottom up. Apply two sauces — one bold base, one finishing drizzle. Present open-faced.',
+  ];
+  const method=methods[Math.floor(Math.random()*methods.length)];
+
+  const totalKcal=Math.round(selectedIngredients.reduce((s,i)=>s+i.kcal,0));
+  const allAllergens=[...new Set(selectedIngredients.flatMap(i=>i.allergens||[]))];
+
+  document.getElementById('recipe-area').innerHTML=`
+    <div class="recipe-card">
+      <div class="recipe-name">${name}</div>
+      <div class="recipe-meta">EL MAGO ORIGINAL · PATENT-NOVEL COMPOSITION · AI SYNTHESIZED</div>
+      <div class="recipe-section">INGREDIENTS</div>
+      ${ings.map(i=>`<div class="recipe-ing-row"><span class="recipe-ing-name">${i.n}</span><span class="recipe-ing-amount">${i.a}</span></div>`).join('')}
+      <div class="recipe-method">${method}</div>
+      <div class="calorie-bar">
+        <div class="cal-title">NUTRITION ESTIMATE</div>
+        ${[
+          {label:'Total kcal',val:totalKcal,max:1200,color:'#f0c060'},
+          {label:'Est. Protein',val:Math.round(selectedIngredients.filter(i=>i.cat==='Protein').reduce((s,i)=>s+i.kcal*0.25,0))+'g',raw:selectedIngredients.filter(i=>i.cat==='Protein').reduce((s,i)=>s+i.kcal*0.25,0),max:80,color:'#50c0a8'},
+          {label:'Est. Fat',val:Math.round(selectedIngredients.filter(i=>['Protein','Cheese','Dairy & Fat','Sauce'].includes(i.cat)).reduce((s,i)=>s+i.kcal*0.12,0))+'g',raw:selectedIngredients.filter(i=>['Protein','Cheese','Dairy & Fat','Sauce'].includes(i.cat)).reduce((s,i)=>s+i.kcal*0.12,0),max:60,color:'#f08060'},
+        ].map(n=>`<div class="cal-row"><div class="cal-label">${n.label}</div><div class="cal-bar-bg"><div class="cal-bar-fill" style="width:${Math.min(100,((n.raw||n.val)/n.max)*100)}%;background:${n.color};"></div></div><div class="cal-val">${typeof n.val==='number'?n.val:n.val}</div></div>`).join('')}
+      </div>
+      ${allAllergens.length?`<div style="margin-top:10px;font-size:10px;color:rgba(245,240,232,0.4);font-family:DM Mono,monospace;">⚠ Contains: ${allAllergens.join(', ')}</div>`:'<div style="margin-top:10px;font-size:10px;color:#50c0a8;font-family:DM Mono,monospace;">✓ No major allergens</div>'}
+    </div>`;
+}
+
+function generateDishName(){
+  const adj=['Obsidian','Gilded','Velvet','Phantom','Sublime','Sable','Astral','Noir','Aureate','Ember','Crimson','Ivory'];
+  const noun=['Accord','Theorem','Paradox','Meridian','Cipher','Reverie','Codex','Continuum','Study','Edition','Composition','Manifesto'];
+  return adj[Math.floor(Math.random()*adj.length)]+' '+noun[Math.floor(Math.random()*noun.length)];
+}
+
+// ── TECHNIQUES ──
+function renderTechniques(){
+  const techs=[
+    {icon:'🔪',label:'Brunoise Cut',desc:'2mm precision vegetable dice'},
+    {icon:'🌡',label:'Sous Vide',desc:'Precision immersion at 56–65°C'},
+    {icon:'🔥',label:'Maillard Sear',desc:'Cast iron at 230°C+ surface'},
+    {icon:'💨',label:'Cold Smoke',desc:'Beech wood at 18°C ambient'},
+    {icon:'⚗',label:'Cryo Garnish',desc:'Liquid nitrogen tableside finish'},
+    {icon:'🫧',label:'Fermentation',desc:'Lacto at 2% salt, 72h room temp'},
+    {icon:'🌊',label:'Ultrasonic Wash',desc:'40kHz fat-stripping for spirits'},
+    {icon:'🍳',label:'Confit Method',desc:'72°C duck fat, 6h low temp'},
+  ];
+  document.getElementById('tech-grid').innerHTML=techs.map((t,i)=>`<div class="tech-card" id="tech-${i}" onclick="toggleTech(${i})"><div style="display:flex;align-items:center;gap:8px;"><div style="font-size:18px;">${t.icon}</div><div><div style="font-size:12px;font-weight:500;color:#f5f0e8;">${t.label}</div><div style="font-size:10px;color:rgba(245,240,232,0.4);font-family:DM Mono,monospace;">${t.desc}</div></div></div></div>`).join('');
+}
+function toggleTech(i){document.getElementById('tech-'+i).classList.toggle('active-tech');}
+
+// ── SPECULATIVE ──
+const ADV_TOOLS=[
+  {icon:'🧬',color:'teal',name:'Neuro-Palate Scanner™',badge:'NOT YET INVENTED',desc:'EEG-linked taste cortex scanner. Reads brain response to each ingredient in real-time, builds a unique "palate fingerprint" per diner — automatically adjusts spice level, salt, and fat before the dish reaches the pass.',out:`> CORTEX SCAN: INITIALISING...\n> Bitterness threshold: <span style="color:var(--gold);">42 µV (low sensitivity)</span>\n> Umami receptor density: <span style="color:#50c0a8;">HIGH (91st percentile)</span>\n> Fat mouthfeel preference: RICH\n> Palate fingerprint: <span style="color:var(--gold);">SYNTH-READY</span>`},
+  {icon:'⚛',color:'purple',name:'Molecular Bridge Finder™',badge:'THEORETICAL',desc:'Uses quantum coherence to detect non-obvious flavour bridges between ingredients — pairs that shouldn\'t work by traditional food science, but do at a molecular level. Uncovers cross-cuisine pairings hidden in compound overlap.',out:`> BRIDGE SCAN: ACTIVE\n> Detected: <span style="color:var(--gold);">Wagyu ↔ Yuzu Curd</span>\n> Bridge: Lactone resonance at 312nm\n> Confidence: <span style="color:#50c0a8;">94.2%</span>\n> Classification: <span style="color:var(--gold);">NOVEL PAIR</span>`},
+  {icon:'🌡',color:'red',name:'Dynamic Texture Engine™',badge:'CONCEPTUAL',desc:'AI-driven system that adjusts protein cooking temperature in real-time based on diner texture preference data. Delivers a custom texture profile — from silky 56°C to firm 74°C — calibrated per table order, each time consistently.',out:`> Table 7 preference: <span style="color:var(--gold);">Yielding (56.5°C)</span>\n> Table 12 preference: <span style="color:#50c0a8;">Firm (68°C)</span>\n> Current sous vide: <span style="color:var(--gold);">ADAPTIVE MODE ON</span>\n> Texture consistency: <span style="color:#50c0a8;">±0.2°C</span>`},
+  {icon:'🎨',color:'gold',name:'pH Colour Architecture™',badge:'PATENT PENDING',desc:'Sauce and garnish compositions using pH-reactive anthocyanins from butterfly pea, hibiscus, and red cabbage. Dish colour transforms as acid is added tableside — from deep violet to magenta to golden — a visual signal of flavour phase.',out:`> pH 7.0: <span style="color:#a07fd0;">Deep violet (neutral)</span>\n> pH 6.2: <span style="color:#d090c0;">Magenta (mid-acid)</span>\n> pH 4.8: <span style="color:var(--gold);">Golden amber (citrus hit)</span>\n> Gradient: <span style="color:#50c0a8;">SMOOTH TRANSITION ✓</span>`},
+  {icon:'🌍',color:'blue',name:'Terroir Traceability AI™',badge:'PATENT PENDING',desc:'Every ingredient\'s origin GPS, harvest date, soil pH, rainfall, and processing temperature is blockchain-verified and spectroscopy-confirmed. Guests scan a QR code on the plate for a full molecular origin story in real-time.',out:`> Wagyu: <span style="color:var(--gold);">34.6°N, 135.5°E — Kobe, JP</span>\n> Truffle: 43.9°N, 12.4°E — Umbria, IT\n> Blockchain hash: <span style="color:#50c0a8;">0x4fa9...c3b1</span>\n> Traceability: <span style="color:var(--gold);">VERIFIED ✓</span>`},
+  {icon:'⏱',color:'teal',name:'Temporal Flavour Release™',badge:'NOT YET INVENTED',desc:'Micro-encapsulated flavour spheres embedded in the dish, programmed to burst at precise intervals after the first bite: T+0s primary hit, T+8s secondary depth, T+22s lingering finish. Creates a 30-second evolving flavour journey.',out:`> T+0s: <span style="color:var(--gold);">Primary hit (umami burst)</span>\n> T+8s: <span style="color:#50c0a8;">Secondary bloom (herbal lift)</span>\n> T+22s: <span style="color:#a0a0a0;">Lingering finish (smoke fade)</span>\n> Experience window: <span style="color:var(--gold);">30 seconds</span>`},
+  {icon:'🧠',color:'purple',name:'AI Culinary Sommelier™',badge:'CONCEPTUAL',desc:'Conversational AI trained on 80,000 restaurant menus, 12,000 chef tasting notes, and 40 years of Michelin review data. Suggests real-time dish modifications, wine/cocktail pairings, and plating aesthetics as chefs build each dish.',out:`> Training corpus: <span style="color:var(--gold);">80,000 menus</span>\n> Pairing DB: 12,000 verified combos\n> Michelin data: 3-star validated\n> Suggestion confidence: <span style="color:#50c0a8;">96.1%</span>`},
+  {icon:'🫁',color:'green',name:'Aroma Priming Mist™',badge:'CONCEPTUAL',desc:'A precision aerosol system delivers a micro-mist of the dish\'s primary volatile compounds to the table 8 seconds before service — priming the diner\'s olfactory receptors for an amplified first-bite experience (+3× perceived complexity).',out:`> Primary volatiles isolated: <span style="color:var(--gold);">18 compounds</span>\n> Mist PSI: 8.2 (food-safe)\n> Pre-serve timing: <span style="color:#50c0a8;">8s before plate drop</span>\n> Complexity amplifier: <span style="color:var(--gold);">×2.8</span>`},
+];
+
+function renderAdvanced(){
+  document.getElementById('adv-tools').innerHTML=ADV_TOOLS.map((t,i)=>`<div class="tool-card" onclick="toggleTool(${i})"><div class="tool-card-header"><div class="tool-icon ${t.color}">${t.icon}</div><div><div class="tool-name">${t.name}</div></div><div class="tool-badge">${t.badge}</div></div><div class="tool-desc">${t.desc}</div><div class="tool-output" id="adv-${i}"><span style="color:var(--gold);">> SYSTEM ACTIVE</span><br>${t.out}</div></div>`).join('');
+}
+function toggleTool(i){document.getElementById('adv-'+i).classList.toggle('visible');}
+
+// ── NAV ──
+function showPage(page,tabId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab,.nav-btn').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  const tabEl=document.querySelector(`.tab[onclick*="${tabId}"]`);
+  if(tabEl)tabEl.classList.add('active');
+}
+
+init();
+
+// Enter key on login
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('access-key').addEventListener('keydown',e=>{if(e.key==='Enter')verifyKey();});
+});
+</script>
+</body>
+</html>
