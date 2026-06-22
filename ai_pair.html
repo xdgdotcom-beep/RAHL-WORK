@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Mago — Cocktail Pairing Suggester</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:   #0a0805;
+    --deep:    #110e09;
+    --smoke:   #1c1710;
+    --ember:   #C8581A;
+    --gold:    #b8922a;
+    --cream:   #e8ddc8;
+    --mist:    #7a6e5e;
+    --border:  rgba(184,146,42,0.2);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── AMBIENT BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(200,88,26,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 80% 80%, rgba(184,146,42,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 24px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--cream);
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  header p {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--mist);
+    letter-spacing: 0.05em;
+    max-width: 420px;
+    margin-inline: auto;
+    line-height: 1.7;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── INPUT PANEL ── */
+  .input-panel {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 40px;
+    margin-bottom: 40px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--mist);
+    padding: 12px 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tab:hover { color: var(--cream); }
+  .tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── FORM ELEMENTS ── */
+  .field-group {
+    display: grid;
+    gap: 20px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--mist);
+    text-transform: uppercase;
+  }
+
+  input[type="text"],
+  select,
+  textarea {
+    background: var(--smoke);
+    border: 1px solid var(--border);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input[type="text"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--gold);
+  }
+  input::placeholder, textarea::placeholder { color: var(--mist); }
+
+  select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6e5e' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+
+  select option { background: var(--smoke); }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* ── CHIP SELECTORS ── */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    color: var(--mist);
+    border: 1px solid var(--border);
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: none;
+    letter-spacing: 0.03em;
+  }
+  .chip:hover { color: var(--cream); border-color: var(--mist); }
+  .chip.selected {
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(184,146,42,0.08);
+  }
+
+  /* ── CTA BUTTON ── */
+  .cta-row {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--black);
+    background: var(--gold);
+    border: none;
+    padding: 16px 36px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--ember); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled {
+    background: var(--smoke);
+    color: var(--mist);
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--mist);
+    background: none;
+    border: 1px solid var(--border);
+    padding: 14px 24px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { color: var(--cream); border-color: var(--mist); }
+
+  /* ── LOADING ── */
+  .loading-state {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+    border: 1px solid var(--border);
+    background: var(--deep);
+    margin-bottom: 40px;
+  }
+  .loading-state.visible { display: block; }
+
+  .smoke-ring {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--gold);
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    animation: spin 1.2s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-state p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--mist);
+  }
+
+  /* ── RESULT CARD ── */
+  .result-card {
+    display: none;
+    border: 1px solid var(--border);
+    background: var(--deep);
+    overflow: hidden;
+    margin-bottom: 40px;
+    animation: fadeUp 0.5s ease;
+  }
+  .result-card.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    background: var(--smoke);
+    padding: 28px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .result-chapter {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .result-cocktail-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .result-technique {
+    font-size: 11px;
+    color: var(--mist);
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .match-score {
+    text-align: right;
+  }
+  .match-score span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .match-score small {
+    display: block;
+    font-size: 9px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.3em;
+    color: var(--mist);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .result-body {
+    padding: 36px 40px;
+    display: grid;
+    gap: 28px;
+  }
+
+  .result-section h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .result-section p,
+  .result-section ul {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .result-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  .result-section ul li::before {
+    content: '— ';
+    color: var(--gold);
+  }
+
+  .flavour-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .flavour-tag {
+    font-size: 11px;
+    color: var(--gold);
+    border: 1px solid rgba(184,146,42,0.3);
+    padding: 5px 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .result-quote {
+    border-left: 2px solid var(--gold);
+    padding: 16px 24px;
+    background: rgba(184,146,42,0.04);
+  }
+  .result-quote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--cream);
+    line-height: 1.7;
+  }
+
+  /* ── ALSO CONSIDER ── */
+  .alternatives {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .alt-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 24px;
+    transition: border-color 0.2s;
+    cursor: default;
+  }
+  .alt-card:hover { border-color: rgba(184,146,42,0.4); }
+
+  .alt-chapter {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .alt-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .alt-reason {
+    font-size: 12px;
+    color: var(--mist);
+    line-height: 1.6;
+  }
+
+  /* ── ERROR ── */
+  .error-state {
+    display: none;
+    background: rgba(200,88,26,0.08);
+    border: 1px solid rgba(200,88,26,0.3);
+    padding: 24px 32px;
+    margin-bottom: 40px;
+    color: var(--ember);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+  }
+  .error-state.visible { display: block; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--mist);
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .input-panel { padding: 28px 20px; }
+    .result-header { padding: 22px 20px; }
+    .result-body { padding: 24px 20px; }
+    .tab { padding: 10px 14px; font-size: 9px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo-mark">El Mago · Subhash Sankar</span>
+  <h1>Cocktail <em>Pairing</em><br>Suggester</h1>
+  <p>Tell us what you're dining on — or how you feel — and El Mago's AI sommelier will find your perfect cocktail from the signature menu.</p>
+</header>
+
+<main>
+
+  <div class="section-label">Your Preferences</div>
+
+  <div class="input-panel">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" data-tab="dish">By Dish</button>
+      <button class="tab" data-tab="mood">By Mood</button>
+      <button class="tab" data-tab="spirit">By Spirit</button>
+    </div>
+
+    <!-- TAB: DISH -->
+    <div class="tab-content active" id="tab-dish">
+      <div class="field-group">
+        <div class="field">
+          <label>Dish Name or Description</label>
+          <input type="text" id="dish-input" placeholder="e.g. Cochinita Pibil, Ceviche de Camarón, grilled octopus…">
+        </div>
+        <div class="field">
+          <label>Flavour Profile of the Dish</label>
+          <div class="chips" id="flavour-chips">
+            <button class="chip" data-value="smoky">Smoky</button>
+            <button class="chip" data-value="citrus">Citrus</button>
+            <button class="chip" data-value="rich & fatty">Rich & Fatty</button>
+            <button class="chip" data-value="spicy">Spicy</button>
+            <button class="chip" data-value="umami">Umami</button>
+            <button class="chip" data-value="sweet">Sweet</button>
+            <button class="chip" data-value="herbaceous">Herbaceous</button>
+            <button class="chip" data-value="delicate">Delicate</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Course</label>
+          <select id="course-select">
+            <option value="">Select a course…</option>
+            <option>Appetizer</option>
+            <option>Main Course</option>
+            <option>Dessert</option>
+            <option>Between courses (palate cleanser)</option>
+            <option>No food — bar sipping</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: MOOD -->
+    <div class="tab-content" id="tab-mood">
+      <div class="field-group">
+        <div class="field">
+          <label>How are you feeling?</label>
+          <div class="chips" id="mood-chips">
+            <button class="chip" data-value="celebratory">Celebratory</button>
+            <button class="chip" data-value="adventurous">Adventurous</button>
+            <button class="chip" data-value="romantic">Romantic</button>
+            <button class="chip" data-value="contemplative">Contemplative</button>
+            <button class="chip" data-value="playful">Playful</button>
+            <button class="chip" data-value="sophisticated">Sophisticated</button>
+            <button class="chip" data-value="warming">Warming</button>
+            <button class="chip" data-value="refreshing">Refreshing</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Occasion</label>
+          <select id="occasion-select">
+            <option value="">Select an occasion…</option>
+            <option>Intimate dinner</option>
+            <option>Cocktail masterclass</option>
+            <option>Wine dinner pairing</option>
+            <option>Sunset drinks</option>
+            <option>Special celebration</option>
+            <option>Business entertainment</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Any additional notes</label>
+          <textarea id="mood-notes" placeholder="e.g. prefer something strong, no rum, loves theatrical presentation…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: SPIRIT -->
+    <div class="tab-content" id="tab-spirit">
+      <div class="field-group">
+        <div class="field">
+          <label>Preferred Base Spirit</label>
+          <div class="chips" id="spirit-chips">
+            <button class="chip" data-value="Bourbon / Whiskey">Bourbon</button>
+            <button class="chip" data-value="Tequila">Tequila</button>
+            <button class="chip" data-value="Rum">Rum</button>
+            <button class="chip" data-value="Gin">Gin</button>
+            <button class="chip" data-value="Vodka">Vodka</button>
+            <button class="chip" data-value="Brandy / Cognac">Brandy</button>
+            <button class="chip" data-value="Scotch / Malt Whiskey">Scotch</button>
+            <button class="chip" data-value="No alcohol preference">No Preference</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Preferred Technique / Style</label>
+          <div class="chips" id="technique-chips">
+            <button class="chip" data-value="molecular & theatrical">Molecular</button>
+            <button class="chip" data-value="fire & smoke">Fire & Smoke</button>
+            <button class="chip" data-value="barrel aged & classic">Barrel Aged</button>
+            <button class="chip" data-value="fat washed & clarified">Fat Wash</button>
+            <button class="chip" data-value="boozy gelato">Boozy Gelato</button>
+            <button class="chip" data-value="BBQ & toasted">BBQ & Toast</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Strength Preference</label>
+          <select id="strength-select">
+            <option value="">Select strength…</option>
+            <option>Light & easy</option>
+            <option>Medium — balanced</option>
+            <option>Strong & spirit-forward</option>
+            <option>Strong — I trust El Mago</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn-primary" id="suggest-btn" onclick="getSuggestion()">Find My Cocktail</button>
+      <button class="btn-ghost" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loading">
+    <div class="smoke-ring"></div>
+    <p>El Mago is consulting the spirits…</p>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-state" id="error-state"></div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result-card">
+    <div class="result-header">
+      <div>
+        <div class="result-chapter" id="res-chapter"></div>
+        <div class="result-cocktail-name" id="res-name"></div>
+        <div class="result-technique" id="res-technique"></div>
+      </div>
+      <div class="match-score">
+        <span id="res-score"></span>
+        <small>Pairing Match</small>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="result-section">
+        <h3>Why This Pairing</h3>
+        <p id="res-why"></p>
+      </div>
+      <div class="result-section">
+        <h3>Flavour Bridge</h3>
+        <div class="flavour-tags" id="res-flavours"></div>
+      </div>
+      <div class="result-section">
+        <h3>The Experience</h3>
+        <div class="result-quote">
+          <p id="res-experience"></p>
+        </div>
+      </div>
+      <div class="result-section">
+        <h3>How to Savour It</h3>
+        <ul id="res-tips"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALTERNATIVES -->
+  <div id="alt-section" style="display:none">
+    <div class="section-label">Also Consider</div>
+    <div class="alternatives" id="alt-cards"></div>
+  </div>
+
+</main>
+
+<footer>© 2026 El Mago · Subhash Sankar · Molecular Mixology</footer>
+
+<div style="position:fixed;bottom:18px;right:20px;z-index:9999;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:rgba(184,146,42,0.45);text-transform:uppercase;pointer-events:none;user-select:none;">XD Devs</div>
+
+<script>
+// ── TAB LOGIC ──
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ── CHIP LOGIC ──
+document.querySelectorAll('.chips').forEach(group => {
+  const multi = group.id === 'flavour-chips' || group.id === 'mood-chips';
+  group.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (multi) {
+        chip.classList.toggle('selected');
+      } else {
+        group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+      }
+    });
+  });
+});
+
+function getSelectedChips(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .chip.selected`)]
+    .map(c => c.dataset.value).join(', ');
+}
+
+// ── BUILD PROMPT ──
+function buildPrompt() {
+  const activeTab = document.querySelector('.tab.active').dataset.tab;
+  let context = '';
+
+  if (activeTab === 'dish') {
+    const dish = document.getElementById('dish-input').value.trim();
+    const flavours = getSelectedChips('flavour-chips');
+    const course = document.getElementById('course-select').value;
+    if (!dish && !flavours) return null;
+    context = `The guest is having: "${dish || 'an unspecified dish'}".
+Dish flavour profile: ${flavours || 'not specified'}.
+Course: ${course || 'not specified'}.`;
+  } else if (activeTab === 'mood') {
+    const moods = getSelectedChips('mood-chips');
+    const occasion = document.getElementById('occasion-select').value;
+    const notes = document.getElementById('mood-notes').value.trim();
+    if (!moods && !occasion) return null;
+    context = `Guest mood: ${moods || 'not specified'}.
+Occasion: ${occasion || 'not specified'}.
+Additional notes: ${notes || 'none'}.`;
+  } else {
+    const spirit = getSelectedChips('spirit-chips');
+    const technique = getSelectedChips('technique-chips');
+    const strength = document.getElementById('strength-select').value;
+    if (!spirit && !technique) return null;
+    context = `Preferred spirit: ${spirit || 'no preference'}.
+Preferred technique: ${technique || 'no preference'}.
+Strength preference: ${strength || 'not specified'}.`;
+  }
+
+  return `You are the AI sommelier for El Mago, Subhash Sankar's luxury molecular mixology brand.
+
+The signature cocktail menu has six chapters:
+1. ALCHEMY (Molecular Masterpieces): Reverse Sphere Antioxidant (Spherification), The Camphor Infinity (Aromatic), Liquid Nitrogen Illusion (Cryogenic), Black Ginger Emulsification (Emulsion), Syphon Mango Bubblegum (Syphon), Gravity Induced Negroni (Gravity)
+2. FIRE & ASH (Smoke & Flambé): Cigar Smoked Flambé Old Fashioned (Bourbon), Cinnamon Smoked Brown Derby (Bourbon), Rosemary Smoked Blood and Sand (Scotch), Smoked Whiskey Campfire (Malt whiskey), Bourbon Black Apple Manhattan
+3. AGED BUT NOT OLD (Barrel Aged): Aged Old Fashioned, Aged Manhattan, Aged Banana Sazerac, Aged Cuban Almond Cigar, Aged Negroni
+4. CRAFTED BOOZY GELATO: Perlini Nutmeg Honey Alexander, Coffee Sphere Frappuccino Martini, Passionfruit Air Golden Margarita, Purple Candy Rosemary Bramble, Tigers Milk Bamboo Colada
+5. FAT WASH & CLARIFICATION: Fat Washed Pearl Manhattan, Bacon Washed Old Fashioned, Truffle Washed Negroni, Parmesan Washed Martini, Lobster Washed Bloody Mary, Clarified Piña Colada, Clarified Rum & Coke, Clarified Espresso Martini
+6. BBQ & TOAST: BBQ Spicy Pineapple Margarita, Toasted Thai Coconut Margarita, BBQ Blackberry Bramble Martini, Grilled Beet Purple Colada, BBQ Mixed Citrus Mojito
+
+Guest context: ${context}
+
+Respond ONLY with valid JSON (no markdown, no backticks) in this exact structure:
+{
+  "chapter": "chapter name",
+  "cocktail": "cocktail name",
+  "technique": "technique or style in 4-6 words",
+  "matchScore": "a percentage like 94%",
+  "why": "2-3 sentences explaining why this cocktail pairs perfectly with the guest's choice",
+  "flavours": ["flavour1", "flavour2", "flavour3", "flavour4"],
+  "experience": "A poetic 1-2 sentence description of the sensory experience, in Subhash Sankar's voice",
+  "tips": ["tip1", "tip2", "tip3"],
+  "alternatives": [
+    { "chapter": "chapter", "cocktail": "name", "reason": "1 sentence reason" },
+    { "chapter": "chapter", "cocktail": "name", "reason": "1 sentence reason" }
+  ]
+}`;
+}
+
+// ── MAIN FUNCTION ──
+async function getSuggestion() {
+  const prompt = buildPrompt();
+  if (!prompt) {
+    showError('Please fill in at least one preference before consulting El Mago.');
+    return;
+  }
+
+  hideAll();
+  document.getElementById('loading').classList.add('visible');
+  document.getElementById('suggest-btn').disabled = true;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content?.map(b => b.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    renderResult(result);
+  } catch (err) {
+    showError('El Mago is momentarily unavailable. Please try again shortly.');
+    console.error(err);
+  } finally {
+    document.getElementById('loading').classList.remove('visible');
+    document.getElementById('suggest-btn').disabled = false;
+  }
+}
+
+// ── RENDER ──
+function renderResult(r) {
+  document.getElementById('res-chapter').textContent = r.chapter;
+  document.getElementById('res-name').textContent = r.cocktail;
+  document.getElementById('res-technique').textContent = r.technique;
+  document.getElementById('res-score').textContent = r.matchScore;
+  document.getElementById('res-why').textContent = r.why;
+  document.getElementById('res-experience').textContent = r.experience;
+
+  const flavoursEl = document.getElementById('res-flavours');
+  flavoursEl.innerHTML = (r.flavours || []).map(f => `<span class="flavour-tag">${f}</span>`).join('');
+
+  const tipsEl = document.getElementById('res-tips');
+  tipsEl.innerHTML = (r.tips || []).map(t => `<li>${t}</li>`).join('');
+
+  document.getElementById('result-card').classList.add('visible');
+
+  // Alternatives
+  if (r.alternatives?.length) {
+    const altSection = document.getElementById('alt-section');
+    const altCards = document.getElementById('alt-cards');
+    altCards.innerHTML = r.alternatives.map(a => `
+      <div class="alt-card">
+        <div class="alt-chapter">${a.chapter}</div>
+        <div class="alt-name">${a.cocktail}</div>
+        <div class="alt-reason">${a.reason}</div>
+      </div>
+    `).join('');
+    altSection.style.display = 'block';
+  }
+
+  document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function hideAll() {
+  document.getElementById('result-card').classList.remove('visible');
+  document.getElementById('error-state').classList.remove('visible');
+  document.getElementById('alt-section').style.display = 'none';
+}
+
+function showError(msg) {
+  document.getElementById('loading').classList.remove('visible');
+  const el = document.getElementById('error-state');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+function resetAll() {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('input[type="text"], textarea').forEach(i => i.value = '');
+  document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  hideAll();
+}
+</script>
+</body>
+</html>
